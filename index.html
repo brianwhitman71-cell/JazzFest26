@@ -145,8 +145,8 @@ main{max-width:1200px;margin:0 auto;padding:0 0 calc(60px + var(--safe-bot))}
 .stage-band-label{font-family:'Barlow Condensed',sans-serif;font-size:16px;font-weight:600;fill:rgba(255,255,255,0.9);dominant-baseline:middle;text-anchor:middle;pointer-events:none}
 .stage-sub-label{font-family:'Barlow Condensed',sans-serif;font-size:12px;font-weight:400;fill:rgba(255,255,255,0.45);dominant-baseline:middle;text-anchor:middle;pointer-events:none}
 .stage-band-name{font-family:'Barlow Condensed',sans-serif;font-size:15px;font-weight:700;text-anchor:middle;dominant-baseline:middle;pointer-events:none;paint-order:stroke;stroke:#000;stroke-width:3px;stroke-linejoin:round;}
-/* Taller pill rects to fit larger band-name text */
-.band-pill rect{height:28px;transition:opacity 0.4s}
+/* Taller pill rects to fit band name + start time */
+.band-pill rect{height:38px;transition:opacity 0.4s}
 .band-pill text{transition:opacity 0.4s}
 .band-pill.empty rect,.band-pill.empty text{opacity:0}
 
@@ -1399,11 +1399,13 @@ function updateLiveMap(dayKey, timeVal) {
     const playing = stageMap[stageName];
     if (playing) {
       let name = playing.artist;
-      if (name.length > 22) name = name.substring(0,20) + '…';
-      bnEl.textContent = name;
+      if (name.length > 20) name = name.substring(0,18) + '…';
+      bnEl.innerHTML =
+        `<tspan x="0" dy="-8">${name}</tspan>` +
+        `<tspan x="0" dy="15" font-size="12" opacity="0.75">${playing.time}</tspan>`;
       pilEl.classList.remove('empty');
     } else {
-      bnEl.textContent = '';
+      bnEl.innerHTML = '';
       pilEl.classList.add('empty');
     }
   }
