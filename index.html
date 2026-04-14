@@ -1190,29 +1190,15 @@ function generateTimeOptions() {
 // CARD HTML  (with Spotify + YouTube buttons)
 // ─────────────────────────────────────────────────────────
 function spotifyURL(name) {
-  // Opens directly to the Playlists tab of search results for the artist
-  return 'https://open.spotify.com/search/' + encodeURIComponent(name + ' playlist') + '/playlists';
+  // Universal link — opens in Spotify app if installed, web player otherwise
+  return 'https://open.spotify.com/search/' + encodeURIComponent(name) + '/playlists';
 }
 
 function openSpotify(e, name) {
   e.preventDefault();
-  // "Artist playlist" search surfaces curated & fan playlists for the band
-  const q      = encodeURIComponent(name + ' playlist');
-  const webURL = 'https://open.spotify.com/search/' + q + '/playlists';
-  const appURL = 'spotify:search:' + q;   // app shows Playlists tab in results
-
-  if (/iPhone|iPad|iPod/.test(navigator.userAgent)) {
-    const fallback = setTimeout(() => window.open(webURL, '_blank'), 600);
-    const cancel = () => { clearTimeout(fallback); window.removeEventListener('blur', cancel); };
-    window.addEventListener('blur', cancel, { once: true });
-    window.location.href = appURL;
-  } else if (/Android/.test(navigator.userAgent)) {
-    window.location.href =
-      'intent://open.spotify.com/search/' + q +
-      '#Intent;package=com.spotify.music;scheme=https;end';
-  } else {
-    window.open(webURL, '_blank');
-  }
+  // open.spotify.com is a universal link: iOS/Android Spotify app intercepts it
+  // and lands directly on the Playlists tab; falls back to web player if app not installed
+  window.open(spotifyURL(name), '_blank');
 }
 function youtubeURL(name) {
   return 'https://www.youtube.com/results?search_query=' + encodeURIComponent(name + ' live');
