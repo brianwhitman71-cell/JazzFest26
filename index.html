@@ -309,14 +309,15 @@ footer{margin-top:20px;padding:20px 16px calc(20px + var(--safe-bot));border-top
     display: block !important;
     width: 100%;
   }
-  /* Day tabs: smaller font so all 4 fit in the panel */
-  .day-tab { font-size: 12px !important; padding: 8px 14px 10px !important; }
-  .day-tab .hl { font-size: 10px !important; }
+  /* Day tabs: hide sub-headline and shrink so all 4 fit in the panel */
+  .day-tab { font-size: 12px !important; padding: 8px 12px 10px !important; }
+  .day-tab .hl { display: none !important; }
 }
 
 @media (min-width: 1100px) {
   #view-schedule { width: 480px; }
-  .day-tab { font-size: 13px !important; padding: 9px 16px 11px !important; }
+  .day-tab { font-size: 13px !important; padding: 9px 14px 11px !important; }
+  .day-tab .hl { display: none !important; }
 }
 
 /* ══════════════════════════════════
