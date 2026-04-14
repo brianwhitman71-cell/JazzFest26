@@ -273,7 +273,11 @@ footer{margin-top:20px;padding:20px 16px calc(20px + var(--safe-bot));border-top
    Schedule left · Map right
 ══════════════════════════════════ */
 @media (min-width: 900px) {
-  .nav-tabs { display: none; }      /* both panels always visible */
+  /* Keep nav tabs visible — needed for Rules & Regs */
+  .nav-tabs { display: flex; }
+  /* Full Schedule + Now Playing tabs are always both visible on desktop */
+  .nav-tab[data-view="schedule"],
+  .nav-tab[data-view="map"] { opacity: 0.5; cursor: default; pointer-events: none; }
   .content-split:not(.rules-active) {
     display: flex;
     align-items: flex-start;
@@ -281,7 +285,7 @@ footer{margin-top:20px;padding:20px 16px calc(20px + var(--safe-bot));border-top
   /* Schedule panel — left, sticky, scrollable */
   .content-split:not(.rules-active) #view-schedule {
     display: block !important;
-    width: 400px;
+    width: 420px;
     flex-shrink: 0;
     border-right: 1px solid var(--border);
     height: calc(100vh - var(--header-h, 96px));
@@ -305,10 +309,14 @@ footer{margin-top:20px;padding:20px 16px calc(20px + var(--safe-bot));border-top
     display: block !important;
     width: 100%;
   }
+  /* Day tabs: smaller font so all 4 fit in the panel */
+  .day-tab { font-size: 12px !important; padding: 8px 14px 10px !important; }
+  .day-tab .hl { font-size: 10px !important; }
 }
 
 @media (min-width: 1100px) {
-  #view-schedule { width: 460px; }
+  #view-schedule { width: 480px; }
+  .day-tab { font-size: 13px !important; padding: 9px 16px 11px !important; }
 }
 
 /* ══════════════════════════════════
@@ -819,7 +827,7 @@ footer{margin-top:20px;padding:20px 16px calc(20px + var(--safe-bot));border-top
           <text class="stage-sub-label" x="0" y="8">Main Stage</text>
           <!-- Dynamic band pill (above) -->
           <g class="band-pill empty" id="pill-Acura Stage">
-            <rect x="-70" y="-76" width="140" height="22" rx="3" fill="#0e4a82" stroke="#2a8fd5" stroke-width="0.8" opacity="0.96"/>
+            <rect x="-70" y="-76" width="140" height="22" rx="3" fill="#0e4a82" stroke="#2a8fd5" stroke-width="0.8" opacity="0.72"/>
             <text class="stage-band-name" id="bn-Acura Stage" x="0" y="-61" fill="#e0f0ff" font-size="10.5"></text>
           </g>
         </g>
@@ -833,7 +841,7 @@ footer{margin-top:20px;padding:20px 16px calc(20px + var(--safe-bot));border-top
           <text class="stage-sub-label" x="0" y="9">Stage</text>
           <!-- Dynamic band pill (below) -->
           <g class="band-pill empty" id="pill-Shell Gentilly Stage">
-            <rect x="-70" y="54" width="140" height="22" rx="3" fill="#1c6038" stroke="#3aaa6a" stroke-width="0.8" opacity="0.96"/>
+            <rect x="-70" y="54" width="140" height="22" rx="3" fill="#1c6038" stroke="#3aaa6a" stroke-width="0.8" opacity="0.72"/>
             <text class="stage-band-name" id="bn-Shell Gentilly Stage" x="0" y="69" fill="#c0ffd8" font-size="10.5"></text>
           </g>
         </g>
@@ -847,7 +855,7 @@ footer{margin-top:20px;padding:20px 16px calc(20px + var(--safe-bot));border-top
           <text class="stage-band-label" x="0" y="-5" font-size="8.5" font-weight="700" letter-spacing="1.5">CONGO SQUARE</text>
           <text class="stage-sub-label" x="0" y="8">Stage</text>
           <g class="band-pill empty" id="pill-Congo Square Stage">
-            <rect x="-68" y="-60" width="136" height="22" rx="3" fill="#5c1038" stroke="#b03570" stroke-width="0.8" opacity="0.96"/>
+            <rect x="-68" y="-60" width="136" height="22" rx="3" fill="#5c1038" stroke="#b03570" stroke-width="0.8" opacity="0.72"/>
             <text class="stage-band-name" id="bn-Congo Square Stage" x="0" y="-45" fill="#ffd0e8" font-size="10.5"></text>
           </g>
         </g>
@@ -860,7 +868,7 @@ footer{margin-top:20px;padding:20px 16px calc(20px + var(--safe-bot));border-top
           <text class="stage-band-label" x="0" y="-5" font-size="8.5" font-weight="700" letter-spacing="1">WWOZ JAZZ TENT</text>
           <text class="stage-sub-label" x="0" y="9">Jazz Tent</text>
           <g class="band-pill empty" id="pill-WWOZ Jazz Tent">
-            <rect x="-70" y="-60" width="140" height="22" rx="3" fill="#8a5200" stroke="#e09820" stroke-width="0.8" opacity="0.96"/>
+            <rect x="-70" y="-60" width="140" height="22" rx="3" fill="#8a5200" stroke="#e09820" stroke-width="0.8" opacity="0.72"/>
             <text class="stage-band-name" id="bn-WWOZ Jazz Tent" x="0" y="-45" fill="#fff0c0" font-size="10.5"></text>
           </g>
         </g>
@@ -872,7 +880,7 @@ footer{margin-top:20px;padding:20px 16px calc(20px + var(--safe-bot));border-top
           <text class="stage-band-label" x="0" y="-4" font-size="8.5" font-weight="700" letter-spacing="1">BLUES TENT</text>
           <text class="stage-sub-label" x="0" y="9" opacity="0.5">Blues</text>
           <g class="band-pill empty" id="pill-Blues Tent">
-            <rect x="-60" y="-59" width="120" height="22" rx="3" fill="#2a2a7a" stroke="#6a6acc" stroke-width="0.8" opacity="0.96"/>
+            <rect x="-60" y="-59" width="120" height="22" rx="3" fill="#2a2a7a" stroke="#6a6acc" stroke-width="0.8" opacity="0.72"/>
             <text class="stage-band-name" id="bn-Blues Tent" x="0" y="-44" fill="#d0d0ff" font-size="10.5"></text>
           </g>
         </g>
@@ -884,7 +892,7 @@ footer{margin-top:20px;padding:20px 16px calc(20px + var(--safe-bot));border-top
           <text class="stage-band-label" x="0" y="-4" font-size="8.5" font-weight="700" letter-spacing="1">GOSPEL TENT</text>
           <text class="stage-sub-label" x="0" y="9" opacity="0.5">Gospel</text>
           <g class="band-pill empty" id="pill-Gospel Tent">
-            <rect x="-62" y="29" width="124" height="22" rx="3" fill="#6a2200" stroke="#d05010" stroke-width="0.8" opacity="0.96"/>
+            <rect x="-62" y="29" width="124" height="22" rx="3" fill="#6a2200" stroke="#d05010" stroke-width="0.8" opacity="0.72"/>
             <text class="stage-band-name" id="bn-Gospel Tent" x="0" y="44" fill="#ffe0c0" font-size="10.5"></text>
           </g>
         </g>
@@ -896,7 +904,7 @@ footer{margin-top:20px;padding:20px 16px calc(20px + var(--safe-bot));border-top
           <text class="stage-band-label" x="0" y="-6" font-size="8" font-weight="700" letter-spacing="1">ECONOMY HALL</text>
           <text class="stage-sub-label" x="0" y="8">Tent</text>
           <g class="band-pill empty" id="pill-Economy Hall Tent">
-            <rect x="-68" y="-68" width="136" height="22" rx="3" fill="#165050" stroke="#3aaa9a" stroke-width="0.8" opacity="0.96"/>
+            <rect x="-68" y="-68" width="136" height="22" rx="3" fill="#165050" stroke="#3aaa9a" stroke-width="0.8" opacity="0.72"/>
             <text class="stage-band-name" id="bn-Economy Hall Tent" x="0" y="-53" fill="#c0ffee" font-size="10.5"></text>
           </g>
         </g>
@@ -908,7 +916,7 @@ footer{margin-top:20px;padding:20px 16px calc(20px + var(--safe-bot));border-top
           <text class="stage-band-label" x="0" y="-4" font-size="8.5" font-weight="700" letter-spacing="1">LAGNIAPPE</text>
           <text class="stage-sub-label" x="0" y="9">Stage</text>
           <g class="band-pill empty" id="pill-Lagniappe Stage">
-            <rect x="-62" y="29" width="124" height="22" rx="3" fill="#4e2068" stroke="#a060cc" stroke-width="0.8" opacity="0.96"/>
+            <rect x="-62" y="29" width="124" height="22" rx="3" fill="#4e2068" stroke="#a060cc" stroke-width="0.8" opacity="0.72"/>
             <text class="stage-band-name" id="bn-Lagniappe Stage" x="0" y="44" fill="#f0d0ff" font-size="10.5"></text>
           </g>
         </g>
@@ -920,7 +928,7 @@ footer{margin-top:20px;padding:20px 16px calc(20px + var(--safe-bot));border-top
           <text class="stage-band-label" x="0" y="-4" font-size="8.5" font-weight="700" letter-spacing="1">FAIS DO-DO</text>
           <text class="stage-sub-label" x="0" y="9">Stage</text>
           <g class="band-pill empty" id="pill-Fais Do-Do Stage">
-            <rect x="-62" y="-60" width="124" height="22" rx="3" fill="#344a14" stroke="#7aaa3a" stroke-width="0.8" opacity="0.96"/>
+            <rect x="-62" y="-60" width="124" height="22" rx="3" fill="#344a14" stroke="#7aaa3a" stroke-width="0.8" opacity="0.72"/>
             <text class="stage-band-name" id="bn-Fais Do-Do Stage" x="0" y="-45" fill="#e8ffc0" font-size="10.5"></text>
           </g>
         </g>
@@ -933,7 +941,7 @@ footer{margin-top:20px;padding:20px 16px calc(20px + var(--safe-bot));border-top
           <text class="stage-band-label" x="0" y="-6" font-size="8" font-weight="700" letter-spacing="1">JAZZ &amp; HERITAGE</text>
           <text class="stage-sub-label" x="0" y="8">Stage</text>
           <g class="band-pill empty" id="pill-Jazz &amp; Heritage Stage">
-            <rect x="-70" y="-72" width="140" height="22" rx="3" fill="#5a2c10" stroke="#b07050" stroke-width="0.8" opacity="0.96"/>
+            <rect x="-70" y="-72" width="140" height="22" rx="3" fill="#5a2c10" stroke="#b07050" stroke-width="0.8" opacity="0.72"/>
             <text class="stage-band-name" id="bn-Jazz &amp; Heritage Stage" x="0" y="-57" fill="#ffe8d0" font-size="10.5"></text>
           </g>
         </g>
@@ -1355,14 +1363,31 @@ function updateLiveMap(dayKey, timeVal) {
   const [h, m] = timeVal.split(':').map(Number);
   const selMin = h * 60 + m;
 
-  const artists   = schedule[dayKey] || [];
-  const nowPlaying = artists.filter(a => isPlayingAt(a, selMin));
+  const artists = schedule[dayKey] || [];
 
-  // Build stage → current artist map
-  const stageMap = {};
-  for (const a of nowPlaying) {
-    if (!stageMap[a.stage] || a.headliner) stageMap[a.stage] = a;
+  // Group acts by stage, then find which act is current at each stage.
+  // An act is "current" from its start time until the next act at that stage
+  // starts (or until start + set duration for the last act of the day).
+  const byStage = {};
+  for (const a of artists) {
+    (byStage[a.stage] = byStage[a.stage] || []).push(a);
   }
+  const stageMap = {};
+  for (const [stageName, acts] of Object.entries(byStage)) {
+    const sorted = [...acts].sort((a, b) => timeToMin(a.time) - timeToMin(b.time));
+    for (let i = 0; i < sorted.length; i++) {
+      const start = timeToMin(sorted[i].time);
+      if (start > selMin) break;               // not started yet
+      const end = i + 1 < sorted.length
+        ? timeToMin(sorted[i + 1].time)        // ends when next act starts
+        : start + setDuration(sorted[i]);      // last act: use estimated duration
+      if (selMin < end) {
+        stageMap[stageName] = sorted[i];
+      }
+    }
+  }
+
+  const nowPlaying = Object.values(stageMap);
 
   // Update SVG stage pills
   for (const stageName of Object.keys(STAGE_COLORS)) {
@@ -1721,7 +1746,10 @@ document.addEventListener('DOMContentLoaded', () => {
       document.querySelectorAll('.view').forEach(v => v.classList.remove('active'));
       tab.classList.add('active');
       document.getElementById('view-' + tab.dataset.view).classList.add('active');
-      contentSplit.classList.toggle('rules-active', tab.dataset.view === 'rules');
+      const isRules = tab.dataset.view === 'rules';
+      contentSplit.classList.toggle('rules-active', isRules);
+      // On desktop, Full Schedule + Now Playing are always co-visible
+      // Remove pointer-events blockage by re-showing schedule when leaving rules
     });
   });
 
@@ -1734,7 +1762,9 @@ document.addEventListener('DOMContentLoaded', () => {
     updateLiveMap(dayPicker.value, timePicker.value);
   }
   dayPicker.addEventListener('change', onTimeChange);
+  dayPicker.addEventListener('input', onTimeChange);
   timePicker.addEventListener('change', onTimeChange);
+  timePicker.addEventListener('input', onTimeChange);
 
   // ── "Now" button — engage live mode
   document.getElementById('btnNow').addEventListener('click', () => {
