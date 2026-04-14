@@ -1613,15 +1613,27 @@ function initMapZoom() {
     }
   }, { passive: false });
 
+  let recentPinch = false;
+  let recentPinchTimer = null;
+
   wrap.addEventListener('touchend', e => {
-    if (e.touches.length < 2) pinching = false;
+    if (e.touches.length < 2) {
+      if (pinching) {
+        // mark that a pinch just ended so double-tap handler ignores stray touchends
+        recentPinch = true;
+        clearTimeout(recentPinchTimer);
+        recentPinchTimer = setTimeout(() => { recentPinch = false; }, 400);
+      }
+      pinching = false;
+    }
     if (e.touches.length === 0) dragging = false;
     if (scale < 1.05) { scale=1; tx=0; ty=0; apply(true); }
   });
 
-  // Double-tap to reset zoom
+  // Double-tap to reset zoom (suppressed when a pinch just ended)
   let lastTap = 0;
   wrap.addEventListener('touchend', e => {
+    if (recentPinch) return;   // don't misfire after pinch release
     const now = Date.now();
     if (now - lastTap < 320 && e.changedTouches.length === 1) {
       scale=1; tx=0; ty=0; apply(true);
