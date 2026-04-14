@@ -370,8 +370,8 @@ footer{margin-top:20px;padding:20px 16px calc(20px + var(--safe-bot));border-top
     </div>
   </div>
   <nav class="nav-tabs" role="tablist">
-    <button class="nav-tab" data-view="schedule" role="tab">Full Schedule</button>
-    <button class="nav-tab active" data-view="map" role="tab">Now Playing</button>
+    <button class="nav-tab active" data-view="schedule" role="tab">Full Schedule</button>
+    <button class="nav-tab" data-view="map" role="tab">Now Playing</button>
   </nav>
 </header>
 
@@ -379,7 +379,7 @@ footer{margin-top:20px;padding:20px 16px calc(20px + var(--safe-bot));border-top
 <div class="content-split">
 
   <!-- ══ FULL SCHEDULE (left panel on desktop) ══ -->
-  <div class="view schedule-view" id="view-schedule">
+  <div class="view schedule-view active" id="view-schedule">
     <div class="day-tabs" id="schedDayTabs">
       <button class="day-tab active" data-sday="thu">Thu 4/30<span class="hl">Widespread Panic</span></button>
       <button class="day-tab" data-sday="fri">Fri 5/1<span class="hl">Lainey Wilson</span></button>
@@ -422,7 +422,7 @@ footer{margin-top:20px;padding:20px 16px calc(20px + var(--safe-bot));border-top
   </div><!-- /schedule-view -->
 
   <!-- ══ NOW PLAYING MAP VIEW (right panel on desktop) ══ -->
-  <div class="view map-view active" id="view-map">
+  <div class="view map-view" id="view-map">
 
     <!-- Time controls -->
     <div class="time-controls" id="timeControls">
