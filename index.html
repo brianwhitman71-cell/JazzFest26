@@ -236,6 +236,7 @@ main{max-width:1200px;margin:0 auto;padding:0 0 calc(60px + var(--safe-bot))}
 .vl-dot{width:10px;height:10px;border-radius:50%;flex-shrink:0}
 
 /* ── RULES & REGS ── */
+.prefest-note{font-family:'Barlow Condensed',sans-serif;font-size:12px;letter-spacing:0.08em;color:var(--amber);background:rgba(217,118,30,0.1);border-left:3px solid var(--amber);padding:7px 16px;}
 .rules-view{padding:0}
 .rules-wrap{max-width:900px;margin:0 auto;padding:24px 16px}
 .rules-header{margin-bottom:24px;padding-bottom:16px;border-bottom:1px solid var(--border)}
@@ -473,6 +474,7 @@ footer{margin-top:20px;padding:20px 16px calc(20px + var(--safe-bot));border-top
       <button class="gps-btn" id="gpsBtn"><div class="gps-dot"></div>GPS</button>
     </div>
     <div class="gps-status" id="gpsStatus"></div>
+    <div class="prefest-note" id="prefestNote" style="display:none"></div>
 
     <!-- ══ DETAILED SVG MAP ══ -->
     <div class="map-wrap">
@@ -1455,6 +1457,22 @@ function syncToNow() {
   setTimePickerValue(snapVal);
 
   btnNow.classList.toggle('synced', !!matchDay);
+
+  // Show a note when today is not a festival day
+  const prefestNote = document.getElementById('prefestNote');
+  if (prefestNote) {
+    if (!matchDay) {
+      const months = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
+      const todayStr = months[mo-1] + ' ' + d;
+      const fd = FEST_DATES[nearestDay];
+      const fdStr = months[fd.month-1] + ' ' + fd.day;
+      prefestNote.textContent = 'Today is ' + todayStr + ' — festival not yet started. Showing schedule for nearest day (' + fdStr + ').';
+      prefestNote.style.display = 'block';
+    } else {
+      prefestNote.style.display = 'none';
+    }
+  }
+
   updateLiveMap(dayPicker.value, timePicker.value);
 }
 
