@@ -164,15 +164,21 @@ main{max-width:1200px;margin:0 auto;padding:0 0 calc(60px + var(--safe-bot))}
 /* ══════════════════════════════════
    SCHEDULE VIEW
 ══════════════════════════════════ */
-.schedule-view{padding:16px 16px 16px}
-.day-tabs{display:flex;gap:0;overflow-x:auto;scrollbar-width:none;margin-bottom:20px;border-bottom:1px solid var(--border)}
+.schedule-view{padding:0}
+.day-tabs{
+  display:flex;gap:0;overflow-x:auto;scrollbar-width:none;
+  border-bottom:1px solid var(--border);
+  position:sticky;top:var(--header-h,96px);z-index:80;
+  background:var(--surface);
+  padding:0 16px;
+}
 .day-tabs::-webkit-scrollbar{display:none}
 .day-tab{font-family:'Barlow Condensed',sans-serif;font-size:14px;font-weight:600;letter-spacing:0.16em;text-transform:uppercase;color:var(--muted);padding:9px 16px 11px;border:none;background:transparent;cursor:pointer;border-bottom:2px solid transparent;transition:color 0.2s,border-color 0.2s;white-space:nowrap;-webkit-tap-highlight-color:transparent}
 .day-tab:hover{color:var(--cream)}
 .day-tab.active{color:var(--gold);border-bottom-color:var(--gold)}
 .day-tab .hl{display:block;font-size:11px;font-weight:400;letter-spacing:0.06em;color:var(--amber);margin-top:1px;opacity:0.8}
 .sched-day{display:none}
-.sched-day.active{display:block}
+.sched-day.active{display:block;padding:16px 16px 16px}
 .day-header{margin-bottom:16px}
 .day-title{font-family:'Cormorant SC',serif;font-size:clamp(22px,5vw,30px);font-weight:600;color:var(--gold);letter-spacing:0.08em}
 .day-hl{font-family:'Barlow Condensed',sans-serif;font-size:13px;letter-spacing:0.16em;text-transform:uppercase;color:var(--amber);display:block;margin-top:3px}
@@ -309,9 +315,10 @@ footer{margin-top:20px;padding:20px 16px calc(20px + var(--safe-bot));border-top
     display: block !important;
     width: 100%;
   }
-  /* Day tabs: hide sub-headline and shrink so all 4 fit in the panel */
+  /* Day tabs: hide sub-headline, shrink so all 4 fit, stick at top of scroll panel */
   .day-tab { font-size: 12px !important; padding: 8px 12px 10px !important; }
   .day-tab .hl { display: none !important; }
+  .day-tabs { top: 0; padding: 0 8px; }
 }
 
 @media (min-width: 1100px) {
