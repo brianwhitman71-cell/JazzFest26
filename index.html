@@ -301,9 +301,6 @@ footer{margin-top:20px;padding:20px 16px calc(20px + var(--safe-bot));border-top
 @media (min-width: 900px) {
   /* Keep nav tabs visible — needed for Rules & Regs */
   .nav-tabs { display: flex; }
-  /* Full Schedule + Now Playing tabs are always both visible on desktop */
-  .nav-tab[data-view="schedule"],
-  .nav-tab[data-view="map"] { opacity: 0.5; cursor: default; pointer-events: none; }
   .content-split:not(.rules-active) {
     display: flex;
     align-items: flex-start;
