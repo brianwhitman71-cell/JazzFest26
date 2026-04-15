@@ -141,6 +141,26 @@ main{max-width:1200px;margin:0 auto;padding:0 0 calc(60px + var(--safe-bot))}
 }
 .map-zoom-hint.show{opacity:1}
 
+/* Fullscreen map button */
+.map-fs-btn{
+  position:absolute;top:10px;right:10px;z-index:20;
+  background:rgba(0,0,0,0.55);color:rgba(255,255,255,0.85);
+  border:1px solid rgba(255,255,255,0.2);border-radius:4px;
+  width:36px;height:36px;display:flex;align-items:center;justify-content:center;
+  cursor:pointer;transition:background 0.2s,color 0.2s;
+  -webkit-tap-highlight-color:transparent;
+}
+.map-fs-btn:hover{background:rgba(0,0,0,0.8);color:#fff}
+
+/* Fullscreen map overlay */
+.map-wrap.fullscreen{
+  position:fixed;inset:0;z-index:9000;
+  width:100vw;height:100vh;
+  border:none;border-radius:0;
+}
+.map-wrap.fullscreen .map-svg{height:100%;width:100%;object-fit:contain}
+.map-wrap.fullscreen .map-fs-btn{top:14px;right:14px;width:44px;height:44px;}
+
 /* Band pills on map — font sizes large enough to read on iPhone */
 .stage-band-label{font-family:'Barlow Condensed',sans-serif;font-size:16px;font-weight:600;fill:rgba(255,255,255,0.9);dominant-baseline:middle;text-anchor:middle;pointer-events:none}
 .stage-sub-label{font-family:'Barlow Condensed',sans-serif;font-size:12px;font-weight:400;fill:rgba(255,255,255,0.45);dominant-baseline:middle;text-anchor:middle;pointer-events:none}
@@ -1001,6 +1021,12 @@ footer{margin-top:20px;padding:20px 16px calc(20px + var(--safe-bot));border-top
 
       </svg>
       <div class="map-zoom-hint" id="mapZoomHint">Pinch to zoom · Double-tap to reset</div>
+      <button class="map-fs-btn" id="mapFsBtn" title="Fullscreen map" aria-label="Toggle fullscreen map">
+        <svg id="mapFsIcon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" width="18" height="18">
+          <polyline points="15 3 21 3 21 9"/><polyline points="9 21 3 21 3 15"/>
+          <line x1="21" y1="3" x2="14" y2="10"/><line x1="3" y1="21" x2="10" y2="14"/>
+        </svg>
+      </button>
     </div><!-- /map-wrap -->
 
     <!-- Now-playing list -->
@@ -1828,6 +1854,40 @@ document.addEventListener('DOMContentLoaded', () => {
 
   // ── Map zoom/pan
   initMapZoom();
+
+  // ── Map fullscreen button
+  const mapWrap  = document.querySelector('.map-wrap');
+  const mapFsBtn = document.getElementById('mapFsBtn');
+  const mapFsIcon = document.getElementById('mapFsIcon');
+  const expandIcon = `<polyline points="15 3 21 3 21 9"/><polyline points="9 21 3 21 3 15"/><line x1="21" y1="3" x2="14" y2="10"/><line x1="3" y1="21" x2="10" y2="14"/>`;
+  const collapseIcon = `<polyline points="4 14 10 14 10 20"/><polyline points="20 4 14 4 14 10"/><line x1="10" y1="20" x2="3" y2="13"/><line x1="14" y1="10" x2="21" y2="3"/>`;
+
+  function exitMapFs() {
+    mapWrap.classList.remove('fullscreen');
+    document.body.style.overflow = '';
+    mapFsIcon.innerHTML = expandIcon;
+  }
+
+  mapFsBtn.addEventListener('click', () => {
+    if (mapWrap.classList.contains('fullscreen')) {
+      if (document.fullscreenElement) document.exitFullscreen().catch(()=>{});
+      exitMapFs();
+    } else {
+      mapWrap.classList.add('fullscreen');
+      document.body.style.overflow = 'hidden';
+      mapFsIcon.innerHTML = collapseIcon;
+      // Try native fullscreen (works on Android/desktop, silently fails on iOS)
+      if (mapWrap.requestFullscreen) {
+        mapWrap.requestFullscreen().catch(() => {});
+      }
+    }
+  });
+
+  // Exit on Escape or native fullscreen exit
+  document.addEventListener('keydown', e => { if (e.key === 'Escape') exitMapFs(); });
+  document.addEventListener('fullscreenchange', () => {
+    if (!document.fullscreenElement) exitMapFs();
+  });
 
   // ── Async: fetch fresh schedule from schedule.json on every load
   loadSchedule();
