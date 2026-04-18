@@ -362,18 +362,7 @@ span.beer-name{font-family:'Cormorant Garamond',serif;font-size:20px;font-weight
 .beer-price-row{display:flex;align-items:center;justify-content:space-between;margin-top:4px}
 .beer-price{font-family:'Barlow Condensed',sans-serif;font-size:14px;font-weight:700;color:var(--gold);letter-spacing:0.08em}
 .beer-note{font-family:'Barlow Condensed',sans-serif;font-size:13px;letter-spacing:0.08em;color:var(--dim)}
-/* Map highlight pulse — pulsing yellow ring injected into SVG */
-@keyframes map-pin-glow{
-  0%  {transform:scale(1);   opacity:1}
-  100%{transform:scale(3.5); opacity:0}
-}
-.map-pulse-ring{
-  fill:none;stroke:#f5d030;stroke-width:2.5;
-  transform-box:fill-box;transform-origin:50% 50%;
-  animation:map-pin-glow 1.1s ease-out 3 forwards;
-  pointer-events:none;
-  filter:drop-shadow(0 0 5px #f5d030) drop-shadow(0 0 12px #f5d030);
-}
+/* Map highlight pulse — rendered via SVG SMIL in #map-pulse-overlay */
 
 /* ── RULES & REGS ── */
 .prefest-note{font-family:'Barlow Condensed',sans-serif;font-size:16px;letter-spacing:0.08em;color:var(--amber);background:rgba(217,118,30,0.1);border-left:3px solid var(--amber);padding:8px 16px;}
@@ -645,6 +634,10 @@ footer{margin-top:20px;padding:20px 16px calc(20px + var(--safe-bot));border-top
           </filter>
           <filter id="softshadow" x="-20%" y="-20%" width="140%" height="140%">
             <feDropShadow dx="0" dy="1" stdDeviation="2" flood-color="#000" flood-opacity="0.5"/>
+          </filter>
+          <filter id="pulse-glow-filter" x="-150%" y="-150%" width="400%" height="400%">
+            <feGaussianBlur stdDeviation="5" result="blur"/>
+            <feMerge><feMergeNode in="blur"/><feMergeNode in="blur"/><feMergeNode in="SourceGraphic"/></feMerge>
           </filter>
           <!-- Grass texture pattern -->
           <pattern id="grass" width="6" height="6" patternUnits="userSpaceOnUse">
@@ -1138,6 +1131,9 @@ footer{margin-top:20px;padding:20px 16px calc(20px + var(--safe-bot));border-top
         <!-- Track label -->
         <text x="480" y="35" text-anchor="middle" font-family="Barlow Condensed,sans-serif" font-size="8" font-weight="500" letter-spacing="5" fill="#2e3428" opacity="0.7">FAIR GROUNDS RACE COURSE</text>
 
+        <!-- Pulse overlay — always on top, unaffected by other filters -->
+        <g id="map-pulse-overlay" pointer-events="none"></g>
+
       </svg>
       <div class="map-zoom-hint" id="mapZoomHint">Pinch to zoom · Double-tap to reset</div>
       <button class="map-fs-btn" id="mapFsBtn" title="Fullscreen map" aria-label="Toggle fullscreen map">
@@ -1428,27 +1424,57 @@ function showOnMap(areaId) {
   if (contentSplit) {
     contentSplit.classList.remove('rules-active', 'provisions-active');
   }
-  // Highlight target element with pulsing yellow ring
+  // Highlight with pulsing yellow ring in the SVG overlay group
   setTimeout(() => {
     const el = document.getElementById(areaId);
-    if (!el) return;
-    // Remove any existing pulse rings
-    el.querySelectorAll('.map-pulse-ring').forEach(r => r.remove());
-    // Determine ring radius: label markers use r=22, dot markers use r=14
-    const hasDot = el.querySelector('circle');
-    const r = hasDot ? 14 : 22;
+    const overlay = document.getElementById('map-pulse-overlay');
+    if (!el || !overlay) return;
+    // Accumulate translate transforms up to SVG root to get absolute coords
+    let tx = 0, ty = 0, node = el;
+    while (node && node.tagName !== 'svg') {
+      const t = (node.getAttribute && node.getAttribute('transform')) || '';
+      const m = t.match(/translate\(\s*([-\d.]+)\s*,\s*([-\d.]+)\s*\)/);
+      if (m) { tx += parseFloat(m[1]); ty += parseFloat(m[2]); }
+      node = node.parentElement;
+    }
+    // Clear any previous pulse
+    overlay.innerHTML = '';
+    // Two rings with staggered delay for continuous glow feel
     const ns = 'http://www.w3.org/2000/svg';
-    const ring = document.createElementNS(ns, 'circle');
-    ring.setAttribute('cx', '0');
-    ring.setAttribute('cy', '0');
-    ring.setAttribute('r', r);
-    ring.classList.add('map-pulse-ring');
-    el.appendChild(ring);
+    [0, 0.55].forEach(delay => {
+      const c = document.createElementNS(ns, 'circle');
+      c.setAttribute('cx', tx);
+      c.setAttribute('cy', ty);
+      c.setAttribute('r', '10');
+      c.setAttribute('fill', 'none');
+      c.setAttribute('stroke', '#f5d030');
+      c.setAttribute('stroke-width', '3');
+      c.setAttribute('filter', 'url(#pulse-glow-filter)');
+      const animR = document.createElementNS(ns, 'animate');
+      animR.setAttribute('attributeName', 'r');
+      animR.setAttribute('from', '10');
+      animR.setAttribute('to', '52');
+      animR.setAttribute('dur', '1.1s');
+      animR.setAttribute('begin', delay + 's');
+      animR.setAttribute('repeatCount', '3');
+      animR.setAttribute('fill', 'freeze');
+      const animO = document.createElementNS(ns, 'animate');
+      animO.setAttribute('attributeName', 'opacity');
+      animO.setAttribute('from', '1');
+      animO.setAttribute('to', '0');
+      animO.setAttribute('dur', '1.1s');
+      animO.setAttribute('begin', delay + 's');
+      animO.setAttribute('repeatCount', '3');
+      animO.setAttribute('fill', 'freeze');
+      c.appendChild(animR);
+      c.appendChild(animO);
+      overlay.appendChild(c);
+    });
     // Scroll map into view
     const mapWrap = document.querySelector('.map-wrap');
     if (mapWrap) mapWrap.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
-    // Clean up after 3 pulses (3 × 1.1s)
-    setTimeout(() => ring.remove(), 3400);
+    // Clean up after animations finish (3 pulses × 1.1s + stagger + buffer)
+    setTimeout(() => { overlay.innerHTML = ''; }, 4200);
   }, 100);
 }
 
