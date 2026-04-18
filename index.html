@@ -668,32 +668,74 @@ footer{margin-top:20px;padding:20px 16px calc(20px + var(--safe-bot));border-top
       <svg id="livemap" class="map-svg" viewBox="0 0 960 680" preserveAspectRatio="xMidYMid meet" xmlns="http://www.w3.org/2000/svg">
         <defs>
           <filter id="glow" x="-30%" y="-30%" width="160%" height="160%">
-            <feGaussianBlur stdDeviation="2.5" result="blur"/>
-            <feMerge><feMergeNode in="blur"/><feMergeNode in="SourceGraphic"/></feMerge>
-          </filter>
-          <filter id="glow2" x="-50%" y="-50%" width="200%" height="200%">
-            <feGaussianBlur stdDeviation="5" result="blur"/>
+            <feGaussianBlur stdDeviation="2" result="blur"/>
             <feMerge><feMergeNode in="blur"/><feMergeNode in="SourceGraphic"/></feMerge>
           </filter>
           <filter id="softshadow" x="-20%" y="-20%" width="140%" height="140%">
-            <feDropShadow dx="0" dy="1" stdDeviation="2" flood-color="#000" flood-opacity="0.5"/>
+            <feDropShadow dx="0" dy="2" stdDeviation="2.5" flood-color="#000" flood-opacity="0.4"/>
+          </filter>
+          <filter id="treeShadow" x="-60%" y="-60%" width="220%" height="220%">
+            <feDropShadow dx="3" dy="5" stdDeviation="3" flood-color="#000" flood-opacity="0.5"/>
+          </filter>
+          <filter id="structShadow" x="-30%" y="-30%" width="160%" height="160%">
+            <feDropShadow dx="4" dy="6" stdDeviation="3.5" flood-color="#000" flood-opacity="0.45"/>
           </filter>
           <filter id="pulse-glow-filter" x="-150%" y="-150%" width="400%" height="400%">
             <feGaussianBlur stdDeviation="5" result="blur"/>
             <feMerge><feMergeNode in="blur"/><feMergeNode in="blur"/><feMergeNode in="SourceGraphic"/></feMerge>
           </filter>
-          <!-- Grass texture pattern -->
-          <pattern id="grass" width="6" height="6" patternUnits="userSpaceOnUse">
-            <rect width="6" height="6" fill="#0c1808"/>
-            <line x1="0" y1="3" x2="6" y2="3" stroke="#112010" stroke-width="0.4" opacity="0.4"/>
-            <line x1="3" y1="0" x2="3" y2="6" stroke="#112010" stroke-width="0.4" opacity="0.2"/>
+          <!-- Aerial grass patterns -->
+          <pattern id="grass-outer" width="20" height="20" patternUnits="userSpaceOnUse">
+            <rect width="20" height="20" fill="#5aaa2a"/>
+            <rect x="0" y="0" width="10" height="10" fill="#62b430" opacity="0.3"/>
+            <rect x="10" y="10" width="10" height="10" fill="#529620" opacity="0.25"/>
+            <rect x="0" y="14" width="6" height="6" fill="#4e9018" opacity="0.2"/>
+            <rect x="14" y="3" width="4" height="4" fill="#66be32" opacity="0.2"/>
           </pattern>
-          <!-- Dirt texture pattern -->
-          <pattern id="dirt" width="8" height="8" patternUnits="userSpaceOnUse">
-            <rect width="8" height="8" fill="#1e1808"/>
-            <circle cx="2" cy="2" r="0.8" fill="#241e0e" opacity="0.5"/>
-            <circle cx="6" cy="5" r="0.6" fill="#241e0e" opacity="0.4"/>
+          <pattern id="grass-infield" width="16" height="16" patternUnits="userSpaceOnUse">
+            <rect width="16" height="16" fill="#52a022"/>
+            <rect x="0" y="0" width="8" height="8" fill="#5aac28" opacity="0.35"/>
+            <rect x="8" y="8" width="8" height="8" fill="#4a9018" opacity="0.3"/>
+            <rect x="4" y="12" width="5" height="4" fill="#62b830" opacity="0.2"/>
           </pattern>
+          <!-- Clay racetrack -->
+          <pattern id="clay" width="14" height="14" patternUnits="userSpaceOnUse">
+            <rect width="14" height="14" fill="#c49448"/>
+            <rect x="0" y="0" width="7" height="7" fill="#cc9e50" opacity="0.35"/>
+            <rect x="7" y="7" width="7" height="7" fill="#ba8a3e" opacity="0.3"/>
+            <circle cx="3" cy="3" r="1.5" fill="#d4a858" opacity="0.25"/>
+            <circle cx="10" cy="9" r="1.2" fill="#b48038" opacity="0.2"/>
+          </pattern>
+          <!-- Grandstand seating rows -->
+          <pattern id="seating" width="5" height="8" patternUnits="userSpaceOnUse">
+            <rect width="5" height="8" fill="#d8cda8"/>
+            <rect x="0" y="0" width="5" height="3.5" fill="#e2d6b4" opacity="0.7"/>
+            <rect x="0" y="4" width="5" height="3.5" fill="#ccc09a" opacity="0.6"/>
+            <line x1="0" y1="3.8" x2="5" y2="3.8" stroke="#b8a878" stroke-width="0.6"/>
+          </pattern>
+          <!-- Tree radial gradients — satellite lollipop look -->
+          <radialGradient id="treeGrad" cx="38%" cy="36%" r="62%">
+            <stop offset="0%" stop-color="#72d028"/>
+            <stop offset="40%" stop-color="#3e9010"/>
+            <stop offset="75%" stop-color="#1e6008"/>
+            <stop offset="100%" stop-color="#0a3804"/>
+          </radialGradient>
+          <radialGradient id="treeGradMed" cx="38%" cy="36%" r="62%">
+            <stop offset="0%" stop-color="#68c424"/>
+            <stop offset="40%" stop-color="#36820c"/>
+            <stop offset="75%" stop-color="#185406"/>
+            <stop offset="100%" stop-color="#082e02"/>
+          </radialGradient>
+          <radialGradient id="treeGradSm" cx="35%" cy="33%" r="65%">
+            <stop offset="0%" stop-color="#5cb81e"/>
+            <stop offset="45%" stop-color="#2e7408"/>
+            <stop offset="100%" stop-color="#0a3004"/>
+          </radialGradient>
+          <radialGradient id="shrubGrad" cx="40%" cy="38%" r="60%">
+            <stop offset="0%" stop-color="#58a820"/>
+            <stop offset="50%" stop-color="#246c08"/>
+            <stop offset="100%" stop-color="#083c02"/>
+          </radialGradient>
           <!-- Vendor icon symbols -->
           <symbol id="ic-food" viewBox="0 0 14 14">
             <line x1="3" y1="1.5" x2="3" y2="12" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
@@ -710,7 +752,7 @@ footer{margin-top:20px;padding:20px 16px calc(20px + var(--safe-bot));border-top
           <symbol id="ic-merch" viewBox="0 0 14 14">
             <path d="M2 5 L3 12 L11 12 L12 5 Z" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round"/>
             <path d="M4.5 5 C4.5 2 9.5 2 9.5 5" fill="none" stroke="currentColor" stroke-width="1.5"/>
-            <line x1="5" y1="8" x2="9" y2="8" stroke="currentColor" stroke-width="1.2" opacity="0.6"/>
+            <line x1="5" y1="8" x2="9" y2="8" stroke="currentColor" stroke-width="1.2" opacity="0.7"/>
           </symbol>
           <symbol id="ic-wc" viewBox="0 0 14 14">
             <circle cx="7" cy="7" r="5.5" fill="none" stroke="currentColor" stroke-width="1.2"/>
@@ -718,414 +760,425 @@ footer{margin-top:20px;padding:20px 16px calc(20px + var(--safe-bot));border-top
           </symbol>
         </defs>
 
-        <!-- ══ BACKGROUND ══ -->
-        <rect width="960" height="680" fill="#060a05"/>
-
-        <!-- Outer grounds boundary -->
-        <rect x="14" y="14" width="932" height="652" rx="6" fill="#080e07" stroke="#161e12" stroke-width="1.5"/>
-
-        <!-- Street label — Gentilly Blvd -->
-        <text x="480" y="672" text-anchor="middle" font-family="Barlow Condensed,sans-serif" font-size="8" font-weight="500" letter-spacing="3" fill="#2e3428" opacity="0.8">GENTILLY BLVD</text>
-
-        <!-- ══ GROUNDS GRASS ══ -->
-        <rect x="22" y="22" width="916" height="636" rx="4" fill="url(#grass)"/>
+        <!-- ══ GROUND LAYERS ══ -->
+        <rect width="960" height="680" fill="#2e2c26"/>
+        <rect x="0" y="654" width="960" height="26" fill="#3a3830"/>
+        <line x1="100" y1="667" x2="860" y2="667" stroke="#6a6450" stroke-width="0.8" stroke-dasharray="22,14" opacity="0.6"/>
+        <rect x="14" y="646" width="932" height="8" fill="#b0a888" opacity="0.6"/>
+        <rect x="14" y="14" width="932" height="640" rx="5" fill="#3e7c16" stroke="#2a5c0e" stroke-width="2"/>
+        <rect x="18" y="18" width="924" height="632" rx="4" fill="url(#grass-outer)"/>
+        <rect x="18" y="18" width="924" height="632" rx="4" fill="none" stroke="#c4bcaa" stroke-width="18" opacity="0.6"/>
+        <rect x="18" y="18" width="924" height="632" rx="4" fill="none" stroke="#a8a08c" stroke-width="1.5" opacity="0.35"/>
 
         <!-- ══ RACE TRACK ══ -->
-        <!-- Outer track boundary — dirt oval -->
-        <ellipse cx="480" cy="324" rx="418" ry="268" fill="url(#dirt)" stroke="#2e2410" stroke-width="1"/>
-        <!-- Inner track edge / infield -->
-        <ellipse cx="480" cy="324" rx="342" ry="196" fill="url(#grass)" stroke="#1e2a14" stroke-width="1"/>
-
-        <!-- Track surface markings -->
-        <ellipse cx="480" cy="324" rx="418" ry="268" fill="none" stroke="#2a2010" stroke-width="0.5" opacity="0.5"/>
-        <ellipse cx="480" cy="324" rx="380" ry="240" fill="none" stroke="#2a2010" stroke-width="0.5" opacity="0.3"/>
-
-        <!-- ══ GRANDSTAND / CLUBHOUSE (east side) ══ -->
-        <g opacity="0.9">
-          <!-- Main grandstand building -->
-          <rect x="880" y="224" width="56" height="200" rx="2" fill="#1a1812" stroke="#2e2a1e" stroke-width="1"/>
-          <!-- Grandstand rows indicator -->
-          <line x1="882" y1="240" x2="934" y2="240" stroke="#2e2a1e" stroke-width="0.8"/>
-          <line x1="882" y1="256" x2="934" y2="256" stroke="#2e2a1e" stroke-width="0.8"/>
-          <line x1="882" y1="272" x2="934" y2="272" stroke="#2e2a1e" stroke-width="0.8"/>
-          <line x1="882" y1="288" x2="934" y2="288" stroke="#2e2a1e" stroke-width="0.8"/>
-          <line x1="882" y1="304" x2="934" y2="304" stroke="#2e2a1e" stroke-width="0.8"/>
-          <line x1="882" y1="320" x2="934" y2="320" stroke="#2e2a1e" stroke-width="0.8"/>
-          <line x1="882" y1="336" x2="934" y2="336" stroke="#2e2a1e" stroke-width="0.8"/>
-          <line x1="882" y1="352" x2="934" y2="352" stroke="#2e2a1e" stroke-width="0.8"/>
-          <line x1="882" y1="368" x2="934" y2="368" stroke="#2e2a1e" stroke-width="0.8"/>
-          <line x1="882" y1="384" x2="934" y2="384" stroke="#2e2a1e" stroke-width="0.8"/>
-          <line x1="882" y1="400" x2="934" y2="400" stroke="#2e2a1e" stroke-width="0.8"/>
-          <text x="908" y="436" text-anchor="middle" font-family="Barlow Condensed,sans-serif" font-size="7" font-weight="600" letter-spacing="1" fill="#3e3828" transform="rotate(-90 908 436)">GRANDSTAND</text>
+        <ellipse cx="480" cy="324" rx="418" ry="268" fill="url(#clay)" stroke="#a07828" stroke-width="2"/>
+        <ellipse cx="480" cy="324" rx="416" ry="266" fill="none" stroke="#f0e8c8" stroke-width="2.5" opacity="0.6"/>
+        <ellipse cx="480" cy="324" rx="344" ry="198" fill="none" stroke="#f0e8c8" stroke-width="2" opacity="0.55"/>
+        <ellipse cx="480" cy="324" rx="342" ry="196" fill="url(#grass-infield)" stroke="#3a7810" stroke-width="2"/>
+        <ellipse cx="480" cy="324" rx="340" ry="194" fill="none" stroke="#2e6008" stroke-width="1" opacity="0.5"/>
+        <!-- Furlong poles -->
+        <g fill="#f0e0a0" opacity="0.7">
+          <rect x="62" y="322" width="4" height="8" rx="1"/><rect x="898" y="322" width="4" height="8" rx="1"/>
+          <rect x="480" y="57" width="8" height="4" rx="1"/><rect x="480" y="588" width="8" height="4" rx="1"/>
+          <rect x="146" y="135" width="6" height="6" rx="1"/><rect x="804" y="135" width="6" height="6" rx="1"/>
+          <rect x="146" y="512" width="6" height="6" rx="1"/><rect x="804" y="512" width="6" height="6" rx="1"/>
         </g>
+
+        <!-- ══ GRANDSTAND / CLUBHOUSE ══ -->
+        <rect x="884" y="230" width="58" height="196" rx="2" fill="#000" opacity="0.4" transform="translate(5,7)"/>
+        <rect x="882" y="224" width="56" height="200" rx="2" fill="url(#seating)" stroke="#c0ae80" stroke-width="1.5"/>
+        <rect x="882" y="224" width="56" height="7" rx="1" fill="#c8b888" opacity="0.9"/>
+        <rect x="882" y="417" width="56" height="7" rx="1" fill="#c8b888" opacity="0.9"/>
+        <line x1="910" y1="224" x2="910" y2="424" stroke="#f0e4c0" stroke-width="3" opacity="0.4"/>
+        <text x="910" y="432" text-anchor="middle" font-family="Barlow Condensed,sans-serif" font-size="7" font-weight="700" letter-spacing="1.5" fill="#8a7840" transform="rotate(-90 910 432)">GRANDSTAND</text>
+        <rect x="840" y="290" width="46" height="65" rx="2" fill="#000" opacity="0.35" transform="translate(4,6)"/>
+        <rect x="840" y="290" width="46" height="65" rx="2" fill="#d8cc98" stroke="#b8a868" stroke-width="1.5"/>
+        <rect x="848" y="298" width="30" height="10" rx="1" fill="#f0e4b8" opacity="0.8"/>
+        <line x1="863" y1="290" x2="863" y2="355" stroke="#e0d4a0" stroke-width="2" opacity="0.4"/>
+        <text x="863" y="373" text-anchor="middle" font-family="Barlow Condensed,sans-serif" font-size="6" font-weight="600" fill="#7a6c38">CLUBHOUSE</text>
 
         <!-- ══ WALKWAYS / PATHS ══ -->
-        <!-- Main north-south spine -->
-        <line x1="480" y1="132" x2="480" y2="590" stroke="#1a2016" stroke-width="10" stroke-linecap="round" opacity="0.6"/>
-        <line x1="480" y1="132" x2="480" y2="590" stroke="#22280e" stroke-width="6" stroke-linecap="round" opacity="0.8"/>
-        <!-- East-west main path -->
-        <line x1="148" y1="328" x2="840" y2="328" stroke="#1a2016" stroke-width="8" stroke-linecap="round" opacity="0.5"/>
-        <line x1="148" y1="328" x2="840" y2="328" stroke="#22280e" stroke-width="5" stroke-linecap="round" opacity="0.7"/>
-        <!-- Congo Sq to center -->
-        <line x1="195" y1="388" x2="420" y2="335" stroke="#22280e" stroke-width="5" opacity="0.5"/>
-        <!-- Blues Tent to center -->
-        <line x1="258" y1="490" x2="420" y2="395" stroke="#22280e" stroke-width="4" opacity="0.5"/>
-        <!-- Lagniappe to main path -->
-        <line x1="220" y1="210" x2="340" y2="290" stroke="#22280e" stroke-width="4" opacity="0.5"/>
-        <!-- Economy Hall to WWOZ -->
-        <line x1="810" y1="320" x2="810" y2="412" stroke="#22280e" stroke-width="4" opacity="0.5"/>
-        <!-- Gospel Tent path -->
-        <line x1="700" y1="168" x2="560" y2="268" stroke="#22280e" stroke-width="4" opacity="0.5"/>
-        <!-- Fais Do-Do path -->
-        <line x1="700" y1="490" x2="560" y2="395" stroke="#22280e" stroke-width="4" opacity="0.5"/>
-        <!-- South entrance path -->
-        <line x1="480" y1="590" x2="480" y2="658" stroke="#22280e" stroke-width="12" opacity="0.6"/>
-        <!-- West paths -->
-        <line x1="148" y1="328" x2="22" y2="328" stroke="#22280e" stroke-width="6" opacity="0.4"/>
+        <line x1="480" y1="125" x2="480" y2="588" stroke="#8a826e" stroke-width="16" stroke-linecap="round" opacity="0.55"/>
+        <line x1="480" y1="125" x2="480" y2="588" stroke="#c4bca8" stroke-width="11" stroke-linecap="round" opacity="0.75"/>
+        <line x1="480" y1="125" x2="480" y2="588" stroke="#d4cdb8" stroke-width="5" stroke-linecap="round" opacity="0.4"/>
+        <line x1="144" y1="328" x2="840" y2="328" stroke="#8a826e" stroke-width="14" stroke-linecap="round" opacity="0.5"/>
+        <line x1="144" y1="328" x2="840" y2="328" stroke="#c4bca8" stroke-width="9" stroke-linecap="round" opacity="0.7"/>
+        <line x1="144" y1="328" x2="840" y2="328" stroke="#d4cdb8" stroke-width="4" stroke-linecap="round" opacity="0.4"/>
+        <line x1="195" y1="388" x2="420" y2="335" stroke="#b8b09c" stroke-width="8" opacity="0.6"/>
+        <line x1="258" y1="490" x2="420" y2="395" stroke="#b8b09c" stroke-width="7" opacity="0.6"/>
+        <line x1="220" y1="210" x2="340" y2="290" stroke="#b8b09c" stroke-width="7" opacity="0.6"/>
+        <line x1="810" y1="320" x2="810" y2="412" stroke="#b8b09c" stroke-width="7" opacity="0.6"/>
+        <line x1="700" y1="168" x2="560" y2="268" stroke="#b8b09c" stroke-width="7" opacity="0.6"/>
+        <line x1="700" y1="490" x2="560" y2="395" stroke="#b8b09c" stroke-width="7" opacity="0.6"/>
+        <line x1="144" y1="328" x2="22" y2="328" stroke="#b8b09c" stroke-width="9" opacity="0.55"/>
+        <line x1="480" y1="588" x2="480" y2="654" stroke="#7a7460" stroke-width="22" opacity="0.6"/>
+        <line x1="480" y1="588" x2="480" y2="654" stroke="#b8b09c" stroke-width="15" opacity="0.7"/>
 
-        <!-- ══ TREES (decorative) ══ -->
-        <g fill="#0f2010" opacity="0.7">
-          <!-- Infield trees -->
-          <circle cx="380" cy="250" r="12"/><circle cx="590" cy="250" r="10"/>
-          <circle cx="350" cy="360" r="9"/><circle cx="610" cy="360" r="11"/>
-          <circle cx="410" cy="460" r="8"/><circle cx="560" cy="450" r="9"/>
-          <circle cx="340" cy="310" r="7"/><circle cx="640" cy="290" r="8"/>
-          <circle cx="440" cy="230" r="7"/><circle cx="530" cy="235" r="6"/>
-          <!-- Outer trees -->
-          <circle cx="90" cy="100" r="10"/><circle cx="150" cy="80" r="8"/>
-          <circle cx="820" cy="90" r="10"/><circle cx="870" cy="115" r="7"/>
-          <circle cx="80" cy="520" r="9"/><circle cx="110" cy="580" r="7"/>
-          <circle cx="840" cy="580" r="9"/><circle cx="780" cy="610" r="8"/>
-          <circle cx="200" cy="620" r="7"/><circle cx="290" cy="640" r="6"/>
-          <circle cx="660" cy="640" r="7"/><circle cx="750" cy="630" r="6"/>
-          <circle cx="50" cy="200" r="8"/><circle cx="50" cy="440" r="8"/>
-          <circle cx="910" cy="180" r="7"/><circle cx="910" cy="480" r="7"/>
+        <!-- ══ TREES — satellite radial-gradient lollipop look ══ -->
+        <!-- Shadows -->
+        <g opacity="0.28" fill="#000">
+          <circle cx="383" cy="257" r="15"/><circle cx="593" cy="257" r="13"/><circle cx="353" cy="367" r="12"/><circle cx="613" cy="367" r="14"/>
+          <circle cx="413" cy="467" r="11"/><circle cx="563" cy="457" r="12"/><circle cx="343" cy="317" r="10"/><circle cx="643" cy="297" r="11"/>
+          <circle cx="443" cy="237" r="10"/><circle cx="533" cy="242" r="9"/><circle cx="455" cy="293" r="9"/><circle cx="507" cy="288" r="8"/>
+          <circle cx="360" cy="432" r="8"/><circle cx="600" cy="402" r="9"/><circle cx="420" cy="400" r="7"/><circle cx="545" cy="380" r="8"/>
+          <circle cx="93" cy="107" r="15"/><circle cx="153" cy="87" r="13"/><circle cx="823" cy="97" r="15"/><circle cx="873" cy="122" r="12"/>
+          <circle cx="83" cy="527" r="14"/><circle cx="113" cy="587" r="12"/><circle cx="843" cy="587" r="14"/><circle cx="783" cy="617" r="13"/>
+          <circle cx="203" cy="627" r="12"/><circle cx="293" cy="647" r="11"/><circle cx="663" cy="647" r="12"/><circle cx="753" cy="637" r="11"/>
+          <circle cx="53" cy="207" r="13"/><circle cx="53" cy="447" r="13"/><circle cx="913" cy="187" r="12"/><circle cx="913" cy="487" r="12"/>
+          <circle cx="130" cy="152" r="11"/><circle cx="80" cy="382" r="12"/><circle cx="878" cy="202" r="11"/><circle cx="158" cy="452" r="10"/>
+          <circle cx="700" cy="52" r="10"/><circle cx="380" cy="47" r="9"/><circle cx="243" cy="58" r="10"/><circle cx="603" cy="51" r="11"/>
+          <circle cx="733" cy="623" r="10"/><circle cx="353" cy="633" r="9"/>
+          <circle cx="45" cy="100" r="9"/><circle cx="45" cy="300" r="10"/><circle cx="45" cy="560" r="10"/><circle cx="915" cy="350" r="9"/>
+          <circle cx="160" cy="640" r="8"/><circle cx="800" cy="640" r="9"/>
         </g>
-        <!-- Lighter tree highlight dots -->
-        <g fill="#163018" opacity="0.5">
-          <circle cx="380" cy="250" r="6"/><circle cx="590" cy="250" r="5"/>
-          <circle cx="350" cy="360" r="4"/><circle cx="610" cy="360" r="5"/>
-          <circle cx="90" cy="100" r="5"/><circle cx="820" cy="90" r="5"/>
+        <!-- Tree canopies -->
+        <g filter="url(#treeShadow)">
+          <circle cx="380" cy="250" r="15" fill="url(#treeGrad)"/><circle cx="590" cy="250" r="13" fill="url(#treeGrad)"/>
+          <circle cx="350" cy="360" r="12" fill="url(#treeGradMed)"/><circle cx="610" cy="360" r="14" fill="url(#treeGrad)"/>
+          <circle cx="410" cy="460" r="11" fill="url(#treeGradMed)"/><circle cx="560" cy="450" r="12" fill="url(#treeGrad)"/>
+          <circle cx="340" cy="310" r="10" fill="url(#treeGradSm)"/><circle cx="640" cy="290" r="11" fill="url(#treeGradMed)"/>
+          <circle cx="440" cy="230" r="10" fill="url(#treeGradSm)"/><circle cx="530" cy="235" r="9" fill="url(#treeGradSm)"/>
+          <circle cx="452" cy="287" r="9" fill="url(#treeGradSm)"/><circle cx="505" cy="282" r="8" fill="url(#treeGradSm)"/>
+          <circle cx="357" cy="427" r="8" fill="url(#treeGradSm)"/><circle cx="597" cy="397" r="9" fill="url(#treeGradMed)"/>
+          <circle cx="418" cy="398" r="7" fill="url(#treeGradSm)"/><circle cx="543" cy="378" r="8" fill="url(#treeGradSm)"/>
+          <circle cx="90" cy="100" r="15" fill="url(#treeGrad)"/><circle cx="150" cy="80" r="13" fill="url(#treeGradMed)"/>
+          <circle cx="820" cy="90" r="15" fill="url(#treeGrad)"/><circle cx="870" cy="115" r="12" fill="url(#treeGradSm)"/>
+          <circle cx="80" cy="520" r="14" fill="url(#treeGrad)"/><circle cx="110" cy="580" r="12" fill="url(#treeGradMed)"/>
+          <circle cx="840" cy="580" r="14" fill="url(#treeGrad)"/><circle cx="780" cy="610" r="13" fill="url(#treeGradMed)"/>
+          <circle cx="200" cy="620" r="12" fill="url(#treeGradSm)"/><circle cx="290" cy="640" r="11" fill="url(#treeGradSm)"/>
+          <circle cx="660" cy="640" r="12" fill="url(#treeGradMed)"/><circle cx="750" cy="630" r="11" fill="url(#treeGradSm)"/>
+          <circle cx="50" cy="200" r="13" fill="url(#treeGrad)"/><circle cx="50" cy="440" r="13" fill="url(#treeGrad)"/>
+          <circle cx="910" cy="180" r="12" fill="url(#treeGradMed)"/><circle cx="910" cy="480" r="12" fill="url(#treeGradMed)"/>
+          <circle cx="127" cy="147" r="11" fill="url(#shrubGrad)"/><circle cx="77" cy="377" r="12" fill="url(#treeGradMed)"/>
+          <circle cx="877" cy="197" r="11" fill="url(#shrubGrad)"/><circle cx="157" cy="447" r="10" fill="url(#shrubGrad)"/>
+          <circle cx="697" cy="47" r="10" fill="url(#treeGradSm)"/><circle cx="377" cy="42" r="9" fill="url(#treeGradSm)"/>
+          <circle cx="240" cy="55" r="10" fill="url(#treeGradSm)"/><circle cx="600" cy="48" r="11" fill="url(#treeGradMed)"/>
+          <circle cx="730" cy="620" r="10" fill="url(#shrubGrad)"/><circle cx="350" cy="630" r="9" fill="url(#shrubGrad)"/>
+          <circle cx="44" cy="97" r="9" fill="url(#treeGradSm)"/><circle cx="44" cy="297" r="10" fill="url(#treeGradMed)"/>
+          <circle cx="44" cy="557" r="10" fill="url(#treeGrad)"/><circle cx="912" cy="347" r="9" fill="url(#treeGradSm)"/>
+          <circle cx="157" cy="637" r="8" fill="url(#shrubGrad)"/><circle cx="797" cy="637" r="9" fill="url(#shrubGrad)"/>
+          <circle cx="115" cy="37" r="8" fill="url(#treeGradSm)"/><circle cx="840" cy="37" r="8" fill="url(#treeGradSm)"/>
         </g>
 
         <!-- ══ ENTRANCE GATES ══ -->
-        <!-- Main entrance (south) -->
-        <g transform="translate(480,638)">
-          <rect x="-50" y="-10" width="100" height="20" rx="3" fill="#12180e" stroke="#2a3820" stroke-width="1"/>
-          <rect x="-40" y="-6" width="80" height="12" rx="2" fill="#0c1208"/>
-          <text x="0" y="4" text-anchor="middle" font-family="Barlow Condensed,sans-serif" font-size="7.5" font-weight="700" letter-spacing="2" fill="#3a4830">MAIN ENTRANCE · GATE A</text>
+        <g transform="translate(480,638)" filter="url(#softshadow)">
+          <rect x="-58" y="-14" width="116" height="28" rx="3" fill="#3c5028" stroke="#5a7840" stroke-width="1.5"/>
+          <rect x="-50" y="-10" width="100" height="20" rx="2" fill="#2c3c1e" opacity="0.8"/>
+          <rect x="-56" y="-16" width="10" height="32" rx="1" fill="#506838" stroke="#6a8850" stroke-width="1"/>
+          <rect x="46" y="-16" width="10" height="32" rx="1" fill="#506838" stroke="#6a8850" stroke-width="1"/>
+          <text x="0" y="4" text-anchor="middle" font-family="Barlow Condensed,sans-serif" font-size="7.5" font-weight="700" letter-spacing="2" fill="#a8d078">MAIN ENTRANCE · GATE A</text>
         </g>
-        <!-- Gate B (south-west) -->
-        <g transform="translate(260,638)">
-          <rect x="-28" y="-8" width="56" height="16" rx="2" fill="#12180e" stroke="#2a3820" stroke-width="1"/>
-          <text x="0" y="4" text-anchor="middle" font-family="Barlow Condensed,sans-serif" font-size="7" font-weight="600" letter-spacing="1.5" fill="#3a4830">GATE B</text>
+        <g transform="translate(260,638)" filter="url(#softshadow)">
+          <rect x="-32" y="-12" width="64" height="24" rx="2" fill="#3c5028" stroke="#5a7840" stroke-width="1"/>
+          <rect x="-28" y="-6" width="12" height="18" rx="1" fill="#506838"/>
+          <rect x="16" y="-6" width="12" height="18" rx="1" fill="#506838"/>
+          <text x="0" y="5" text-anchor="middle" font-family="Barlow Condensed,sans-serif" font-size="7.5" font-weight="700" letter-spacing="1.5" fill="#a8d078">GATE B</text>
         </g>
-        <!-- Gate C (south-east) -->
-        <g transform="translate(700,638)">
-          <rect x="-28" y="-8" width="56" height="16" rx="2" fill="#12180e" stroke="#2a3820" stroke-width="1"/>
-          <text x="0" y="4" text-anchor="middle" font-family="Barlow Condensed,sans-serif" font-size="7" font-weight="600" letter-spacing="1.5" fill="#3a4830">GATE C</text>
+        <g transform="translate(700,638)" filter="url(#softshadow)">
+          <rect x="-32" y="-12" width="64" height="24" rx="2" fill="#3c5028" stroke="#5a7840" stroke-width="1"/>
+          <rect x="-28" y="-6" width="12" height="18" rx="1" fill="#506838"/>
+          <rect x="16" y="-6" width="12" height="18" rx="1" fill="#506838"/>
+          <text x="0" y="5" text-anchor="middle" font-family="Barlow Condensed,sans-serif" font-size="7.5" font-weight="700" letter-spacing="1.5" fill="#a8d078">GATE C</text>
         </g>
-        <!-- North Gate -->
-        <g transform="translate(480,22)">
-          <rect x="-28" y="-2" width="56" height="14" rx="2" fill="#12180e" stroke="#2a3820" stroke-width="1"/>
-          <text x="0" y="9" text-anchor="middle" font-family="Barlow Condensed,sans-serif" font-size="7" font-weight="600" letter-spacing="1.5" fill="#3a4830">GATE N</text>
+        <g transform="translate(480,22)" filter="url(#softshadow)">
+          <rect x="-32" y="-2" width="64" height="18" rx="2" fill="#3c5028" stroke="#5a7840" stroke-width="1"/>
+          <text x="0" y="12" text-anchor="middle" font-family="Barlow Condensed,sans-serif" font-size="7.5" font-weight="600" letter-spacing="1.5" fill="#a8d078">GATE N</text>
         </g>
 
         <!-- ══ FOOD VENDOR MARKERS ══ -->
-        <!-- Food Area 1 (north) -->
-        <g id="map-area-fa1" transform="translate(300,62)" opacity="0.9">
-          <rect x="-28" y="-9" width="56" height="18" rx="2" fill="#2a1e08" stroke="#8B6914" stroke-width="0.8"/>
-          <text x="0" y="5" text-anchor="middle" font-family="Barlow Condensed,sans-serif" font-size="7" font-weight="600" letter-spacing="1" fill="#c9a84c">FOOD AREA 1</text>
+        <g id="map-area-fa1" transform="translate(300,62)" opacity="0.97" filter="url(#softshadow)">
+          <rect x="-32" y="-11" width="64" height="22" rx="2" fill="#3c2c08" stroke="#e0b840" stroke-width="1.2"/>
+          <rect x="-30" y="-9" width="60" height="18" rx="1" fill="#241a04" opacity="0.6"/>
+          <text x="0" y="5" text-anchor="middle" font-family="Barlow Condensed,sans-serif" font-size="7" font-weight="700" letter-spacing="1" fill="#f0cc50">FOOD AREA 1</text>
         </g>
-        <!-- Food Area 2 (south-center) -->
-        <g id="map-area-fa2" transform="translate(330,545)" opacity="0.9">
-          <rect x="-38" y="-10" width="76" height="20" rx="2" fill="#2a1e08" stroke="#8B6914" stroke-width="0.8"/>
-          <text x="0" y="5" text-anchor="middle" font-family="Barlow Condensed,sans-serif" font-size="7" font-weight="600" letter-spacing="1" fill="#c9a84c">FOOD AREA 2</text>
+        <g id="map-area-fa2" transform="translate(330,545)" opacity="0.97" filter="url(#softshadow)">
+          <rect x="-42" y="-12" width="84" height="24" rx="2" fill="#3c2c08" stroke="#e0b840" stroke-width="1.2"/>
+          <rect x="-40" y="-10" width="80" height="20" rx="1" fill="#241a04" opacity="0.6"/>
+          <text x="0" y="6" text-anchor="middle" font-family="Barlow Condensed,sans-serif" font-size="7" font-weight="700" letter-spacing="1" fill="#f0cc50">FOOD AREA 2</text>
         </g>
-        <!-- Heritage Square (south-east) -->
-        <g id="map-area-heritage" transform="translate(628,545)" opacity="0.9">
-          <rect x="-35" y="-10" width="70" height="20" rx="2" fill="#2a1e08" stroke="#8B6914" stroke-width="0.8"/>
-          <text x="0" y="5" text-anchor="middle" font-family="Barlow Condensed,sans-serif" font-size="7" font-weight="600" letter-spacing="1" fill="#c9a84c">HERITAGE SQUARE</text>
+        <g id="map-area-heritage" transform="translate(628,545)" opacity="0.97" filter="url(#softshadow)">
+          <rect x="-40" y="-12" width="80" height="24" rx="2" fill="#3c2c08" stroke="#e0b840" stroke-width="1.2"/>
+          <rect x="-38" y="-10" width="76" height="20" rx="1" fill="#241a04" opacity="0.6"/>
+          <text x="0" y="6" text-anchor="middle" font-family="Barlow Condensed,sans-serif" font-size="7" font-weight="700" letter-spacing="1" fill="#f0cc50">HERITAGE SQUARE</text>
         </g>
-
-        <!-- Individual food vendor dots -->
         <g id="vendors-food" filter="url(#softshadow)">
-          <!-- Congo Square food -->
           <g id="map-area-congo" transform="translate(178,330)">
-            <circle r="9" fill="#3d2a05" stroke="#c9a84c" stroke-width="1"/>
-            <use href="#ic-food" x="-5" y="-5.5" width="10" height="11" stroke="#c9a84c" fill="none" stroke-linecap="round"/>
+            <circle r="11" fill="#4a3008" stroke="#e8c050" stroke-width="1.3"/>
+            <use href="#ic-food" x="-5" y="-5.5" width="10" height="11" stroke="#e8c050" fill="none" stroke-linecap="round"/>
           </g>
-          <!-- Louisiana Folklife Village -->
           <g id="map-area-folklife" transform="translate(235,505)">
-            <circle r="9" fill="#3d2a05" stroke="#c9a84c" stroke-width="1"/>
-            <use href="#ic-food" x="-5" y="-5.5" width="10" height="11" stroke="#c9a84c" fill="none" stroke-linecap="round"/>
+            <circle r="11" fill="#4a3008" stroke="#e8c050" stroke-width="1.3"/>
+            <use href="#ic-food" x="-5" y="-5.5" width="10" height="11" stroke="#e8c050" fill="none" stroke-linecap="round"/>
           </g>
-          <!-- Cultural Exchange Village -->
           <g id="map-area-cultural" transform="translate(296,370)">
-            <circle r="9" fill="#3d2a05" stroke="#c9a84c" stroke-width="1"/>
-            <use href="#ic-food" x="-5" y="-5.5" width="10" height="11" stroke="#c9a84c" fill="none" stroke-linecap="round"/>
+            <circle r="11" fill="#4a3008" stroke="#e8c050" stroke-width="1.3"/>
+            <use href="#ic-food" x="-5" y="-5.5" width="10" height="11" stroke="#e8c050" fill="none" stroke-linecap="round"/>
           </g>
-          <!-- Around the Grounds (north center) -->
           <g id="map-area-grounds" transform="translate(540,62)">
-            <circle r="9" fill="#3d2a05" stroke="#c9a84c" stroke-width="1"/>
-            <use href="#ic-food" x="-5" y="-5.5" width="10" height="11" stroke="#c9a84c" fill="none" stroke-linecap="round"/>
+            <circle r="11" fill="#4a3008" stroke="#e8c050" stroke-width="1.3"/>
+            <use href="#ic-food" x="-5" y="-5.5" width="10" height="11" stroke="#e8c050" fill="none" stroke-linecap="round"/>
           </g>
-          <!-- Grandstand area -->
           <g id="map-area-grandstand" transform="translate(795,190)">
-            <circle r="9" fill="#3d2a05" stroke="#c9a84c" stroke-width="1"/>
-            <use href="#ic-food" x="-5" y="-5.5" width="10" height="11" stroke="#c9a84c" fill="none" stroke-linecap="round"/>
+            <circle r="11" fill="#4a3008" stroke="#e8c050" stroke-width="1.3"/>
+            <use href="#ic-food" x="-5" y="-5.5" width="10" height="11" stroke="#e8c050" fill="none" stroke-linecap="round"/>
           </g>
-          <!-- Fais Do-Do area food -->
           <g transform="translate(762,532)">
-            <circle r="9" fill="#3d2a05" stroke="#c9a84c" stroke-width="1"/>
-            <use href="#ic-food" x="-5" y="-5.5" width="10" height="11" stroke="#c9a84c" fill="none" stroke-linecap="round"/>
+            <circle r="11" fill="#4a3008" stroke="#e8c050" stroke-width="1.3"/>
+            <use href="#ic-food" x="-5" y="-5.5" width="10" height="11" stroke="#e8c050" fill="none" stroke-linecap="round"/>
           </g>
         </g>
 
         <!-- ══ DRINK / BAR MARKERS ══ -->
         <g id="vendors-drink" filter="url(#softshadow)">
-          <!-- Near Acura west (Casamigos Bar area) -->
           <g id="map-bar-south-west" transform="translate(410,530)">
-            <circle r="9" fill="#08243a" stroke="#4a9eff" stroke-width="1"/>
-            <use href="#ic-drink" x="-5" y="-5.5" width="10" height="11" stroke="#4a9eff" fill="none" stroke-linecap="round"/>
+            <circle r="11" fill="#083a58" stroke="#5ab8ff" stroke-width="1.3"/>
+            <use href="#ic-drink" x="-5" y="-5.5" width="10" height="11" stroke="#5ab8ff" fill="none" stroke-linecap="round"/>
           </g>
-          <!-- Near Acura east (Daiquiris) -->
           <g id="map-bar-south-east" transform="translate(560,530)">
-            <circle r="9" fill="#08243a" stroke="#4a9eff" stroke-width="1"/>
-            <use href="#ic-drink" x="-5" y="-5.5" width="10" height="11" stroke="#4a9eff" fill="none" stroke-linecap="round"/>
+            <circle r="11" fill="#083a58" stroke="#5ab8ff" stroke-width="1.3"/>
+            <use href="#ic-drink" x="-5" y="-5.5" width="10" height="11" stroke="#5ab8ff" fill="none" stroke-linecap="round"/>
           </g>
-          <!-- Near Congo Square (Club Tito's) -->
           <g id="map-bar-congo" transform="translate(155,430)">
-            <circle r="9" fill="#08243a" stroke="#4a9eff" stroke-width="1"/>
-            <use href="#ic-drink" x="-5" y="-5.5" width="10" height="11" stroke="#4a9eff" fill="none" stroke-linecap="round"/>
+            <circle r="11" fill="#083a58" stroke="#5ab8ff" stroke-width="1.3"/>
+            <use href="#ic-drink" x="-5" y="-5.5" width="10" height="11" stroke="#5ab8ff" fill="none" stroke-linecap="round"/>
           </g>
-          <!-- Near WWOZ/Economy Hall (Draft Beer Stands) -->
           <g id="map-bar-east" transform="translate(808,450)">
-            <circle r="9" fill="#08243a" stroke="#4a9eff" stroke-width="1"/>
-            <use href="#ic-drink" x="-5" y="-5.5" width="10" height="11" stroke="#4a9eff" fill="none" stroke-linecap="round"/>
+            <circle r="11" fill="#083a58" stroke="#5ab8ff" stroke-width="1.3"/>
+            <use href="#ic-drink" x="-5" y="-5.5" width="10" height="11" stroke="#5ab8ff" fill="none" stroke-linecap="round"/>
           </g>
-          <!-- Near Shell Gentilly west (Wine Tent) -->
           <g id="map-bar-north-west" transform="translate(386,130)">
-            <circle r="9" fill="#08243a" stroke="#4a9eff" stroke-width="1"/>
-            <use href="#ic-drink" x="-5" y="-5.5" width="10" height="11" stroke="#4a9eff" fill="none" stroke-linecap="round"/>
+            <circle r="11" fill="#083a58" stroke="#5ab8ff" stroke-width="1.3"/>
+            <use href="#ic-drink" x="-5" y="-5.5" width="10" height="11" stroke="#5ab8ff" fill="none" stroke-linecap="round"/>
           </g>
-          <!-- Near Shell Gentilly east -->
           <g id="map-bar-north-east" transform="translate(574,130)">
-            <circle r="9" fill="#08243a" stroke="#4a9eff" stroke-width="1"/>
-            <use href="#ic-drink" x="-5" y="-5.5" width="10" height="11" stroke="#4a9eff" fill="none" stroke-linecap="round"/>
+            <circle r="11" fill="#083a58" stroke="#5ab8ff" stroke-width="1.3"/>
+            <use href="#ic-drink" x="-5" y="-5.5" width="10" height="11" stroke="#5ab8ff" fill="none" stroke-linecap="round"/>
           </g>
-          <!-- Center infield bar (Beer Tents) -->
           <g id="map-bar-center" transform="translate(480,372)">
-            <circle r="9" fill="#08243a" stroke="#4a9eff" stroke-width="1"/>
-            <use href="#ic-drink" x="-5" y="-5.5" width="10" height="11" stroke="#4a9eff" fill="none" stroke-linecap="round"/>
+            <circle r="11" fill="#083a58" stroke="#5ab8ff" stroke-width="1.3"/>
+            <use href="#ic-drink" x="-5" y="-5.5" width="10" height="11" stroke="#5ab8ff" fill="none" stroke-linecap="round"/>
           </g>
         </g>
 
         <!-- ══ MERCHANDISE MARKERS ══ -->
         <g id="vendors-merch" filter="url(#softshadow)">
-          <!-- Main entrance merch -->
           <g transform="translate(480,600)">
-            <circle r="9" fill="#2a1a3a" stroke="#c07a00" stroke-width="1"/>
-            <use href="#ic-merch" x="-5" y="-5.5" width="10" height="11" stroke="#c07a00" fill="none" stroke-linecap="round"/>
+            <circle r="11" fill="#342048" stroke="#d89000" stroke-width="1.3"/>
+            <use href="#ic-merch" x="-5" y="-5.5" width="10" height="11" stroke="#d89000" fill="none" stroke-linecap="round"/>
           </g>
-          <!-- Near Acura Stage -->
           <g transform="translate(565,470)">
-            <circle r="9" fill="#2a1a3a" stroke="#c07a00" stroke-width="1"/>
-            <use href="#ic-merch" x="-5" y="-5.5" width="10" height="11" stroke="#c07a00" fill="none" stroke-linecap="round"/>
+            <circle r="11" fill="#342048" stroke="#d89000" stroke-width="1.3"/>
+            <use href="#ic-merch" x="-5" y="-5.5" width="10" height="11" stroke="#d89000" fill="none" stroke-linecap="round"/>
           </g>
-          <!-- East side near grandstand -->
           <g transform="translate(858,320)">
-            <circle r="9" fill="#2a1a3a" stroke="#c07a00" stroke-width="1"/>
-            <use href="#ic-merch" x="-5" y="-5.5" width="10" height="11" stroke="#c07a00" fill="none" stroke-linecap="round"/>
+            <circle r="11" fill="#342048" stroke="#d89000" stroke-width="1.3"/>
+            <use href="#ic-merch" x="-5" y="-5.5" width="10" height="11" stroke="#d89000" fill="none" stroke-linecap="round"/>
           </g>
-          <!-- North area -->
           <g transform="translate(688,62)">
-            <circle r="9" fill="#2a1a3a" stroke="#c07a00" stroke-width="1"/>
-            <use href="#ic-merch" x="-5" y="-5.5" width="10" height="11" stroke="#c07a00" fill="none" stroke-linecap="round"/>
+            <circle r="11" fill="#342048" stroke="#d89000" stroke-width="1.3"/>
+            <use href="#ic-merch" x="-5" y="-5.5" width="10" height="11" stroke="#d89000" fill="none" stroke-linecap="round"/>
           </g>
         </g>
 
-        <!-- ══ RESTROOM / BATHROOM MARKERS ══ -->
+        <!-- ══ RESTROOM MARKERS ══ -->
         <g id="vendors-wc" filter="url(#softshadow)">
-          <!-- Gate A entrance -->
-          <g transform="translate(430,608)">
-            <circle r="9" fill="#1a2818" stroke="#4a7a4a" stroke-width="1"/>
-            <use href="#ic-wc" x="-6" y="-6" width="12" height="12" stroke="#4a7a4a" fill="none"/>
-          </g>
-          <!-- Gate A east -->
-          <g transform="translate(530,608)">
-            <circle r="9" fill="#1a2818" stroke="#4a7a4a" stroke-width="1"/>
-            <use href="#ic-wc" x="-6" y="-6" width="12" height="12" stroke="#4a7a4a" fill="none"/>
-          </g>
-          <!-- South-west -->
-          <g transform="translate(190,540)">
-            <circle r="9" fill="#1a2818" stroke="#4a7a4a" stroke-width="1"/>
-            <use href="#ic-wc" x="-6" y="-6" width="12" height="12" stroke="#4a7a4a" fill="none"/>
-          </g>
-          <!-- South-east -->
-          <g transform="translate(770,540)">
-            <circle r="9" fill="#1a2818" stroke="#4a7a4a" stroke-width="1"/>
-            <use href="#ic-wc" x="-6" y="-6" width="12" height="12" stroke="#4a7a4a" fill="none"/>
-          </g>
-          <!-- West side -->
-          <g transform="translate(80,300)">
-            <circle r="9" fill="#1a2818" stroke="#4a7a4a" stroke-width="1"/>
-            <use href="#ic-wc" x="-6" y="-6" width="12" height="12" stroke="#4a7a4a" fill="none"/>
-          </g>
-          <!-- East side -->
-          <g transform="translate(868,440)">
-            <circle r="9" fill="#1a2818" stroke="#4a7a4a" stroke-width="1"/>
-            <use href="#ic-wc" x="-6" y="-6" width="12" height="12" stroke="#4a7a4a" fill="none"/>
-          </g>
-          <!-- North-west area -->
-          <g transform="translate(200,80)">
-            <circle r="9" fill="#1a2818" stroke="#4a7a4a" stroke-width="1"/>
-            <use href="#ic-wc" x="-6" y="-6" width="12" height="12" stroke="#4a7a4a" fill="none"/>
-          </g>
-          <!-- North-east area -->
-          <g transform="translate(775,80)">
-            <circle r="9" fill="#1a2818" stroke="#4a7a4a" stroke-width="1"/>
-            <use href="#ic-wc" x="-6" y="-6" width="12" height="12" stroke="#4a7a4a" fill="none"/>
-          </g>
-          <!-- Center -->
-          <g transform="translate(480,430)">
-            <circle r="9" fill="#1a2818" stroke="#4a7a4a" stroke-width="1"/>
-            <use href="#ic-wc" x="-6" y="-6" width="12" height="12" stroke="#4a7a4a" fill="none"/>
-          </g>
+          <g transform="translate(430,608)"><circle r="11" fill="#1a3020" stroke="#5acc5a" stroke-width="1.3"/><use href="#ic-wc" x="-6" y="-6" width="12" height="12" stroke="#5acc5a" fill="none"/></g>
+          <g transform="translate(530,608)"><circle r="11" fill="#1a3020" stroke="#5acc5a" stroke-width="1.3"/><use href="#ic-wc" x="-6" y="-6" width="12" height="12" stroke="#5acc5a" fill="none"/></g>
+          <g transform="translate(190,540)"><circle r="11" fill="#1a3020" stroke="#5acc5a" stroke-width="1.3"/><use href="#ic-wc" x="-6" y="-6" width="12" height="12" stroke="#5acc5a" fill="none"/></g>
+          <g transform="translate(770,540)"><circle r="11" fill="#1a3020" stroke="#5acc5a" stroke-width="1.3"/><use href="#ic-wc" x="-6" y="-6" width="12" height="12" stroke="#5acc5a" fill="none"/></g>
+          <g transform="translate(80,300)"><circle r="11" fill="#1a3020" stroke="#5acc5a" stroke-width="1.3"/><use href="#ic-wc" x="-6" y="-6" width="12" height="12" stroke="#5acc5a" fill="none"/></g>
+          <g transform="translate(868,440)"><circle r="11" fill="#1a3020" stroke="#5acc5a" stroke-width="1.3"/><use href="#ic-wc" x="-6" y="-6" width="12" height="12" stroke="#5acc5a" fill="none"/></g>
+          <g transform="translate(200,80)"><circle r="11" fill="#1a3020" stroke="#5acc5a" stroke-width="1.3"/><use href="#ic-wc" x="-6" y="-6" width="12" height="12" stroke="#5acc5a" fill="none"/></g>
+          <g transform="translate(775,80)"><circle r="11" fill="#1a3020" stroke="#5acc5a" stroke-width="1.3"/><use href="#ic-wc" x="-6" y="-6" width="12" height="12" stroke="#5acc5a" fill="none"/></g>
+          <g transform="translate(480,430)"><circle r="11" fill="#1a3020" stroke="#5acc5a" stroke-width="1.3"/><use href="#ic-wc" x="-6" y="-6" width="12" height="12" stroke="#5acc5a" fill="none"/></g>
         </g>
 
         <!-- ══════════════════════════════
              STAGE GROUPS
-             (static bg + dynamic pill)
         ══════════════════════════════ -->
 
-        <!-- ACURA STAGE — south-center, main stage, large -->
+        <!-- ACURA STAGE -->
         <g id="sg-Acura Stage" class="stage-g" transform="translate(480,480)" filter="url(#glow)">
-          <!-- Stage platform -->
-          <rect x="-66" y="-26" width="132" height="52" rx="4" fill="#1a6fb5" opacity="0.95"/>
-          <!-- Stage roof triangle (pointing toward audience/north) -->
-          <polygon points="-50,-26 50,-26 0,-46" fill="#1560a0" opacity="0.8"/>
-          <line x1="-66" y1="-26" x2="66" y2="-26" stroke="#2a8fd5" stroke-width="1" opacity="0.5"/>
-          <text class="stage-band-label" x="0" y="-8" font-size="9.5" font-weight="700" letter-spacing="1.5">ACURA STAGE</text>
-          <text class="stage-sub-label" x="0" y="8">Main Stage</text>
-          <!-- Dynamic band pill (above) -->
+          <rect x="-64" y="-24" width="136" height="58" rx="4" fill="#000" opacity="0.45" transform="translate(5,7)"/>
+          <rect x="-66" y="-26" width="132" height="52" rx="4" fill="#155faa"/>
+          <rect x="-66" y="-26" width="66" height="52" fill="#1568b8" opacity="0.8"/>
+          <rect x="0" y="-26" width="66" height="52" fill="#1258a0" opacity="0.8"/>
+          <line x1="0" y1="-26" x2="0" y2="26" stroke="#3a9fec" stroke-width="2.5" opacity="0.7"/>
+          <polygon points="-52,-26 52,-26 0,-52" fill="#0e4a90" opacity="0.9"/>
+          <line x1="-52" y1="-26" x2="0" y2="-52" stroke="#4aacff" stroke-width="1.2" opacity="0.6"/>
+          <line x1="52" y1="-26" x2="0" y2="-52" stroke="#4aacff" stroke-width="1.2" opacity="0.6"/>
+          <line x1="-66" y1="-26" x2="66" y2="-26" stroke="#4aacff" stroke-width="1.5" opacity="0.5"/>
+          <rect x="-66" y="-30" width="132" height="6" rx="2" fill="#0e3a72" opacity="0.7"/>
+          <text class="stage-band-label" x="0" y="-8" font-size="9.5" font-weight="700" letter-spacing="1.5" fill="#d8f0ff">ACURA STAGE</text>
+          <text class="stage-sub-label" x="0" y="8" fill="#90c8f0" opacity="0.9">Main Stage</text>
           <g class="band-pill empty" id="pill-Acura Stage">
-            <rect x="-70" y="-76" width="140" height="22" rx="3" fill="#0e4a82" stroke="#2a8fd5" stroke-width="0.8" opacity="0.45"/>
-            <text class="stage-band-name" id="bn-Acura Stage" x="0" y="-61" fill="#e0f0ff" font-size="10.5"></text>
+            <rect x="-72" y="-78" width="144" height="22" rx="3" fill="#0a3868" stroke="#2a8fd5" stroke-width="0.8" opacity="0.7"/>
+            <text class="stage-band-name" id="bn-Acura Stage" x="0" y="-63" fill="#e0f0ff" font-size="10.5"></text>
           </g>
         </g>
 
-        <!-- SHELL GENTILLY STAGE — north-center -->
+        <!-- SHELL GENTILLY STAGE -->
         <g id="sg-Shell Gentilly Stage" class="stage-g" transform="translate(480,120)" filter="url(#glow)">
-          <rect x="-60" y="-24" width="120" height="48" rx="4" fill="#2e8b57" opacity="0.95"/>
-          <polygon points="-48,24 48,24 0,44" fill="#257048" opacity="0.8"/>
-          <line x1="-60" y1="24" x2="60" y2="24" stroke="#3aaa6a" stroke-width="1" opacity="0.5"/>
-          <text class="stage-band-label" x="0" y="-6" font-size="9" font-weight="700" letter-spacing="1.5">SHELL GENTILLY</text>
-          <text class="stage-sub-label" x="0" y="9">Stage</text>
-          <!-- Dynamic band pill (below) -->
+          <rect x="-60" y="-24" width="124" height="58" rx="4" fill="#000" opacity="0.4" transform="translate(5,7)"/>
+          <rect x="-60" y="-24" width="120" height="48" rx="4" fill="#228040"/>
+          <rect x="-60" y="-24" width="60" height="48" fill="#269048" opacity="0.8"/>
+          <rect x="0" y="-24" width="60" height="48" fill="#1e7038" opacity="0.8"/>
+          <line x1="0" y1="-24" x2="0" y2="24" stroke="#3acc68" stroke-width="2.5" opacity="0.7"/>
+          <polygon points="-48,24 48,24 0,50" fill="#185c2c" opacity="0.9"/>
+          <line x1="-48" y1="24" x2="0" y2="50" stroke="#3acc68" stroke-width="1.2" opacity="0.6"/>
+          <line x1="48" y1="24" x2="0" y2="50" stroke="#3acc68" stroke-width="1.2" opacity="0.6"/>
+          <line x1="-60" y1="24" x2="60" y2="24" stroke="#3acc68" stroke-width="1.5" opacity="0.5"/>
+          <rect x="-60" y="20" width="120" height="6" rx="2" fill="#104020" opacity="0.7"/>
+          <text class="stage-band-label" x="0" y="-6" font-size="9" font-weight="700" letter-spacing="1.5" fill="#c0ffe0">SHELL GENTILLY</text>
+          <text class="stage-sub-label" x="0" y="9" fill="#80e0a8" opacity="0.9">Stage</text>
           <g class="band-pill empty" id="pill-Shell Gentilly Stage">
-            <rect x="-70" y="54" width="140" height="22" rx="3" fill="#1c6038" stroke="#3aaa6a" stroke-width="0.8" opacity="0.45"/>
-            <text class="stage-band-name" id="bn-Shell Gentilly Stage" x="0" y="69" fill="#c0ffd8" font-size="10.5"></text>
+            <rect x="-70" y="60" width="140" height="22" rx="3" fill="#145830" stroke="#3aaa6a" stroke-width="0.8" opacity="0.7"/>
+            <text class="stage-band-name" id="bn-Shell Gentilly Stage" x="0" y="75" fill="#c0ffd8" font-size="10.5"></text>
           </g>
         </g>
 
-        <!-- CONGO SQUARE STAGE — left/west -->
+        <!-- CONGO SQUARE STAGE -->
         <g id="sg-Congo Square Stage" class="stage-g" transform="translate(128,388)" filter="url(#glow)">
-          <rect x="-52" y="-22" width="104" height="44" rx="4" fill="#8b2252" opacity="0.95"/>
-          <!-- Stage pointing east (audience faces east) -->
-          <polygon points="52,-14 52,14 68,0" fill="#70184a" opacity="0.8"/>
-          <line x1="52" y1="-22" x2="52" y2="22" stroke="#b03570" stroke-width="1" opacity="0.5"/>
-          <text class="stage-band-label" x="0" y="-5" font-size="8.5" font-weight="700" letter-spacing="1.5">CONGO SQUARE</text>
-          <text class="stage-sub-label" x="0" y="8">Stage</text>
+          <rect x="-52" y="-22" width="116" height="50" rx="4" fill="#000" opacity="0.4" transform="translate(5,7)"/>
+          <rect x="-52" y="-22" width="104" height="44" rx="4" fill="#7a1c48"/>
+          <rect x="-52" y="-22" width="104" height="22" fill="#8a2458" opacity="0.8"/>
+          <rect x="-52" y="0" width="104" height="22" fill="#6c1440" opacity="0.8"/>
+          <line x1="-52" y1="0" x2="52" y2="0" stroke="#cc3a78" stroke-width="2.5" opacity="0.6"/>
+          <polygon points="52,-16 52,16 76,0" fill="#5c0c30" opacity="0.9"/>
+          <line x1="52" y1="-16" x2="76" y2="0" stroke="#cc3a78" stroke-width="1.2" opacity="0.6"/>
+          <line x1="52" y1="16" x2="76" y2="0" stroke="#cc3a78" stroke-width="1.2" opacity="0.6"/>
+          <line x1="52" y1="-22" x2="52" y2="22" stroke="#b82e68" stroke-width="1.5" opacity="0.5"/>
+          <rect x="48" y="-22" width="6" height="44" fill="#4c0828" opacity="0.7"/>
+          <text class="stage-band-label" x="0" y="-5" font-size="8.5" font-weight="700" letter-spacing="1.5" fill="#ffd0e8">CONGO SQUARE</text>
+          <text class="stage-sub-label" x="0" y="10" fill="#f090c0" opacity="0.9">Stage</text>
           <g class="band-pill empty" id="pill-Congo Square Stage">
-            <rect x="-68" y="-60" width="136" height="22" rx="3" fill="#5c1038" stroke="#b03570" stroke-width="0.8" opacity="0.45"/>
-            <text class="stage-band-name" id="bn-Congo Square Stage" x="0" y="-45" fill="#ffd0e8" font-size="10.5"></text>
+            <rect x="-68" y="-62" width="136" height="22" rx="3" fill="#4a0c28" stroke="#b82e68" stroke-width="0.8" opacity="0.7"/>
+            <text class="stage-band-name" id="bn-Congo Square Stage" x="0" y="-47" fill="#ffd0e8" font-size="10.5"></text>
           </g>
         </g>
 
-        <!-- WWOZ JAZZ TENT — right/east -->
+        <!-- WWOZ JAZZ TENT -->
         <g id="sg-WWOZ Jazz Tent" class="stage-g" transform="translate(820,290)" filter="url(#glow)">
-          <rect x="-52" y="-22" width="104" height="44" rx="6" fill="#c07a00" opacity="0.95"/>
-          <!-- Tent peak indicators -->
-          <polyline points="-52,-22 -26,-35 0,-22 26,-35 52,-22" fill="none" stroke="#e09820" stroke-width="1.2" opacity="0.7"/>
-          <text class="stage-band-label" x="0" y="-5" font-size="8.5" font-weight="700" letter-spacing="1">WWOZ JAZZ TENT</text>
-          <text class="stage-sub-label" x="0" y="9">Jazz Tent</text>
+          <rect x="-52" y="-22" width="116" height="52" rx="6" fill="#000" opacity="0.4" transform="translate(5,7)"/>
+          <rect x="-52" y="-22" width="104" height="44" rx="6" fill="#aa6800"/>
+          <polygon points="-52,-22 -26,-38 0,-22" fill="#8a4e00" opacity="0.7"/>
+          <polygon points="0,-22 26,-38 52,-22" fill="#8a4e00" opacity="0.7"/>
+          <line x1="-26" y1="-22" x2="-26" y2="22" stroke="#e89820" stroke-width="1.5" opacity="0.5"/>
+          <line x1="26" y1="-22" x2="26" y2="22" stroke="#e89820" stroke-width="1.5" opacity="0.5"/>
+          <polyline points="-52,-22 -26,-40 0,-22 26,-40 52,-22" fill="none" stroke="#f0ae28" stroke-width="2" opacity="0.8"/>
+          <text class="stage-band-label" x="0" y="-5" font-size="8.5" font-weight="700" letter-spacing="1" fill="#fff0c0">WWOZ JAZZ TENT</text>
+          <text class="stage-sub-label" x="0" y="11" fill="#f0d080" opacity="0.9">Jazz Tent</text>
           <g class="band-pill empty" id="pill-WWOZ Jazz Tent">
-            <rect x="-70" y="-60" width="140" height="22" rx="3" fill="#8a5200" stroke="#e09820" stroke-width="0.8" opacity="0.45"/>
-            <text class="stage-band-name" id="bn-WWOZ Jazz Tent" x="0" y="-45" fill="#fff0c0" font-size="10.5"></text>
+            <rect x="-72" y="-62" width="144" height="22" rx="3" fill="#784800" stroke="#e09820" stroke-width="0.8" opacity="0.7"/>
+            <text class="stage-band-name" id="bn-WWOZ Jazz Tent" x="0" y="-47" fill="#fff0c0" font-size="10.5"></text>
           </g>
         </g>
 
-        <!-- BLUES TENT — south-west -->
+        <!-- BLUES TENT -->
         <g id="sg-Blues Tent" class="stage-g" transform="translate(210,490)" filter="url(#glow)">
-          <rect x="-48" y="-21" width="96" height="42" rx="6" fill="#4545a0" opacity="0.95"/>
-          <polyline points="-48,-21 -24,-34 0,-21 24,-34 48,-21" fill="none" stroke="#6a6acc" stroke-width="1.2" opacity="0.7"/>
-          <text class="stage-band-label" x="0" y="-4" font-size="8.5" font-weight="700" letter-spacing="1">BLUES TENT</text>
-          <text class="stage-sub-label" x="0" y="9" opacity="0.5">Blues</text>
+          <rect x="-48" y="-21" width="108" height="50" rx="6" fill="#000" opacity="0.4" transform="translate(5,7)"/>
+          <rect x="-48" y="-21" width="96" height="42" rx="6" fill="#383890"/>
+          <polygon points="-48,-21 -24,-37 0,-21" fill="#242474" opacity="0.7"/>
+          <polygon points="0,-21 24,-37 48,-21" fill="#242474" opacity="0.7"/>
+          <line x1="-24" y1="-21" x2="-24" y2="21" stroke="#6868cc" stroke-width="1.5" opacity="0.5"/>
+          <line x1="24" y1="-21" x2="24" y2="21" stroke="#6868cc" stroke-width="1.5" opacity="0.5"/>
+          <polyline points="-48,-21 -24,-39 0,-21 24,-39 48,-21" fill="none" stroke="#7878e0" stroke-width="2" opacity="0.8"/>
+          <text class="stage-band-label" x="0" y="-4" font-size="8.5" font-weight="700" letter-spacing="1" fill="#d0d0ff">BLUES TENT</text>
+          <text class="stage-sub-label" x="0" y="11" fill="#a0a0e8" opacity="0.9">Blues</text>
           <g class="band-pill empty" id="pill-Blues Tent">
-            <rect x="-60" y="-59" width="120" height="22" rx="3" fill="#2a2a7a" stroke="#6a6acc" stroke-width="0.8" opacity="0.45"/>
-            <text class="stage-band-name" id="bn-Blues Tent" x="0" y="-44" fill="#d0d0ff" font-size="10.5"></text>
+            <rect x="-62" y="-61" width="124" height="22" rx="3" fill="#1e1e68" stroke="#6868cc" stroke-width="0.8" opacity="0.7"/>
+            <text class="stage-band-name" id="bn-Blues Tent" x="0" y="-46" fill="#d0d0ff" font-size="10.5"></text>
           </g>
         </g>
 
-        <!-- GOSPEL TENT — north-east -->
+        <!-- GOSPEL TENT -->
         <g id="sg-Gospel Tent" class="stage-g" transform="translate(718,148)" filter="url(#glow)">
-          <rect x="-48" y="-21" width="96" height="42" rx="6" fill="#a03800" opacity="0.95"/>
-          <polyline points="-48,-21 -24,-34 0,-21 24,-34 48,-21" fill="none" stroke="#d05010" stroke-width="1.2" opacity="0.7"/>
-          <text class="stage-band-label" x="0" y="-4" font-size="8.5" font-weight="700" letter-spacing="1">GOSPEL TENT</text>
-          <text class="stage-sub-label" x="0" y="9" opacity="0.5">Gospel</text>
+          <rect x="-48" y="-21" width="108" height="50" rx="6" fill="#000" opacity="0.4" transform="translate(5,7)"/>
+          <rect x="-48" y="-21" width="96" height="42" rx="6" fill="#8e2e00"/>
+          <polygon points="-48,-21 -24,-37 0,-21" fill="#6c1c00" opacity="0.7"/>
+          <polygon points="0,-21 24,-37 48,-21" fill="#6c1c00" opacity="0.7"/>
+          <line x1="-24" y1="-21" x2="-24" y2="21" stroke="#d05818" stroke-width="1.5" opacity="0.5"/>
+          <line x1="24" y1="-21" x2="24" y2="21" stroke="#d05818" stroke-width="1.5" opacity="0.5"/>
+          <polyline points="-48,-21 -24,-39 0,-21 24,-39 48,-21" fill="none" stroke="#e06820" stroke-width="2" opacity="0.8"/>
+          <text class="stage-band-label" x="0" y="-4" font-size="8.5" font-weight="700" letter-spacing="1" fill="#ffe0c0">GOSPEL TENT</text>
+          <text class="stage-sub-label" x="0" y="11" fill="#f0b080" opacity="0.9">Gospel</text>
           <g class="band-pill empty" id="pill-Gospel Tent">
-            <rect x="-62" y="29" width="124" height="22" rx="3" fill="#6a2200" stroke="#d05010" stroke-width="0.8" opacity="0.45"/>
-            <text class="stage-band-name" id="bn-Gospel Tent" x="0" y="44" fill="#ffe0c0" font-size="10.5"></text>
+            <rect x="-64" y="31" width="128" height="22" rx="3" fill="#5a1800" stroke="#d05818" stroke-width="0.8" opacity="0.7"/>
+            <text class="stage-band-name" id="bn-Gospel Tent" x="0" y="46" fill="#ffe0c0" font-size="10.5"></text>
           </g>
         </g>
 
-        <!-- ECONOMY HALL TENT — east -->
+        <!-- ECONOMY HALL TENT -->
         <g id="sg-Economy Hall Tent" class="stage-g" transform="translate(800,410)" filter="url(#glow)">
-          <rect x="-52" y="-22" width="104" height="44" rx="4" fill="#2a7a7a" opacity="0.95"/>
-          <rect x="-52" y="-28" width="104" height="8" rx="2" fill="#1e6060" opacity="0.8"/>
-          <text class="stage-band-label" x="0" y="-6" font-size="8" font-weight="700" letter-spacing="1">ECONOMY HALL</text>
-          <text class="stage-sub-label" x="0" y="8">Tent</text>
+          <rect x="-52" y="-22" width="116" height="52" rx="4" fill="#000" opacity="0.4" transform="translate(5,7)"/>
+          <rect x="-52" y="-22" width="104" height="44" rx="4" fill="#206868"/>
+          <rect x="-52" y="-28" width="104" height="8" rx="2" fill="#154e4e" opacity="0.9"/>
+          <line x1="-26" y1="-22" x2="-26" y2="22" stroke="#30a0a0" stroke-width="1" opacity="0.4"/>
+          <line x1="0" y1="-22" x2="0" y2="22" stroke="#30a0a0" stroke-width="2" opacity="0.5"/>
+          <line x1="26" y1="-22" x2="26" y2="22" stroke="#30a0a0" stroke-width="1" opacity="0.4"/>
+          <line x1="-52" y1="-22" x2="52" y2="-22" stroke="#30a0a0" stroke-width="1.5" opacity="0.5"/>
+          <text class="stage-band-label" x="0" y="-6" font-size="8" font-weight="700" letter-spacing="1" fill="#c0ffee">ECONOMY HALL</text>
+          <text class="stage-sub-label" x="0" y="10" fill="#80e0cc" opacity="0.9">Tent</text>
           <g class="band-pill empty" id="pill-Economy Hall Tent">
-            <rect x="-68" y="-68" width="136" height="22" rx="3" fill="#165050" stroke="#3aaa9a" stroke-width="0.8" opacity="0.45"/>
-            <text class="stage-band-name" id="bn-Economy Hall Tent" x="0" y="-53" fill="#c0ffee" font-size="10.5"></text>
+            <rect x="-70" y="-70" width="140" height="22" rx="3" fill="#103c3c" stroke="#30a0a0" stroke-width="0.8" opacity="0.7"/>
+            <text class="stage-band-name" id="bn-Economy Hall Tent" x="0" y="-55" fill="#c0ffee" font-size="10.5"></text>
           </g>
         </g>
 
-        <!-- LAGNIAPPE STAGE — west, upper -->
+        <!-- LAGNIAPPE STAGE -->
         <g id="sg-Lagniappe Stage" class="stage-g" transform="translate(170,208)" filter="url(#glow)">
-          <rect x="-50" y="-21" width="100" height="42" rx="4" fill="#7a3a9a" opacity="0.95"/>
-          <polygon points="-38,-21 38,-21 0,-37" fill="#6020808" opacity="0.7"/>
-          <text class="stage-band-label" x="0" y="-4" font-size="8.5" font-weight="700" letter-spacing="1">LAGNIAPPE</text>
-          <text class="stage-sub-label" x="0" y="9">Stage</text>
+          <rect x="-50" y="-21" width="112" height="50" rx="4" fill="#000" opacity="0.4" transform="translate(5,7)"/>
+          <rect x="-50" y="-21" width="100" height="42" rx="4" fill="#6a2888"/>
+          <rect x="-50" y="-21" width="50" height="42" fill="#7a3098" opacity="0.8"/>
+          <rect x="0" y="-21" width="50" height="42" fill="#5e2078" opacity="0.8"/>
+          <line x1="0" y1="-21" x2="0" y2="21" stroke="#b060e0" stroke-width="2.5" opacity="0.7"/>
+          <polygon points="-40,-21 40,-21 0,-41" fill="#4c1460" opacity="0.9"/>
+          <line x1="-40" y1="-21" x2="0" y2="-41" stroke="#b060e0" stroke-width="1.2" opacity="0.6"/>
+          <line x1="40" y1="-21" x2="0" y2="-41" stroke="#b060e0" stroke-width="1.2" opacity="0.6"/>
+          <line x1="-50" y1="-21" x2="50" y2="-21" stroke="#a050cc" stroke-width="1.5" opacity="0.5"/>
+          <text class="stage-band-label" x="0" y="-4" font-size="8.5" font-weight="700" letter-spacing="1" fill="#f0d0ff">LAGNIAPPE</text>
+          <text class="stage-sub-label" x="0" y="11" fill="#c890e8" opacity="0.9">Stage</text>
           <g class="band-pill empty" id="pill-Lagniappe Stage">
-            <rect x="-62" y="29" width="124" height="22" rx="3" fill="#4e2068" stroke="#a060cc" stroke-width="0.8" opacity="0.45"/>
-            <text class="stage-band-name" id="bn-Lagniappe Stage" x="0" y="44" fill="#f0d0ff" font-size="10.5"></text>
+            <rect x="-64" y="31" width="128" height="22" rx="3" fill="#3c1050" stroke="#a060cc" stroke-width="0.8" opacity="0.7"/>
+            <text class="stage-band-name" id="bn-Lagniappe Stage" x="0" y="46" fill="#f0d0ff" font-size="10.5"></text>
           </g>
         </g>
 
-        <!-- FAIS DO-DO STAGE — south-east -->
+        <!-- FAIS DO-DO STAGE -->
         <g id="sg-Fais Do-Do Stage" class="stage-g" transform="translate(718,488)" filter="url(#glow)">
-          <rect x="-50" y="-21" width="100" height="42" rx="4" fill="#5a7a2a" opacity="0.95"/>
-          <polygon points="-38,-21 38,-21 0,-37" fill="#486020" opacity="0.7"/>
-          <text class="stage-band-label" x="0" y="-4" font-size="8.5" font-weight="700" letter-spacing="1">FAIS DO-DO</text>
-          <text class="stage-sub-label" x="0" y="9">Stage</text>
+          <rect x="-50" y="-21" width="112" height="50" rx="4" fill="#000" opacity="0.4" transform="translate(5,7)"/>
+          <rect x="-50" y="-21" width="100" height="42" rx="4" fill="#4a6c18"/>
+          <rect x="-50" y="-21" width="50" height="42" fill="#568020" opacity="0.8"/>
+          <rect x="0" y="-21" width="50" height="42" fill="#3e5c10" opacity="0.8"/>
+          <line x1="0" y1="-21" x2="0" y2="21" stroke="#80c038" stroke-width="2.5" opacity="0.7"/>
+          <polygon points="-40,-21 40,-21 0,-41" fill="#304c08" opacity="0.9"/>
+          <line x1="-40" y1="-21" x2="0" y2="-41" stroke="#80c038" stroke-width="1.2" opacity="0.6"/>
+          <line x1="40" y1="-21" x2="0" y2="-41" stroke="#80c038" stroke-width="1.2" opacity="0.6"/>
+          <line x1="-50" y1="-21" x2="50" y2="-21" stroke="#70aa28" stroke-width="1.5" opacity="0.5"/>
+          <text class="stage-band-label" x="0" y="-4" font-size="8.5" font-weight="700" letter-spacing="1" fill="#e8ffc0">FAIS DO-DO</text>
+          <text class="stage-sub-label" x="0" y="11" fill="#b0e070" opacity="0.9">Stage</text>
           <g class="band-pill empty" id="pill-Fais Do-Do Stage">
-            <rect x="-62" y="-60" width="124" height="22" rx="3" fill="#344a14" stroke="#7aaa3a" stroke-width="0.8" opacity="0.45"/>
-            <text class="stage-band-name" id="bn-Fais Do-Do Stage" x="0" y="-45" fill="#e8ffc0" font-size="10.5"></text>
+            <rect x="-64" y="-62" width="128" height="22" rx="3" fill="#283808" stroke="#70aa28" stroke-width="0.8" opacity="0.7"/>
+            <text class="stage-band-name" id="bn-Fais Do-Do Stage" x="0" y="-47" fill="#e8ffc0" font-size="10.5"></text>
           </g>
         </g>
 
-        <!-- JAZZ & HERITAGE STAGE — center infield -->
+        <!-- JAZZ & HERITAGE STAGE -->
         <g id="sg-Jazz &amp; Heritage Stage" class="stage-g" transform="translate(480,310)" filter="url(#glow)">
-          <rect x="-56" y="-24" width="112" height="48" rx="4" fill="#8a4a2a" opacity="0.95"/>
-          <polygon points="-44,-24 44,-24 0,-42" fill="#704030" opacity="0.7"/>
-          <line x1="-56" y1="-24" x2="56" y2="-24" stroke="#b07050" stroke-width="1" opacity="0.5"/>
-          <text class="stage-band-label" x="0" y="-6" font-size="8" font-weight="700" letter-spacing="1">JAZZ &amp; HERITAGE</text>
-          <text class="stage-sub-label" x="0" y="8">Stage</text>
+          <rect x="-56" y="-24" width="124" height="56" rx="4" fill="#000" opacity="0.45" transform="translate(5,7)"/>
+          <rect x="-56" y="-24" width="112" height="48" rx="4" fill="#7a3818"/>
+          <rect x="-56" y="-24" width="56" height="48" fill="#8a4020" opacity="0.8"/>
+          <rect x="0" y="-24" width="56" height="48" fill="#6a3010" opacity="0.8"/>
+          <line x1="0" y1="-24" x2="0" y2="24" stroke="#cc7848" stroke-width="2.5" opacity="0.7"/>
+          <polygon points="-46,-24 46,-24 0,-46" fill="#581e08" opacity="0.9"/>
+          <line x1="-46" y1="-24" x2="0" y2="-46" stroke="#cc7848" stroke-width="1.2" opacity="0.6"/>
+          <line x1="46" y1="-24" x2="0" y2="-46" stroke="#cc7848" stroke-width="1.2" opacity="0.6"/>
+          <line x1="-56" y1="-24" x2="56" y2="-24" stroke="#b86838" stroke-width="1.5" opacity="0.5"/>
+          <text class="stage-band-label" x="0" y="-6" font-size="8" font-weight="700" letter-spacing="1" fill="#ffe8d0">JAZZ &amp; HERITAGE</text>
+          <text class="stage-sub-label" x="0" y="10" fill="#e0b890" opacity="0.9">Stage</text>
           <g class="band-pill empty" id="pill-Jazz &amp; Heritage Stage">
-            <rect x="-70" y="-72" width="140" height="22" rx="3" fill="#5a2c10" stroke="#b07050" stroke-width="0.8" opacity="0.45"/>
-            <text class="stage-band-name" id="bn-Jazz &amp; Heritage Stage" x="0" y="-57" fill="#ffe8d0" font-size="10.5"></text>
+            <rect x="-72" y="-74" width="144" height="22" rx="3" fill="#481808" stroke="#b06848" stroke-width="0.8" opacity="0.7"/>
+            <text class="stage-band-name" id="bn-Jazz &amp; Heritage Stage" x="0" y="-59" fill="#ffe8d0" font-size="10.5"></text>
           </g>
         </g>
 
@@ -1137,42 +1190,41 @@ footer{margin-top:20px;padding:20px 16px calc(20px + var(--safe-bot));border-top
           <circle cx="0" cy="0" r="2" fill="white"/>
         </g>
 
-        <!-- ══ VENDOR LEGEND (bottom-left) ══ -->
-        <g transform="translate(22,592)" opacity="0.85">
-          <rect x="0" y="0" width="152" height="72" rx="3" fill="#0a0e08" stroke="#1e2418" stroke-width="1"/>
-          <text x="8" y="14" font-family="Barlow Condensed,sans-serif" font-size="7.5" font-weight="700" letter-spacing="1.5" fill="#3e4a30">FACILITIES</text>
-          <!-- Food -->
-          <circle cx="18" cy="26" r="7" fill="#3d2a05" stroke="#c9a84c" stroke-width="0.8"/>
-          <use href="#ic-food" x="13" y="20.5" width="10" height="11" stroke="#c9a84c" fill="none" stroke-linecap="round"/>
-          <text x="30" y="30" font-family="Barlow Condensed,sans-serif" font-size="8" fill="#7a6a54">Food</text>
-          <!-- Drink -->
-          <circle cx="78" cy="26" r="7" fill="#08243a" stroke="#4a9eff" stroke-width="0.8"/>
-          <use href="#ic-drink" x="73" y="20.5" width="10" height="11" stroke="#4a9eff" fill="none" stroke-linecap="round"/>
-          <text x="90" y="30" font-family="Barlow Condensed,sans-serif" font-size="8" fill="#7a6a54">Drinks</text>
-          <!-- Merch -->
-          <circle cx="18" cy="48" r="7" fill="#2a1a3a" stroke="#c07a00" stroke-width="0.8"/>
-          <use href="#ic-merch" x="13" y="42.5" width="10" height="11" stroke="#c07a00" fill="none" stroke-linecap="round"/>
-          <text x="30" y="52" font-family="Barlow Condensed,sans-serif" font-size="8" fill="#7a6a54">Merch</text>
-          <!-- WC -->
-          <circle cx="78" cy="48" r="7" fill="#1a2818" stroke="#4a7a4a" stroke-width="0.8"/>
-          <use href="#ic-wc" x="72" y="42" width="12" height="12" stroke="#4a7a4a" fill="none"/>
-          <text x="90" y="52" font-family="Barlow Condensed,sans-serif" font-size="8" fill="#7a6a54">Restrooms</text>
-          <!-- Gate -->
-          <rect x="9" y="60" width="18" height="8" rx="1" fill="#12180e" stroke="#2a3820" stroke-width="0.8"/>
-          <text x="22" y="67" text-anchor="middle" font-family="Barlow Condensed,sans-serif" font-size="5" fill="#3a4830">GATE</text>
-          <text x="34" y="68" font-family="Barlow Condensed,sans-serif" font-size="8" fill="#7a6a54">Entrance</text>
+        <!-- ══ VENDOR LEGEND ══ -->
+        <g transform="translate(20,526)" opacity="0.94">
+          <rect x="0" y="0" width="166" height="88" rx="3" fill="#182c10" stroke="#2e5020" stroke-width="1.2"/>
+          <rect x="0" y="0" width="166" height="14" rx="3" fill="#fff" opacity="0.04"/>
+          <text x="8" y="12" font-family="Barlow Condensed,sans-serif" font-size="7.5" font-weight="700" letter-spacing="2" fill="#78c048">FACILITIES</text>
+          <circle cx="18" cy="26" r="9" fill="#4a3008" stroke="#e8c050" stroke-width="1"/>
+          <use href="#ic-food" x="13" y="20.5" width="10" height="11" stroke="#e8c050" fill="none" stroke-linecap="round"/>
+          <text x="32" y="30" font-family="Barlow Condensed,sans-serif" font-size="8.5" fill="#b0a068">Food</text>
+          <circle cx="90" cy="26" r="9" fill="#083a58" stroke="#5ab8ff" stroke-width="1"/>
+          <use href="#ic-drink" x="85" y="20.5" width="10" height="11" stroke="#5ab8ff" fill="none" stroke-linecap="round"/>
+          <text x="104" y="30" font-family="Barlow Condensed,sans-serif" font-size="8.5" fill="#b0a068">Drinks</text>
+          <circle cx="18" cy="50" r="9" fill="#342048" stroke="#d89000" stroke-width="1"/>
+          <use href="#ic-merch" x="13" y="44.5" width="10" height="11" stroke="#d89000" fill="none" stroke-linecap="round"/>
+          <text x="32" y="54" font-family="Barlow Condensed,sans-serif" font-size="8.5" fill="#b0a068">Merch</text>
+          <circle cx="90" cy="50" r="9" fill="#1a3020" stroke="#5acc5a" stroke-width="1"/>
+          <use href="#ic-wc" x="84" y="44" width="12" height="12" stroke="#5acc5a" fill="none"/>
+          <text x="104" y="54" font-family="Barlow Condensed,sans-serif" font-size="8.5" fill="#b0a068">Restrooms</text>
+          <rect x="8" y="64" width="20" height="10" rx="1" fill="#3c5028" stroke="#5a7840" stroke-width="0.8"/>
+          <text x="18" y="72" text-anchor="middle" font-family="Barlow Condensed,sans-serif" font-size="5" fill="#a8d078">GATE</text>
+          <text x="34" y="72" font-family="Barlow Condensed,sans-serif" font-size="8.5" fill="#b0a068">Entrance</text>
         </g>
 
         <!-- ══ COMPASS ══ -->
-        <g transform="translate(920,640)">
-          <circle cx="0" cy="0" r="16" fill="#0c1008" stroke="#1e2418" stroke-width="1"/>
-          <polygon points="0,-12 2.5,-5 -2.5,-5" fill="#c9a84c"/>
-          <polygon points="0,12 2.5,5 -2.5,5" fill="#3e3828"/>
-          <text x="0" y="-5" text-anchor="middle" font-family="Barlow Condensed,sans-serif" font-size="7" font-weight="700" fill="#c9a84c">N</text>
+        <g transform="translate(920,638)">
+          <circle cx="0" cy="0" r="18" fill="#182c10" stroke="#2e5020" stroke-width="1.2"/>
+          <circle cx="0" cy="0" r="16" fill="none" stroke="#3e6828" stroke-width="0.5" opacity="0.5"/>
+          <polygon points="0,-14 3.5,-5 -3.5,-5" fill="#f0c840"/>
+          <polygon points="0,14 3.5,5 -3.5,5" fill="#556040"/>
+          <circle cx="0" cy="0" r="2.5" fill="#182c10" stroke="#c0a030" stroke-width="0.8"/>
+          <text x="0" y="-6" text-anchor="middle" font-family="Barlow Condensed,sans-serif" font-size="7" font-weight="700" fill="#f0c840">N</text>
+          <text x="0" y="13" text-anchor="middle" font-family="Barlow Condensed,sans-serif" font-size="6" fill="#6a7a50">S</text>
         </g>
 
         <!-- Track label -->
-        <text x="480" y="35" text-anchor="middle" font-family="Barlow Condensed,sans-serif" font-size="8" font-weight="500" letter-spacing="5" fill="#2e3428" opacity="0.7">FAIR GROUNDS RACE COURSE</text>
+        <text x="480" y="672" text-anchor="middle" font-family="Barlow Condensed,sans-serif" font-size="8.5" font-weight="600" letter-spacing="4" fill="#7a7060" opacity="0.9">GENTILLY BLVD</text>
 
         <!-- Pulse overlay — always on top, unaffected by other filters -->
         <g id="map-pulse-overlay" pointer-events="none"></g>
