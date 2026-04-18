@@ -349,7 +349,7 @@ a.vendor-name:hover{color:var(--gold-light)}
 .beer-stand-location{font-family:'Barlow Condensed',sans-serif;font-size:13px;font-weight:500;letter-spacing:0.14em;text-transform:uppercase;color:var(--muted)}
 .beer-stand-note{font-family:'Barlow Condensed',sans-serif;font-size:13px;letter-spacing:0.08em;color:var(--amber);margin-top:6px;padding:5px 10px;border-left:2px solid var(--amber);background:rgba(217,118,30,0.08)}
 .beer-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(240px,1fr));gap:8px}
-.beer-card{background:var(--card);border:1px solid var(--border);border-left:3px solid var(--gold);border-radius:3px;padding:12px 14px;transition:background 0.2s}
+.beer-card{background:var(--card);border:1px solid var(--border);border-left:3px solid var(--gold);border-radius:3px;padding:12px 38px 12px 14px;position:relative;transition:background 0.2s}
 .beer-card:hover{background:var(--card-hover)}
 a.beer-name{font-family:'Cormorant Garamond',serif;font-size:20px;font-weight:600;color:var(--cream);text-decoration:none;line-height:1.2;transition:color 0.2s;display:inline}
 a.beer-name:hover{color:var(--gold-light)}
@@ -884,38 +884,38 @@ footer{margin-top:20px;padding:20px 16px calc(20px + var(--safe-bot));border-top
 
         <!-- ══ DRINK / BAR MARKERS ══ -->
         <g id="vendors-drink" filter="url(#softshadow)">
-          <!-- Near Acura west -->
-          <g transform="translate(410,530)">
+          <!-- Near Acura west (Casamigos Bar area) -->
+          <g id="map-bar-south-west" transform="translate(410,530)">
             <circle r="9" fill="#08243a" stroke="#4a9eff" stroke-width="1"/>
             <use href="#ic-drink" x="-5" y="-5.5" width="10" height="11" stroke="#4a9eff" fill="none" stroke-linecap="round"/>
           </g>
-          <!-- Near Acura east -->
-          <g transform="translate(560,530)">
+          <!-- Near Acura east (Daiquiris) -->
+          <g id="map-bar-south-east" transform="translate(560,530)">
             <circle r="9" fill="#08243a" stroke="#4a9eff" stroke-width="1"/>
             <use href="#ic-drink" x="-5" y="-5.5" width="10" height="11" stroke="#4a9eff" fill="none" stroke-linecap="round"/>
           </g>
-          <!-- Near Congo Square -->
-          <g transform="translate(155,430)">
+          <!-- Near Congo Square (Club Tito's) -->
+          <g id="map-bar-congo" transform="translate(155,430)">
             <circle r="9" fill="#08243a" stroke="#4a9eff" stroke-width="1"/>
             <use href="#ic-drink" x="-5" y="-5.5" width="10" height="11" stroke="#4a9eff" fill="none" stroke-linecap="round"/>
           </g>
-          <!-- Near WWOZ/Economy Hall -->
-          <g transform="translate(808,450)">
+          <!-- Near WWOZ/Economy Hall (Draft Beer Stands) -->
+          <g id="map-bar-east" transform="translate(808,450)">
             <circle r="9" fill="#08243a" stroke="#4a9eff" stroke-width="1"/>
             <use href="#ic-drink" x="-5" y="-5.5" width="10" height="11" stroke="#4a9eff" fill="none" stroke-linecap="round"/>
           </g>
-          <!-- Near Shell Gentilly west -->
-          <g transform="translate(386,130)">
+          <!-- Near Shell Gentilly west (Wine Tent) -->
+          <g id="map-bar-north-west" transform="translate(386,130)">
             <circle r="9" fill="#08243a" stroke="#4a9eff" stroke-width="1"/>
             <use href="#ic-drink" x="-5" y="-5.5" width="10" height="11" stroke="#4a9eff" fill="none" stroke-linecap="round"/>
           </g>
           <!-- Near Shell Gentilly east -->
-          <g transform="translate(574,130)">
+          <g id="map-bar-north-east" transform="translate(574,130)">
             <circle r="9" fill="#08243a" stroke="#4a9eff" stroke-width="1"/>
             <use href="#ic-drink" x="-5" y="-5.5" width="10" height="11" stroke="#4a9eff" fill="none" stroke-linecap="round"/>
           </g>
-          <!-- Center infield bar -->
-          <g transform="translate(480,372)">
+          <!-- Center infield bar (Beer Tents) -->
+          <g id="map-bar-center" transform="translate(480,372)">
             <circle r="9" fill="#08243a" stroke="#4a9eff" stroke-width="1"/>
             <use href="#ic-drink" x="-5" y="-5.5" width="10" height="11" stroke="#4a9eff" fill="none" stroke-linecap="round"/>
           </g>
@@ -1542,7 +1542,7 @@ function showOnMap(areaId) {
 // BEER & SPIRITS DATA
 // ─────────────────────────────────────────────────────────
 const BEER_STANDS = [
-  { name:'Beer Tents', location:'Throughout the Grounds', note:'Beer selections from 2025 — subject to change in 2026. Stands are volunteer-staffed throughout the Fair Grounds.',
+  { name:'Beer Tents', mapId:'map-bar-center', location:'Throughout the Grounds', note:'Beer selections from 2025 — subject to change in 2026. Stands are volunteer-staffed throughout the Fair Grounds.',
     beers:[
       { name:'Miller Lite', style:'American Light Lager', abv:'4.2%', format:'Can & Draft', price:'$8.50', untappd:'https://untappd.com/b/miller-brewing-company-miller-lite/3811', description:"America's classic light lager. Crisp, clean, and refreshing in the New Orleans heat." },
       { name:'Sol', style:'Mexican Pale Lager', abv:'4.5%', format:'Can', price:null, untappd:'https://untappd.com/b/cerveceria-cuauhtemoc-moctezuma-s-a-de-c-v-sol/7457', description:'A light, easy-drinking Mexican lager first brewed in the 1890s. Clean with subtle citrus notes.' },
@@ -1552,7 +1552,7 @@ const BEER_STANDS = [
       { name:"Foster's Lager", style:'Australian Pale Lager', abv:'5.0%', format:'Can', price:null, untappd:'https://untappd.com/b/foster-s-group-foster-s-lager/5519', description:"Australia's famous lager since 1888. Balanced and smooth with no bitter aftertaste." },
     ]
   },
-  { name:'Draft Beer Stands', location:'Near Jazz, Gospel & Blues Tents · Grandstand', note:'16 oz draft pours. Stands vary — walk to a different one if you don\'t see what you want.',
+  { name:'Draft Beer Stands', mapId:'map-bar-east', location:'Near Jazz, Gospel & Blues Tents · Grandstand', note:'16 oz draft pours. Stands vary — walk to a different one if you don\'t see what you want.',
     beers:[
       { name:'Miller Lite', style:'American Light Lager', abv:'4.2%', format:'16 oz Draft', price:'$8.50', untappd:'https://untappd.com/b/miller-brewing-company-miller-lite/3811', description:"America's classic light lager, also available on draft." },
       { name:'Abita Amber', style:'Munich-Style Lager', abv:'4.5%', format:'16 oz Draft', price:'$8', untappd:'https://untappd.com/b/abita-brewing-company-amber-ale/5166902', description:"Louisiana's flagship beer from Abita Springs since 1986. Rich malt character with a clean, crisp finish." },
@@ -1560,20 +1560,20 @@ const BEER_STANDS = [
       { name:'Pilsner Urquell', style:'Czech Pilsner', abv:'4.4%', format:'16 oz Draft', price:'$8', untappd:'https://untappd.com/b/plzensky-prazdroj-pilsner-urquell/37936', description:'The original pilsner, brewed in Plzeň since 1842 using the same recipe. Crisp, golden, and hoppy.' },
     ]
   },
-  { name:'Casamigos Bar', location:'Between Jazz & Heritage Stage and Festival Stage', note:null,
+  { name:'Casamigos Bar', mapId:'map-bar-south-west', location:'Between Jazz & Heritage Stage and Festival Stage', note:null,
     beers:[
       { name:'Paloma', style:'Tequila Cocktail', abv:null, format:'On the rocks or frozen', price:'~$12', untappd:null, description:'Casamigos tequila with grapefruit and blood orange juice, sparkling grapefruit water.' },
       { name:'Casamigos Margarita', style:'Tequila Cocktail', abv:null, format:'Cocktail', price:'~$12', untappd:null, description:'Classic margarita made with Casamigos tequila.' },
       { name:'Michelada', style:'Beer Cocktail', abv:null, format:'Cocktail', price:null, untappd:null, description:'Sol with pre-mixed lime and tomato juice — a classic Mexican cure for what ails you.' },
     ]
   },
-  { name:"Club Tito's", location:'Various locations throughout grounds', note:null,
+  { name:"Club Tito's", mapId:'map-bar-congo', location:'Various locations throughout grounds', note:null,
     beers:[
       { name:"Tito's Lemonade", style:'Vodka Cocktail', abv:null, format:'Cocktail', price:'$15', untappd:null, description:"Tito's Handmade Vodka over lemonade. One of the most-ordered drinks at the fest." },
       { name:'Vodka Soda', style:'Vodka Cocktail', abv:null, format:'Cocktail', price:'~$12', untappd:null, description:"Tito's with soda water and lemon." },
     ]
   },
-  { name:'Rhythmpourium Wine Tent', location:'Throughout Grounds', note:null,
+  { name:'Rhythmpourium Wine Tent', mapId:'map-bar-north-west', location:'Throughout Grounds', note:null,
     beers:[
       { name:'Côtes du Rhône Blanc', style:'White Wine', abv:null, format:'Glass or $48/liter carafe', price:'$9.50', untappd:null, description:'Crisp French white wine from the southern Rhône Valley.' },
       { name:'Côtes du Rhône Rouge', style:'Red Wine', abv:null, format:'Glass or $48/liter carafe', price:'$9.50', untappd:null, description:'Full-bodied French red from the southern Rhône Valley.' },
@@ -1584,7 +1584,7 @@ const BEER_STANDS = [
       { name:'Louisiana Lemonade', style:'Vodka Cocktail', abv:null, format:'Cocktail', price:'$11.50–$12.50', untappd:null, description:'House lemonade with vodka.' },
     ]
   },
-  { name:'New Orleans Original Daiquiris', location:'Throughout Grounds (5 locations)', note:'Prices not confirmed — typical Jazz Fest frozen drinks run $12–$15.',
+  { name:'New Orleans Original Daiquiris', mapId:'map-bar-south-east', location:'Throughout Grounds (5 locations)', note:'Prices not confirmed — typical Jazz Fest frozen drinks run $12–$15.',
     beers:[
       { name:'Frozen Margarita', style:'Tequila Cocktail', abv:null, format:'Frozen', price:null, untappd:null, description:'Classic frozen margarita.' },
       { name:'Rum Punch', style:'Rum Cocktail', abv:null, format:'Frozen', price:null, untappd:null, description:'Tropical rum punch, frozen.' },
@@ -1594,14 +1594,23 @@ const BEER_STANDS = [
   },
 ];
 
-function beerCardHTML(b) {
+function beerCardHTML(b, mapId) {
   const nameEl = b.untappd
     ? `<a href="${b.untappd}" target="_blank" rel="noopener" class="beer-name">${b.name} <span class="beer-link-arrow">↗</span></a>`
     : `<span class="beer-name">${b.name}</span>`;
+  const pinBtn = mapId
+    ? `<button class="vendor-map-pin" onclick="showOnMap('${mapId}')" title="Show on map" aria-label="Show on map">
+        <svg width="16" height="22" viewBox="0 0 16 22" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <path d="M8 0C3.58 0 0 3.58 0 8c0 5.25 8 14 8 14s8-8.75 8-14c0-4.42-3.58-8-8-8z" fill="#e03030"/>
+          <circle cx="8" cy="8" r="3" fill="#fff" opacity="0.9"/>
+        </svg>
+      </button>`
+    : '';
   const abvEl = b.abv ? `<span class="beer-abv">${b.abv}</span>` : '';
   const priceEl = b.price ? `<span class="beer-price">${b.price}</span>` : '';
   const formatEl = b.format ? `<span class="beer-format">${b.format}</span>` : '';
   return `<div class="beer-card">
+    ${pinBtn}
     <div>${nameEl}</div>
     <div class="beer-meta">
       <span class="beer-style">${b.style}</span>
@@ -1623,7 +1632,7 @@ function renderBeer() {
         <span class="beer-stand-location">&#9679; ${stand.location}</span>
       </div>
       ${note}
-      <div class="beer-grid">${stand.beers.map(beerCardHTML).join('')}</div>
+      <div class="beer-grid">${stand.beers.map(b => beerCardHTML(b, stand.mapId)).join('')}</div>
     </div>`;
   }).join('');
 }
