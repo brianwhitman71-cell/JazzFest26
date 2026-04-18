@@ -212,6 +212,13 @@ main{max-width:1200px;margin:0 auto;padding:0 0 calc(60px + var(--safe-bot))}
 .sched-filter{font-family:'Barlow Condensed',sans-serif;font-size:17px;background:var(--surface);color:var(--cream);border:1px solid var(--border);padding:8px 28px 8px 10px;border-radius:2px;appearance:none;-webkit-appearance:none;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='10' height='7' viewBox='0 0 10 7'%3E%3Cpath d='M1 1l4 4 4-4' stroke='%237a6a54' stroke-width='1.5' fill='none'/%3E%3C/svg%3E");background-repeat:no-repeat;background-position:right 8px center;cursor:pointer;min-height:44px}
 .sched-filter:focus{outline:none;border-color:var(--gold)}
 .count-badge{font-family:'Barlow Condensed',sans-serif;font-size:15px;letter-spacing:0.1em;color:var(--muted)}
+.search-wrap{position:relative;display:flex;align-items:center;flex:1;min-width:160px;max-width:320px}
+.sched-search{font-family:'Barlow Condensed',sans-serif;font-size:17px;background:var(--surface);color:var(--cream);border:1px solid var(--border);padding:8px 32px 8px 10px;border-radius:2px;width:100%;min-height:44px;outline:none;transition:border-color 0.2s}
+.sched-search::placeholder{color:var(--dim)}
+.sched-search:focus{border-color:var(--gold)}
+.search-clear{position:absolute;right:8px;background:none;border:none;color:var(--muted);cursor:pointer;font-size:18px;line-height:1;padding:4px;display:none;-webkit-tap-highlight-color:transparent}
+.search-clear:hover{color:var(--cream)}
+.search-results-banner{font-family:'Barlow Condensed',sans-serif;font-size:15px;letter-spacing:0.1em;color:var(--amber);padding:6px 16px 0;display:none}
 
 .cards-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(260px,1fr));gap:8px}
 
@@ -389,8 +396,8 @@ footer{margin-top:20px;padding:20px 16px calc(20px + var(--safe-bot));border-top
   .day-hl { font-size: 14px; letter-spacing: 0.18em; margin-top: 5px; }
   .day-header { margin-bottom: 20px; }
   .sched-controls { margin-bottom: 20px; gap: 12px; }
-  .sched-label { font-size: 14px; letter-spacing: 0.16em; }
-  .sched-filter { font-size: 16px; padding: 9px 32px 9px 12px; min-height: 44px; }
+  .sched-search { font-size: 16px; }
+  .search-wrap { max-width: 400px; }
   .count-badge { font-size: 14px; letter-spacing: 0.12em; }
 
   .cards-grid { gap: 12px; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); }
@@ -461,22 +468,13 @@ footer{margin-top:20px;padding:20px 16px calc(20px + var(--safe-bot));border-top
       <button class="day-tab" data-sday="sun">Sun 5/3<span class="hl">Earth, Wind &amp; Fire</span></button>
     </div>
     <div class="sched-controls">
-      <span class="sched-label">Stage</span>
-      <select class="sched-filter" id="schedFilter">
-        <option value="all">All Stages</option>
-        <option value="Acura Stage">Acura Stage</option>
-        <option value="Shell Gentilly Stage">Shell Gentilly Stage</option>
-        <option value="Congo Square Stage">Congo Square Stage</option>
-        <option value="WWOZ Jazz Tent">WWOZ Jazz Tent</option>
-        <option value="Blues Tent">Blues Tent</option>
-        <option value="Gospel Tent">Gospel Tent</option>
-        <option value="Economy Hall Tent">Economy Hall Tent</option>
-        <option value="Lagniappe Stage">Lagniappe Stage</option>
-        <option value="Fais Do-Do Stage">Fais Do-Do Stage</option>
-        <option value="Jazz &amp; Heritage Stage">Jazz &amp; Heritage Stage</option>
-      </select>
+      <div class="search-wrap">
+        <input type="search" class="sched-search" id="schedSearch" placeholder="Search artist…" autocomplete="off" spellcheck="false">
+        <button class="search-clear" id="schedSearchClear" aria-label="Clear search">✕</button>
+      </div>
       <span class="count-badge" id="schedCount"></span>
     </div>
+    <div class="search-results-banner" id="searchBanner"></div>
     <div class="sched-day active" id="sday-thu">
       <div class="day-header"><span class="day-title">Thursday, April 30</span><span class="day-hl">Headliner: Widespread Panic</span></div>
       <div class="cards-grid" id="sgrid-thu"></div>
@@ -1383,11 +1381,15 @@ function cardHTML(a) {
 // ─────────────────────────────────────────────────────────
 // RENDER SCHEDULE VIEW
 // ─────────────────────────────────────────────────────────
-function renderScheduleDay(dayKey, filter) {
+function renderScheduleDay(dayKey, filter, search) {
   const grid = document.getElementById('sgrid-' + dayKey);
   if (!grid) return 0;
   let artists = [...(schedule[dayKey] || [])].sort((a,b) => timeToMin(a.time) - timeToMin(b.time));
-  if (filter !== 'all') artists = artists.filter(a => a.stage === filter);
+  if (filter && filter !== 'all') artists = artists.filter(a => a.stage === filter);
+  if (search) {
+    const q = search.toLowerCase();
+    artists = artists.filter(a => a.artist.toLowerCase().includes(q));
+  }
   grid.innerHTML = artists.map(cardHTML).join('');
   return artists.length;
 }
@@ -1471,12 +1473,15 @@ function updateLiveMap(dayKey, timeVal) {
 // ─────────────────────────────────────────────────────────
 // REBUILD ALL VIEWS (after schedule data updates)
 // ─────────────────────────────────────────────────────────
+function getSearchQuery() {
+  return (document.getElementById('schedSearch').value || '').trim();
+}
+
 function rebuildAllViews() {
   ['thu','fri','sat','sun'].forEach(d => renderScheduleDay(d, 'all'));
   const activeDay = document.querySelector('.day-tab.active');
-  const filter    = document.getElementById('schedFilter').value;
   if (activeDay) {
-    const n = renderScheduleDay(activeDay.dataset.sday, filter);
+    const n = renderScheduleDay(activeDay.dataset.sday, 'all', getSearchQuery());
     document.getElementById('schedCount').textContent = n + ' performances';
   }
   const dayPicker  = document.getElementById('dayPicker');
@@ -1824,17 +1829,45 @@ document.addEventListener('DOMContentLoaded', () => {
     document.querySelectorAll('.sched-day').forEach(d => d.classList.remove('active'));
     tab.classList.add('active');
     document.getElementById('sday-' + tab.dataset.sday).classList.add('active');
-    const n = renderScheduleDay(tab.dataset.sday, document.getElementById('schedFilter').value);
+    const n = renderScheduleDay(tab.dataset.sday, 'all', getSearchQuery());
     document.getElementById('schedCount').textContent = n + ' performances';
   });
 
-  // ── Stage filter
-  document.getElementById('schedFilter').addEventListener('change', e => {
+  // ── Artist search
+  const schedSearch = document.getElementById('schedSearch');
+  const schedSearchClear = document.getElementById('schedSearchClear');
+  const searchBanner = document.getElementById('searchBanner');
+
+  function applySearch() {
+    const q = schedSearch.value.trim();
+    schedSearchClear.style.display = q ? 'block' : 'none';
+
     const active = document.querySelector('.day-tab.active');
-    if (active) {
-      const n = renderScheduleDay(active.dataset.sday, e.target.value);
-      document.getElementById('schedCount').textContent = n + ' performances';
+    if (q) {
+      // Search across all days, show results in active day panel
+      let total = 0;
+      ['thu','fri','sat','sun'].forEach(d => { total += renderScheduleDay(d, 'all', q); });
+      const n = active ? document.getElementById('sgrid-' + active.dataset.sday).children.length : 0;
+      document.getElementById('schedCount').textContent = total + ' matches';
+      searchBanner.style.display = 'block';
+      searchBanner.textContent = total
+        ? `${total} artist${total===1?'':'s'} found across all days — showing active day`
+        : 'No artists found';
+    } else {
+      searchBanner.style.display = 'none';
+      ['thu','fri','sat','sun'].forEach(d => renderScheduleDay(d, 'all', ''));
+      if (active) {
+        const n = renderScheduleDay(active.dataset.sday, 'all', '');
+        document.getElementById('schedCount').textContent = n + ' performances';
+      }
     }
+  }
+
+  schedSearch.addEventListener('input', applySearch);
+  schedSearchClear.addEventListener('click', () => {
+    schedSearch.value = '';
+    schedSearch.focus();
+    applySearch();
   });
 
   // ── Initial render using fallback
