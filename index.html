@@ -362,9 +362,18 @@ span.beer-name{font-family:'Cormorant Garamond',serif;font-size:20px;font-weight
 .beer-price-row{display:flex;align-items:center;justify-content:space-between;margin-top:4px}
 .beer-price{font-family:'Barlow Condensed',sans-serif;font-size:14px;font-weight:700;color:var(--gold);letter-spacing:0.08em}
 .beer-note{font-family:'Barlow Condensed',sans-serif;font-size:13px;letter-spacing:0.08em;color:var(--dim)}
-/* Map highlight pulse */
-@keyframes map-area-pulse{0%{opacity:1;filter:brightness(3)}50%{opacity:1;filter:brightness(2)}100%{opacity:1;filter:brightness(1)}}
-.map-highlight{animation:map-area-pulse 2.5s ease-out forwards}
+/* Map highlight pulse — pulsing yellow ring injected into SVG */
+@keyframes map-pin-glow{
+  0%  {transform:scale(1);   opacity:1}
+  100%{transform:scale(3.5); opacity:0}
+}
+.map-pulse-ring{
+  fill:none;stroke:#f5d030;stroke-width:2.5;
+  transform-box:fill-box;transform-origin:50% 50%;
+  animation:map-pin-glow 1.1s ease-out 3 forwards;
+  pointer-events:none;
+  filter:drop-shadow(0 0 5px #f5d030) drop-shadow(0 0 12px #f5d030);
+}
 
 /* ── RULES & REGS ── */
 .prefest-note{font-family:'Barlow Condensed',sans-serif;font-size:16px;letter-spacing:0.08em;color:var(--amber);background:rgba(217,118,30,0.1);border-left:3px solid var(--amber);padding:8px 16px;}
@@ -1419,17 +1428,27 @@ function showOnMap(areaId) {
   if (contentSplit) {
     contentSplit.classList.remove('rules-active', 'provisions-active');
   }
-  // Highlight target element
+  // Highlight target element with pulsing yellow ring
   setTimeout(() => {
     const el = document.getElementById(areaId);
     if (!el) return;
-    el.classList.remove('map-highlight');
-    void el.offsetWidth; // reflow to restart animation
-    el.classList.add('map-highlight');
-    // Scroll map wrap so element is visible
+    // Remove any existing pulse rings
+    el.querySelectorAll('.map-pulse-ring').forEach(r => r.remove());
+    // Determine ring radius: label markers use r=22, dot markers use r=14
+    const hasDot = el.querySelector('circle');
+    const r = hasDot ? 14 : 22;
+    const ns = 'http://www.w3.org/2000/svg';
+    const ring = document.createElementNS(ns, 'circle');
+    ring.setAttribute('cx', '0');
+    ring.setAttribute('cy', '0');
+    ring.setAttribute('r', r);
+    ring.classList.add('map-pulse-ring');
+    el.appendChild(ring);
+    // Scroll map into view
     const mapWrap = document.querySelector('.map-wrap');
     if (mapWrap) mapWrap.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
-    setTimeout(() => el.classList.remove('map-highlight'), 3000);
+    // Clean up after 3 pulses (3 × 1.1s)
+    setTimeout(() => ring.remove(), 3400);
   }, 100);
 }
 
