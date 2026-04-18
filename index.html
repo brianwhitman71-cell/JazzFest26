@@ -1482,13 +1482,11 @@ function pulseSVGLocation(areaId) {
     const animR = document.createElementNS(ns, 'animate');
     animR.setAttribute('attributeName', 'r');
     animR.setAttribute('from', '10'); animR.setAttribute('to', '54');
-    animR.setAttribute('dur', '1.1s'); animR.setAttribute('repeatCount', '3');
-    animR.setAttribute('fill', 'freeze');
+    animR.setAttribute('dur', '1.1s'); animR.setAttribute('repeatCount', 'indefinite');
     const animO = document.createElementNS(ns, 'animate');
     animO.setAttribute('attributeName', 'opacity');
     animO.setAttribute('from', '1'); animO.setAttribute('to', '0');
-    animO.setAttribute('dur', '1.1s'); animO.setAttribute('repeatCount', '3');
-    animO.setAttribute('fill', 'freeze');
+    animO.setAttribute('dur', '1.1s'); animO.setAttribute('repeatCount', 'indefinite');
     c.appendChild(animR); c.appendChild(animO);
     return { c, animR, animO };
   }
@@ -1498,7 +1496,7 @@ function pulseSVGLocation(areaId) {
   const r2 = makeRing();
   overlay.appendChild(r2.c);
   setTimeout(() => { r2.animR.beginElement(); r2.animO.beginElement(); }, 550);
-  setTimeout(() => { overlay.innerHTML = ''; }, 4200);
+  // overlay cleared when modal closes
 }
 
 // ─────────────────────────────────────────────────────────
