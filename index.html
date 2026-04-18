@@ -272,6 +272,31 @@ main{max-width:1200px;margin:0 auto;padding:0 0 calc(60px + var(--safe-bot))}
 .vl-item{display:flex;align-items:center;gap:5px;font-family:'Barlow Condensed',sans-serif;font-size:14px;font-weight:500;letter-spacing:0.1em;color:var(--muted)}
 .vl-dot{width:10px;height:10px;border-radius:50%;flex-shrink:0}
 
+/* ── PROVISIONS & LIBATIONS ── */
+.provisions-view{padding:0}
+.provisions-wrap{max-width:1200px;margin:0 auto;padding:24px 16px}
+.provisions-header{margin-bottom:24px;padding-bottom:16px;border-bottom:1px solid var(--border)}
+.provisions-title{font-family:'Cormorant SC',serif;font-size:clamp(22px,4vw,32px);font-weight:600;color:var(--gold);letter-spacing:0.06em;margin-bottom:6px}
+.provisions-sub{font-family:'Barlow Condensed',sans-serif;font-size:17px;letter-spacing:0.1em;color:var(--muted);text-transform:uppercase}
+.provisions-sub a{color:var(--gold);text-decoration:none}
+.food-area{margin-bottom:32px}
+.food-area-header{display:flex;align-items:baseline;gap:12px;padding:10px 0;border-bottom:2px solid var(--area-color,var(--gold));margin-bottom:14px}
+.food-area-title{font-family:'Cormorant SC',serif;font-size:clamp(18px,3vw,24px);font-weight:600;color:var(--area-color,var(--gold));letter-spacing:0.08em}
+.food-area-count{font-family:'Barlow Condensed',sans-serif;font-size:13px;font-weight:600;letter-spacing:0.14em;text-transform:uppercase;color:var(--muted)}
+.vendor-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(240px,1fr));gap:8px}
+.vendor-card{background:var(--card);border:1px solid var(--border);border-left:3px solid var(--area-color,var(--gold));border-radius:3px;padding:12px 14px;transition:background 0.2s}
+.vendor-card:hover{background:var(--card-hover)}
+.vendor-top{margin-bottom:3px;display:flex;align-items:center;flex-wrap:wrap;gap:6px}
+.vendor-name{font-family:'Cormorant Garamond',serif;font-size:20px;font-weight:600;color:var(--cream);text-decoration:none;line-height:1.2;transition:color 0.2s}
+a.vendor-name:hover{color:var(--gold-light)}
+.vendor-link-arrow{font-size:13px;opacity:0.4;font-weight:300}
+.vendor-badge{font-family:'Barlow Condensed',sans-serif;font-size:10px;font-weight:700;letter-spacing:0.18em;text-transform:uppercase;color:var(--bg);background:var(--amber);padding:2px 6px;border-radius:2px}
+.vendor-city{font-family:'Barlow Condensed',sans-serif;font-size:12px;font-weight:600;letter-spacing:0.18em;text-transform:uppercase;color:var(--muted);margin-bottom:7px}
+.vendor-items{list-style:none;padding:0;margin:0}
+.vendor-items li{font-family:'Cormorant Garamond',serif;font-size:17px;color:var(--cream);opacity:0.85;padding:3px 0;border-bottom:1px solid var(--border);line-height:1.3}
+.vendor-items li:last-child{border-bottom:none}
+.vendor-items li::before{content:'–';margin-right:6px;color:var(--dim)}
+
 /* ── RULES & REGS ── */
 .prefest-note{font-family:'Barlow Condensed',sans-serif;font-size:16px;letter-spacing:0.08em;color:var(--amber);background:rgba(217,118,30,0.1);border-left:3px solid var(--amber);padding:8px 16px;}
 .rules-view{padding:0}
@@ -314,12 +339,12 @@ footer{margin-top:20px;padding:20px 16px calc(20px + var(--safe-bot));border-top
   .nav-tabs { display: flex; }
   /* Now Playing tab is redundant on desktop — map always visible alongside schedule */
   .nav-tab[data-view="map"] { display: none; }
-  .content-split:not(.rules-active) {
+  .content-split:not(.rules-active):not(.provisions-active) {
     display: flex;
     align-items: flex-start;
   }
   /* Schedule panel — left, sticky, scrollable */
-  .content-split:not(.rules-active) #view-schedule {
+  .content-split:not(.rules-active):not(.provisions-active) #view-schedule {
     display: block !important;
     width: 420px;
     flex-shrink: 0;
@@ -335,13 +360,18 @@ footer{margin-top:20px;padding:20px 16px calc(20px + var(--safe-bot));border-top
   #view-schedule::-webkit-scrollbar-track { background: transparent; }
   #view-schedule::-webkit-scrollbar-thumb { background: var(--border); border-radius: 2px; }
   /* Map panel — right, fills remaining space */
-  .content-split:not(.rules-active) #view-map {
+  .content-split:not(.rules-active):not(.provisions-active) #view-map {
     display: block !important;
     flex: 1;
     min-width: 0;
   }
   /* Rules panel — full width */
   .content-split.rules-active #view-rules {
+    display: block !important;
+    width: 100%;
+  }
+  /* Provisions panel — full width */
+  .content-split.provisions-active #view-provisions {
     display: block !important;
     width: 100%;
   }
@@ -453,6 +483,7 @@ footer{margin-top:20px;padding:20px 16px calc(20px + var(--safe-bot));border-top
     <button class="nav-tab active" data-view="schedule" role="tab">Full Schedule</button>
     <button class="nav-tab" data-view="map" role="tab">Now Playing</button>
     <button class="nav-tab" data-view="rules" role="tab">Rules &amp; Regs</button>
+    <button class="nav-tab" data-view="provisions" role="tab">Provisions &amp; Libations</button>
   </nav>
 </header>
 
@@ -1122,6 +1153,17 @@ footer{margin-top:20px;padding:20px 16px calc(20px + var(--safe-bot));border-top
     </div>
   </div><!-- /rules-view -->
 
+  <!-- ══ PROVISIONS & LIBATIONS ══ -->
+  <div class="view provisions-view" id="view-provisions">
+    <div class="provisions-wrap">
+      <div class="provisions-header">
+        <h2 class="provisions-title">Provisions &amp; Libations</h2>
+        <p class="provisions-sub">Nearly 60 local vendors at the Fair Grounds &middot; <a href="https://www.nojazzfest.com/food/" target="_blank" rel="noopener">Full list at nojazzfest.com/food ↗</a></p>
+      </div>
+      <div id="provisions-content"></div>
+    </div>
+  </div><!-- /provisions-view -->
+
 </div><!-- /content-split -->
 
   <footer>
@@ -1132,6 +1174,120 @@ footer{margin-top:20px;padding:20px 16px calc(20px + var(--safe-bot));border-top
 </main>
 
 <script>
+// ─────────────────────────────────────────────────────────
+// FOOD VENDOR DATA
+// ─────────────────────────────────────────────────────────
+const FOOD_AREAS = [
+  { name:'Food Area 1', color:'#d9761e', vendors:[
+    { name:"Vaucresson's Sausage Company", city:"New Orleans", url:"https://www.vaucressonsausage.com/", items:["Hot sausage po'boy","Alligator sausage po'boy","Crawfish sausage po'boy","Jerk chicken sausage po'boy","Hogshead cheese"] },
+    { name:"Panorama Foods", city:"Marksville, LA", items:["Crawfish bread","Shrimp bread","Sausage & jalapeño bread"] },
+    { name:"Catering Unlimited", city:"New Orleans", items:["Cajun jambalaya","Fried chicken"] },
+    { name:"Joyce's Lemonade", city:"New Orleans", items:["Fresh squeezed lemonade","Fruit salad","Grilled cheese","PB&J","Crispy rice treat"] },
+    { name:"CCI Catering", city:"Covington, LA", items:["Cajun duck sliders","Cajun duck & shrimp pasta"] },
+    { name:"Gallagher's Grill", city:"Mandeville", items:["Pecan catfish meunière","Seafood mirliton casserole","Fried crab cake with smoked tomato tartar"] },
+    { name:"DiMartino's Famous Muffulettas", city:"Gretna", items:["Muffuletta","Vegetarian muffuletta","Roast beef po'boy"] },
+    { name:"Keyala's Pralines", city:"New Orleans", items:["Bananas foster cheesecake","Louisiana strawberry cupcake","Key cake with bourbon pecan sauce","Mixed nut brittle"] },
+    { name:"Clesi's Seafood Restaurant", city:"New Orleans", url:"https://clesicatering.com/", items:["Boiled Louisiana crawfish","Fried alligator with pepper jelly","Crawfish étouffée","Cajun crawfish dirty rice"] },
+    { name:"Ten Talents Catering", city:"Covington", items:["Spinach artichoke casserole","Seafood au gratin","Sunflower salad with grilled gulf shrimp"] },
+    { name:"Smoke Street Catering", city:"New Orleans", items:["BBQ chicken sandwich","BBQ brisket sandwich","BBQ jackfruit sandwich","Smokey bacon greens","Fried brussels sprouts"] },
+    { name:"Douglas' Red Beans & Rice", city:"New Orleans", items:["Red beans & rice with sausage","Vegetarian red beans & rice","Blackberry cobbler"] },
+    { name:"Stufhapn Event Catering", city:"New Orleans", items:["Crabmeat po'boy","Creole stuffed crab","Catfish almondine","Potato salad"] },
+    { name:"Papa Ninety Catering", city:"Marrero", items:["Boudin & boudin balls","Crawfish boudin balls","Shrimp & lump crab ravigote","Louisiana crawfish salad roll"] },
+    { name:"TCA Brocato", city:"New Orleans", items:["Shrimp, smoked sausage & okra gumbo","Turtle soup","BBQ oysters","Buffaleaux oysters","NOLA street corn"] },
+    { name:"Walker's BBQ / Love At First Bite", city:"New Orleans", items:["Cochon de lait po'boy"] },
+    { name:"Patton's Caterers", city:"Slidell", items:["Crawfish sack","Oyster patties","Shrimp beignets"] },
+    { name:"Vucinovich's Restaurant", city:"New Orleans", items:["Fried shrimp po'boy","Fried oyster po'boy","Fried oyster spinach salad","Panéed chicken po'boy"] },
+    { name:"Ms. Linda's Catering", city:"New Orleans", items:["Ya ka mein","Fried pork chop sandwich","Bread pudding with rum sauce"] },
+    { name:"Sunshine Concessions", city:"Covington", items:["Rosemint herbal iced tea","Berry breeze herbal iced tea","Southern style sweet iced tea"] },
+    { name:"WWOZ Community Radio", city:"New Orleans", items:["Mango freeze"] },
+  ]},
+  { name:'Food Area 2', color:'#c9a84c', vendors:[
+    { name:"New Orleans Coffee Company", city:"New Orleans", items:["Café au lait (iced, frozen, hot)","Black coffee"] },
+    { name:"The Galley Restaurant", city:"Metairie", items:["Fried soft-shell crab po'boy","Fried catfish filet po'boy"] },
+    { name:"Mrs. Wheat's Foods", city:"New Orleans", items:["Spicy meat pie","Louisiana crawfish pie","Broccoli & cheese pie"] },
+    { name:"Prejean's Restaurant", city:"Lafayette", url:"https://www.prejeans.com/", items:["Pheasant, quail & andouille gumbo","Crawfish enchilada"] },
+    { name:"Judah Lea", city:"New Orleans", items:["Strawberry shortcake","Key lime tart"] },
+    { name:"Mona's Café", city:"New Orleans", url:"https://monascafeanddeli.com/", items:["Gyro sandwich","Falafel sandwich","Hummus with pita","Greek garden salad"] },
+    { name:"Sweet Soulfood Vegan Cuisine", city:"New Orleans", url:"https://sweetvegansoulfood.com/", items:["Sweet heat cauliflower","Sweet potatoes","Collard greens","Cornbread"] },
+    { name:"Ajun Cajun", city:"New Orleans", items:["Shrimp yakisoba","Yakiniku po'boy (garlic rib-eye)","Crabstick & cucumber salad","Seaweed & cucumber salad"] },
+    { name:"Fritai", city:"New Orleans", url:"https://fritai.com/", items:["Grilled shrimp pikliz with avocado","Haitian crab macaroni au gratin","Passion fruit wings"] },
+    { name:"Loretta's Authentic Pralines", city:"New Orleans", url:"https://lorettaspralines.com/", items:["Lump crab beignet","Praline-stuffed beignet","Chocolate beignet","Pralines — pecan, coconut, chocolate, rum"] },
+    { name:"Wally Taillon", city:"Gonzales", items:["Jambalaya"] },
+    { name:"Cafe Dauphine", city:"New Orleans", url:"https://cafedauphine.wixsite.com/cafedauphine", items:["Fried bell pepper bites with crabmeat & shrimp","Crawfish & shrimp egg rolls","Fried green tomato with shrimp remoulade"] },
+    { name:"Caluda's Cottage Catering", city:"River Ridge", items:["Crawfish strudel","Shrimp & grits","Pork debris & grits","White chocolate bread pudding"] },
+    { name:"Chris' Specialty Foods", city:"New Orleans", items:["Pork cracklin","Chicken cracklin"] },
+    { name:"Tempero's Market Kitchen", city:"New Orleans", items:["Gulf fish taco (Baja style)","Grilled vegetable & bean taco","Gulf shrimp taco","Ceviche tostada","Refried beans with fresh chips"] },
+    { name:"Big River Foods — Crawfish Monica", city:"New Orleans", items:["Crawfish Monica"] },
+    { name:"Sunshine Concessions", city:"Covington", items:["Herbal iced teas","Southern style sweet iced tea"] },
+  ]},
+  { name:'Congo Square', color:'#8b2252', vendors:[
+    { name:"A.J.'s Sno-Balls", city:"Meraux", items:["Sno-balls","Sugar-free sno-balls","Stuffed sno-ball","Chantilly sno-ball"] },
+    { name:"Palmer's Jamaican Cuisine", city:"New Orleans", items:["Jamaican chicken","Curry chicken pattie","Spicy beef pattie","Steamed veggies & rice"] },
+    { name:"Gambian Foods", city:"New Orleans", items:["Dibbi (grilled steak on pita)","Spicy grilled tofu with veggies","Grilled veggie pita","Couscous with yogurt sauce"] },
+    { name:"Bennachin", city:"New Orleans", url:"https://bennachinrestaurant.com/", items:["Jama jama (sautéed spinach)","Fried plantains","Poulet fricassee (chicken on a stick)"] },
+    { name:"Marie's Sugar Dumplings", city:"Marrero", items:["Crab, spinach & tomato quiche","Sweet potato turnover","German chocolate cake","Sweet potato pie","Banana nut bread"] },
+    { name:"Strawberry Lemonade", city:"New Orleans", items:["Strawberry lemonade","Tito's strawberry lemonade"] },
+  ]},
+  { name:'Heritage Square', color:'#2e8b57', vendors:[
+    { name:"Café du Monde", city:"New Orleans", url:"https://www.cafedumonde.com/", items:["Café au lait (hot, iced, frozen)","Beignets","Milk & chocolate milk"] },
+    { name:"Li'l Dizzy's Café", city:"New Orleans", url:"https://lildizzyscafe.net/", items:["Crawfish bisque","Creole filé gumbo","Louisiana trout baquet (with crab meat)","Louisiana trout dizzy (with shrimp & crawfish)"] },
+    { name:"Ba Mien Vietnamese Cuisine", city:"New Orleans", url:"http://bamien.com/", items:["Bánh mì xíu mại (Vietnamese meatball po'boy)","Bun (vermicelli w/ shrimp or beef)","Goi cuon (spring roll)","Cha gio (Vietnamese egg roll)"] },
+    { name:"Lady Nellie Oysters", city:"Grand Isle", items:["Oysters on the half shell with satsuma mignonette","Charbroiled oysters"] },
+    { name:"Down Home Creole Cookin'", city:"Baton Rouge", items:["BBQ pork ribs","BBQ turkey wings","Meaty white beans","Peach cobbler","Fresh strawberry cheesecake","Caramel apple cobbler"] },
+    { name:"Francofonte Catering", city:"New Orleans", items:["Handmade ice cream sandwich"] },
+    { name:"Sunshine Concessions", city:"Covington", items:["Herbal iced teas","Southern style sweet iced tea"] },
+  ]},
+  { name:'Around the Grounds', color:'#2a7a7a', vendors:[
+    { name:"Tap Truck Nola", city:"New Orleans", items:["Mocktail mule","Watermelon coconut refresher","Tangerine yuzu cherry mocktail"] },
+    { name:"Café du Monde — Beignets Cart", city:"New Orleans", url:"https://www.cafedumonde.com/", items:["Café au lait","Beignets"] },
+    { name:"Cee Cee's Sno-Balls", city:"Slidell", items:["Sno-balls","Sugar-free sno-balls","Nectar crème float","Chocolate cream soda","Popcorn"] },
+    { name:"Mr. Williams' Pastries", city:"New Orleans", items:["Apple pie","Bean custard pie","Cherry pie","Coconut pie","Pecan pie","Sweet potato pie"] },
+    { name:"Angelo's Bakery", city:"Metairie", items:["Coconut macaroon","Chocolate pecan turtle","Brownie with pecans","Cream puff","Chocolate éclair"] },
+    { name:"Francofonte — Artisan Gelato", city:"New Orleans", items:["Gelato & sorbetto — crème brûlée, chocolate azteca, strawberry balsamic","Homemade ice cream sandwich"] },
+    { name:"Loretta's Authentic Pralines", city:"New Orleans", url:"https://lorettaspralines.com/", items:["Pralines — pecan, coconut, chocolate, rum","Praline shoe soles","Sweet potato cookies"] },
+    { name:"Roman Chewing Candy Company", city:"New Orleans", items:["Roman chewing candy"] },
+    { name:"Plum Street Snowballs", city:"New Orleans", items:["Sno-balls","Sugar-free sno-balls"] },
+    { name:"Lucky Dogs", city:"New Orleans", items:["Lucky dog hot dogs"] },
+    { name:"WWOZ — Mango Freeze", city:"New Orleans", items:["Mango freeze"] },
+    { name:"Jumbo Peanut Company", city:"New Orleans", items:["Glazed pecans"] },
+    { name:"Strawberry Lemonade", city:"New Orleans", items:["Strawberry lemonade","Tito's strawberry lemonade"] },
+  ]},
+  { name:'Louisiana Folklife Village', color:'#5a7a2a', vendors:[
+    { name:"United Houma Nation", city:"Golden Meadow", items:["Shrimp macque choux","Sausage macque choux","Indian taco","Fry bread","Strawberry sweet potato blossom"] },
+  ]},
+  { name:'Cultural Exchange Village', color:'#1a6fb5', vendors:[
+    { name:"Afrodisiac", city:"New Orleans", badge:"NEW 2026", items:["Fried escovitch fish with festival (pickled veggies & fried sweet dumplings)","Oxtail stew with rice & peas","Jerk mushrooms with rice & peas (vegan)"] },
+  ]},
+  { name:'Grandstand', color:'#7a3a9a', vendors:[
+    { name:"Francofonte on Wheels", city:"New Orleans", items:["Old-fashioned handmade ice cream sandwich"] },
+  ]},
+];
+
+function vendorCardHTML(v, color) {
+  const nameEl = v.url
+    ? `<a href="${v.url}" target="_blank" rel="noopener" class="vendor-name">${v.name} <span class="vendor-link-arrow">↗</span></a>`
+    : `<span class="vendor-name">${v.name}</span>`;
+  const badge = v.badge ? `<span class="vendor-badge">${v.badge}</span>` : '';
+  return `<div class="vendor-card" style="--area-color:${color}">
+    <div class="vendor-top">${nameEl}${badge}</div>
+    <div class="vendor-city">${v.city}</div>
+    <ul class="vendor-items">${v.items.map(i => `<li>${i}</li>`).join('')}</ul>
+  </div>`;
+}
+
+function renderProvisions() {
+  const el = document.getElementById('provisions-content');
+  if (!el) return;
+  el.innerHTML = FOOD_AREAS.map(area => `
+    <div class="food-area">
+      <div class="food-area-header" style="--area-color:${area.color}">
+        <span class="food-area-title">${area.name}</span>
+        <span class="food-area-count">${area.vendors.length} vendor${area.vendors.length === 1 ? '' : 's'}</span>
+      </div>
+      <div class="vendor-grid">${area.vendors.map(v => vendorCardHTML(v, area.color)).join('')}</div>
+    </div>`).join('');
+}
+
 // ─────────────────────────────────────────────────────────
 // STAGE COLORS
 // ─────────────────────────────────────────────────────────
@@ -1791,7 +1947,9 @@ document.addEventListener('DOMContentLoaded', () => {
       tab.classList.add('active');
       document.getElementById('view-' + tab.dataset.view).classList.add('active');
       const isRules = tab.dataset.view === 'rules';
+      const isProvisions = tab.dataset.view === 'provisions';
       contentSplit.classList.toggle('rules-active', isRules);
+      contentSplit.classList.toggle('provisions-active', isProvisions);
       // On desktop, Full Schedule + Now Playing are always co-visible
       // Remove pointer-events blockage by re-showing schedule when leaving rules
     });
@@ -1869,6 +2027,9 @@ document.addEventListener('DOMContentLoaded', () => {
     schedSearch.focus();
     applySearch();
   });
+
+  // ── Render provisions tab
+  renderProvisions();
 
   // ── Initial render using fallback
   rebuildAllViews();
