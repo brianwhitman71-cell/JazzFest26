@@ -1439,13 +1439,13 @@ function showOnMap(areaId) {
     }
     // Clear any previous pulse
     overlay.innerHTML = '';
-    // Two rings with staggered delay for continuous glow feel
     const ns = 'http://www.w3.org/2000/svg';
-    [0, 0.55].forEach(delay => {
+    function makeRing() {
       const c = document.createElementNS(ns, 'circle');
       c.setAttribute('cx', tx);
       c.setAttribute('cy', ty);
       c.setAttribute('r', '10');
+      c.setAttribute('opacity', '1');
       c.setAttribute('fill', 'none');
       c.setAttribute('stroke', '#f5d030');
       c.setAttribute('stroke-width', '3');
@@ -1453,9 +1453,8 @@ function showOnMap(areaId) {
       const animR = document.createElementNS(ns, 'animate');
       animR.setAttribute('attributeName', 'r');
       animR.setAttribute('from', '10');
-      animR.setAttribute('to', '52');
+      animR.setAttribute('to', '54');
       animR.setAttribute('dur', '1.1s');
-      animR.setAttribute('begin', delay + 's');
       animR.setAttribute('repeatCount', '3');
       animR.setAttribute('fill', 'freeze');
       const animO = document.createElementNS(ns, 'animate');
@@ -1463,13 +1462,21 @@ function showOnMap(areaId) {
       animO.setAttribute('from', '1');
       animO.setAttribute('to', '0');
       animO.setAttribute('dur', '1.1s');
-      animO.setAttribute('begin', delay + 's');
       animO.setAttribute('repeatCount', '3');
       animO.setAttribute('fill', 'freeze');
       c.appendChild(animR);
       c.appendChild(animO);
-      overlay.appendChild(c);
-    });
+      return { c, animR, animO };
+    }
+    // First ring — start immediately
+    const r1 = makeRing();
+    overlay.appendChild(r1.c);
+    r1.animR.beginElement();
+    r1.animO.beginElement();
+    // Second ring — staggered
+    const r2 = makeRing();
+    overlay.appendChild(r2.c);
+    setTimeout(() => { r2.animR.beginElement(); r2.animO.beginElement(); }, 550);
     // Scroll map into view
     const mapWrap = document.querySelector('.map-wrap');
     if (mapWrap) mapWrap.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
