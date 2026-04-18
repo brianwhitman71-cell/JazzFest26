@@ -60,7 +60,7 @@ h1 span{color:var(--gold-light);font-weight:300}
 /* ── NAV TABS ── */
 .nav-tabs{display:flex;gap:0;overflow-x:auto;scrollbar-width:none;border-top:1px solid var(--border)}
 .nav-tabs::-webkit-scrollbar{display:none}
-.nav-tab{font-family:'Barlow Condensed',sans-serif;font-size:14px;font-weight:600;letter-spacing:0.14em;text-transform:uppercase;color:var(--muted);padding:11px 18px 12px;border:none;background:transparent;cursor:pointer;border-bottom:2px solid transparent;transition:color 0.2s,border-color 0.2s;white-space:nowrap;-webkit-tap-highlight-color:transparent;min-width:44px}
+.nav-tab{font-family:'Barlow Condensed',sans-serif;font-size:14px;font-weight:600;letter-spacing:0.14em;text-transform:uppercase;color:var(--muted);padding:11px 14px 12px;border:none;background:transparent;cursor:pointer;border-bottom:2px solid transparent;transition:color 0.2s,border-color 0.2s;white-space:nowrap;-webkit-tap-highlight-color:transparent;min-width:44px;flex-shrink:0}
 .nav-tab:hover{color:var(--cream)}
 .nav-tab.active{color:var(--gold);border-bottom-color:var(--gold)}
 
@@ -300,6 +300,37 @@ a.vendor-name:hover{color:var(--gold-light)}
 .item-price{font-family:'Barlow Condensed',sans-serif;font-size:13px;font-weight:700;letter-spacing:0.08em;color:var(--gold);flex-shrink:0;white-space:nowrap}
 .price-legend{font-family:'Barlow Condensed',sans-serif;font-size:14px;letter-spacing:0.08em;color:var(--muted);margin-top:16px;padding:8px 12px;border:1px solid var(--border);border-left:3px solid var(--gold);border-radius:2px}
 .price-legend span{color:var(--gold);font-weight:700}
+.show-map-btn{font-family:'Barlow Condensed',sans-serif;font-size:12px;font-weight:600;letter-spacing:0.12em;text-transform:uppercase;color:var(--muted);background:transparent;border:1px solid var(--border);border-radius:2px;padding:3px 8px;cursor:pointer;transition:color 0.2s,border-color 0.2s;flex-shrink:0;-webkit-tap-highlight-color:transparent}
+.show-map-btn:hover{color:var(--gold);border-color:var(--gold)}
+/* Provisions sub-tabs */
+.prov-tabs{display:flex;gap:0;border-bottom:1px solid var(--border);background:var(--surface);padding:0 16px}
+.prov-tab{font-family:'Barlow Condensed',sans-serif;font-size:15px;font-weight:600;letter-spacing:0.14em;text-transform:uppercase;color:var(--muted);padding:10px 16px 11px;border:none;background:transparent;cursor:pointer;border-bottom:2px solid transparent;transition:color 0.2s,border-color 0.2s;white-space:nowrap;-webkit-tap-highlight-color:transparent;flex-shrink:0}
+.prov-tab:hover{color:var(--cream)}.prov-tab.active{color:var(--gold);border-bottom-color:var(--gold)}
+.prov-panel{display:none}.prov-panel.active{display:block}
+/* Beer cards */
+.beer-stand{margin-bottom:36px}
+.beer-stand-header{display:flex;align-items:baseline;gap:12px;padding:10px 0;border-bottom:2px solid var(--gold);margin-bottom:14px;flex-wrap:wrap}
+.beer-stand-title{font-family:'Cormorant SC',serif;font-size:clamp(17px,2.5vw,22px);font-weight:600;color:var(--gold);letter-spacing:0.08em}
+.beer-stand-location{font-family:'Barlow Condensed',sans-serif;font-size:13px;font-weight:500;letter-spacing:0.14em;text-transform:uppercase;color:var(--muted)}
+.beer-stand-note{font-family:'Barlow Condensed',sans-serif;font-size:13px;letter-spacing:0.08em;color:var(--amber);margin-top:6px;padding:5px 10px;border-left:2px solid var(--amber);background:rgba(217,118,30,0.08)}
+.beer-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(240px,1fr));gap:8px}
+.beer-card{background:var(--card);border:1px solid var(--border);border-left:3px solid var(--gold);border-radius:3px;padding:12px 14px;transition:background 0.2s}
+.beer-card:hover{background:var(--card-hover)}
+a.beer-name{font-family:'Cormorant Garamond',serif;font-size:20px;font-weight:600;color:var(--cream);text-decoration:none;line-height:1.2;transition:color 0.2s;display:inline}
+a.beer-name:hover{color:var(--gold-light)}
+span.beer-name{font-family:'Cormorant Garamond',serif;font-size:20px;font-weight:600;color:var(--cream);line-height:1.2}
+.beer-link-arrow{font-size:13px;opacity:0.4;font-weight:300}
+.beer-meta{display:flex;gap:8px;margin:4px 0 8px;flex-wrap:wrap;align-items:center}
+.beer-style{font-family:'Barlow Condensed',sans-serif;font-size:12px;font-weight:600;letter-spacing:0.14em;text-transform:uppercase;color:var(--muted)}
+.beer-abv{font-family:'Barlow Condensed',sans-serif;font-size:12px;font-weight:700;color:var(--amber);letter-spacing:0.08em}
+.beer-format{font-family:'Barlow Condensed',sans-serif;font-size:11px;letter-spacing:0.1em;text-transform:uppercase;color:var(--dim)}
+.beer-description{font-family:'Cormorant Garamond',serif;font-size:17px;color:var(--cream);opacity:0.8;line-height:1.4;margin-bottom:6px}
+.beer-price-row{display:flex;align-items:center;justify-content:space-between;margin-top:4px}
+.beer-price{font-family:'Barlow Condensed',sans-serif;font-size:14px;font-weight:700;color:var(--gold);letter-spacing:0.08em}
+.beer-note{font-family:'Barlow Condensed',sans-serif;font-size:13px;letter-spacing:0.08em;color:var(--dim)}
+/* Map highlight pulse */
+@keyframes map-area-pulse{0%{opacity:1;filter:brightness(3)}50%{opacity:1;filter:brightness(2)}100%{opacity:1;filter:brightness(1)}}
+.map-highlight{animation:map-area-pulse 2.5s ease-out forwards}
 
 /* ── RULES & REGS ── */
 .prefest-note{font-family:'Barlow Condensed',sans-serif;font-size:16px;letter-spacing:0.08em;color:var(--amber);background:rgba(217,118,30,0.1);border-left:3px solid var(--amber);padding:8px 16px;}
@@ -486,8 +517,8 @@ footer{margin-top:20px;padding:20px 16px calc(20px + var(--safe-bot));border-top
   <nav class="nav-tabs" role="tablist">
     <button class="nav-tab active" data-view="schedule" role="tab">Full Schedule</button>
     <button class="nav-tab" data-view="map" role="tab">Now Playing</button>
-    <button class="nav-tab" data-view="rules" role="tab">Rules &amp; Regs</button>
     <button class="nav-tab" data-view="provisions" role="tab">Provisions &amp; Libations</button>
+    <button class="nav-tab" data-view="rules" role="tab">Rules &amp; Regs</button>
   </nav>
 </header>
 
@@ -713,50 +744,50 @@ footer{margin-top:20px;padding:20px 16px calc(20px + var(--safe-bot));border-top
         </g>
 
         <!-- ══ FOOD VENDOR MARKERS ══ -->
-        <!-- Heritage Food Village (south-center) -->
-        <g transform="translate(330,545)" opacity="0.9">
-          <rect x="-38" y="-10" width="76" height="20" rx="2" fill="#2a1e08" stroke="#8B6914" stroke-width="0.8"/>
-          <text x="0" y="5" text-anchor="middle" font-family="Barlow Condensed,sans-serif" font-size="7" font-weight="600" letter-spacing="1" fill="#c9a84c">HERITAGE FOOD VILLAGE</text>
-        </g>
-        <!-- Creole Food Court (south-east) -->
-        <g transform="translate(628,545)" opacity="0.9">
-          <rect x="-35" y="-10" width="70" height="20" rx="2" fill="#2a1e08" stroke="#8B6914" stroke-width="0.8"/>
-          <text x="0" y="5" text-anchor="middle" font-family="Barlow Condensed,sans-serif" font-size="7" font-weight="600" letter-spacing="1" fill="#c9a84c">CREOLE FOOD COURT</text>
-        </g>
-        <!-- North food area -->
-        <g transform="translate(300,62)" opacity="0.9">
+        <!-- Food Area 1 (north) -->
+        <g id="map-area-fa1" transform="translate(300,62)" opacity="0.9">
           <rect x="-28" y="-9" width="56" height="18" rx="2" fill="#2a1e08" stroke="#8B6914" stroke-width="0.8"/>
-          <text x="0" y="5" text-anchor="middle" font-family="Barlow Condensed,sans-serif" font-size="7" font-weight="600" letter-spacing="1" fill="#c9a84c">GENTILLY EATS</text>
+          <text x="0" y="5" text-anchor="middle" font-family="Barlow Condensed,sans-serif" font-size="7" font-weight="600" letter-spacing="1" fill="#c9a84c">FOOD AREA 1</text>
+        </g>
+        <!-- Food Area 2 (south-center) -->
+        <g id="map-area-fa2" transform="translate(330,545)" opacity="0.9">
+          <rect x="-38" y="-10" width="76" height="20" rx="2" fill="#2a1e08" stroke="#8B6914" stroke-width="0.8"/>
+          <text x="0" y="5" text-anchor="middle" font-family="Barlow Condensed,sans-serif" font-size="7" font-weight="600" letter-spacing="1" fill="#c9a84c">FOOD AREA 2</text>
+        </g>
+        <!-- Heritage Square (south-east) -->
+        <g id="map-area-heritage" transform="translate(628,545)" opacity="0.9">
+          <rect x="-35" y="-10" width="70" height="20" rx="2" fill="#2a1e08" stroke="#8B6914" stroke-width="0.8"/>
+          <text x="0" y="5" text-anchor="middle" font-family="Barlow Condensed,sans-serif" font-size="7" font-weight="600" letter-spacing="1" fill="#c9a84c">HERITAGE SQUARE</text>
         </g>
 
         <!-- Individual food vendor dots -->
         <g id="vendors-food" filter="url(#softshadow)">
-          <!-- Near Congo Square -->
-          <g transform="translate(178,330)">
+          <!-- Congo Square food -->
+          <g id="map-area-congo" transform="translate(178,330)">
             <circle r="9" fill="#3d2a05" stroke="#c9a84c" stroke-width="1"/>
             <use href="#ic-food" x="-5" y="-5.5" width="10" height="11" stroke="#c9a84c" fill="none" stroke-linecap="round"/>
           </g>
-          <!-- Near Blues Tent -->
-          <g transform="translate(235,505)">
+          <!-- Louisiana Folklife Village -->
+          <g id="map-area-folklife" transform="translate(235,505)">
             <circle r="9" fill="#3d2a05" stroke="#c9a84c" stroke-width="1"/>
             <use href="#ic-food" x="-5" y="-5.5" width="10" height="11" stroke="#c9a84c" fill="none" stroke-linecap="round"/>
           </g>
-          <!-- Center west -->
-          <g transform="translate(296,370)">
+          <!-- Cultural Exchange Village -->
+          <g id="map-area-cultural" transform="translate(296,370)">
             <circle r="9" fill="#3d2a05" stroke="#c9a84c" stroke-width="1"/>
             <use href="#ic-food" x="-5" y="-5.5" width="10" height="11" stroke="#c9a84c" fill="none" stroke-linecap="round"/>
           </g>
-          <!-- North center -->
-          <g transform="translate(540,62)">
+          <!-- Around the Grounds (north center) -->
+          <g id="map-area-grounds" transform="translate(540,62)">
             <circle r="9" fill="#3d2a05" stroke="#c9a84c" stroke-width="1"/>
             <use href="#ic-food" x="-5" y="-5.5" width="10" height="11" stroke="#c9a84c" fill="none" stroke-linecap="round"/>
           </g>
-          <!-- East area -->
-          <g transform="translate(795,190)">
+          <!-- Grandstand area -->
+          <g id="map-area-grandstand" transform="translate(795,190)">
             <circle r="9" fill="#3d2a05" stroke="#c9a84c" stroke-width="1"/>
             <use href="#ic-food" x="-5" y="-5.5" width="10" height="11" stroke="#c9a84c" fill="none" stroke-linecap="round"/>
           </g>
-          <!-- Fais Do-Do area -->
+          <!-- Fais Do-Do area food -->
           <g transform="translate(762,532)">
             <circle r="9" fill="#3d2a05" stroke="#c9a84c" stroke-width="1"/>
             <use href="#ic-food" x="-5" y="-5.5" width="10" height="11" stroke="#c9a84c" fill="none" stroke-linecap="round"/>
@@ -1159,13 +1190,31 @@ footer{margin-top:20px;padding:20px 16px calc(20px + var(--safe-bot));border-top
 
   <!-- ══ PROVISIONS & LIBATIONS ══ -->
   <div class="view provisions-view" id="view-provisions">
-    <div class="provisions-wrap">
-      <div class="provisions-header">
-        <h2 class="provisions-title">Provisions &amp; Libations</h2>
-        <p class="provisions-sub">Nearly 60 local vendors at the Fair Grounds &middot; <a href="https://www.nojazzfest.com/food/" target="_blank" rel="noopener">Full list at nojazzfest.com/food ↗</a></p>
-        <p class="price-legend"><span>Prices shown in gold</span> are confirmed from press reports (pre-tax). Most dishes run $10–$12; specialty seafood ~$15; drinks $7–$9. Full price list not published by the festival.</p>
+    <div class="prov-tabs">
+      <button class="prov-tab active" data-ptab="food">Food &amp; Drink</button>
+      <button class="prov-tab" data-ptab="beer">Beer &amp; Spirits</button>
+    </div>
+
+    <div class="prov-panel active" id="ppanel-food">
+      <div class="provisions-wrap">
+        <div class="provisions-header">
+          <h2 class="provisions-title">Food &amp; Drink</h2>
+          <p class="provisions-sub">Nearly 60 local vendors at the Fair Grounds &middot; <a href="https://www.nojazzfest.com/food/" target="_blank" rel="noopener">nojazzfest.com/food ↗</a></p>
+          <p class="price-legend"><span>Prices shown in gold</span> are confirmed from press reports (pre-tax). Most dishes run $10–$12; specialty seafood ~$15; drinks $7–$9. Full price list not published by the festival.</p>
+        </div>
+        <div id="provisions-content"></div>
       </div>
-      <div id="provisions-content"></div>
+    </div>
+
+    <div class="prov-panel" id="ppanel-beer">
+      <div class="provisions-wrap">
+        <div class="provisions-header">
+          <h2 class="provisions-title">Beer &amp; Spirits</h2>
+          <p class="provisions-sub">Based on 2025 lineup — subject to change in 2026 &middot; <a href="https://www.nojazzfest.com/faq/" target="_blank" rel="noopener">nojazzfest.com/faq ↗</a></p>
+          <p class="price-legend"><span>Prices shown in gold</span> are confirmed from press reports (pre-tax). Untappd links open each beer's ratings page.</p>
+        </div>
+        <div id="beer-content"></div>
+      </div>
     </div>
   </div><!-- /provisions-view -->
 
@@ -1183,7 +1232,7 @@ footer{margin-top:20px;padding:20px 16px calc(20px + var(--safe-bot));border-top
 // FOOD VENDOR DATA
 // ─────────────────────────────────────────────────────────
 const FOOD_AREAS = [
-  { name:'Food Area 1', color:'#d9761e', vendors:[
+  { name:'Food Area 1', color:'#d9761e', mapId:'map-area-fa1', vendors:[
     { name:"Vaucresson's Sausage Company", city:"New Orleans", url:"https://www.vaucressonsausage.com/", items:["Hot sausage po'boy","Alligator sausage po'boy","Crawfish sausage po'boy","Jerk chicken sausage po'boy","Hogshead cheese"] },
     { name:"Panorama Foods", city:"Marksville, LA", items:["Crawfish bread","Shrimp bread","Sausage & jalapeño bread"] },
     { name:"Catering Unlimited", city:"New Orleans", items:["Cajun jambalaya","Fried chicken"] },
@@ -1206,7 +1255,7 @@ const FOOD_AREAS = [
     { name:"Sunshine Concessions", city:"Covington", items:["Rosemint herbal iced tea","Berry breeze herbal iced tea","Southern style sweet iced tea"], prices:{"Berry breeze herbal iced tea":"$8"} },
     { name:"WWOZ Community Radio", city:"New Orleans", items:["Mango freeze"], prices:{"Mango freeze":"$7"} },
   ]},
-  { name:'Food Area 2', color:'#c9a84c', vendors:[
+  { name:'Food Area 2', color:'#c9a84c', mapId:'map-area-fa2', vendors:[
     { name:"New Orleans Coffee Company", city:"New Orleans", items:["Café au lait (iced, frozen, hot)","Black coffee"] },
     { name:"The Galley Restaurant", city:"Metairie", items:["Fried soft-shell crab po'boy","Fried catfish filet po'boy"] },
     { name:"Mrs. Wheat's Foods", city:"New Orleans", items:["Spicy meat pie","Louisiana crawfish pie","Broccoli & cheese pie"] },
@@ -1225,7 +1274,7 @@ const FOOD_AREAS = [
     { name:"Big River Foods — Crawfish Monica", city:"New Orleans", items:["Crawfish Monica"], prices:{"Crawfish Monica":"$13"} },
     { name:"Sunshine Concessions", city:"Covington", items:["Herbal iced teas","Southern style sweet iced tea"] },
   ]},
-  { name:'Congo Square', color:'#8b2252', vendors:[
+  { name:'Congo Square', color:'#8b2252', mapId:'map-area-congo', vendors:[
     { name:"A.J.'s Sno-Balls", city:"Meraux", items:["Sno-balls","Sugar-free sno-balls","Stuffed sno-ball","Chantilly sno-ball"] },
     { name:"Palmer's Jamaican Cuisine", city:"New Orleans", items:["Jamaican chicken","Curry chicken pattie","Spicy beef pattie","Steamed veggies & rice"] },
     { name:"Gambian Foods", city:"New Orleans", items:["Dibbi (grilled steak on pita)","Spicy grilled tofu with veggies","Grilled veggie pita","Couscous with yogurt sauce"] },
@@ -1233,7 +1282,7 @@ const FOOD_AREAS = [
     { name:"Marie's Sugar Dumplings", city:"Marrero", items:["Crab, spinach & tomato quiche","Sweet potato turnover","German chocolate cake","Sweet potato pie","Banana nut bread"] },
     { name:"Strawberry Lemonade", city:"New Orleans", items:["Strawberry lemonade","Tito's strawberry lemonade"] },
   ]},
-  { name:'Heritage Square', color:'#2e8b57', vendors:[
+  { name:'Heritage Square', color:'#2e8b57', mapId:'map-area-heritage', vendors:[
     { name:"Café du Monde", city:"New Orleans", url:"https://www.cafedumonde.com/", items:["Café au lait (hot, iced, frozen)","Beignets","Milk & chocolate milk"] },
     { name:"Li'l Dizzy's Café", city:"New Orleans", url:"https://lildizzyscafe.net/", items:["Crawfish bisque","Creole filé gumbo","Louisiana trout baquet (with crab meat)","Louisiana trout dizzy (with shrimp & crawfish)"] },
     { name:"Ba Mien Vietnamese Cuisine", city:"New Orleans", url:"http://bamien.com/", items:["Bánh mì xíu mại (Vietnamese meatball po'boy)","Bun (vermicelli w/ shrimp or beef)","Goi cuon (spring roll)","Cha gio (Vietnamese egg roll)"] },
@@ -1242,7 +1291,7 @@ const FOOD_AREAS = [
     { name:"Francofonte Catering", city:"New Orleans", items:["Handmade ice cream sandwich"] },
     { name:"Sunshine Concessions", city:"Covington", items:["Herbal iced teas","Southern style sweet iced tea"] },
   ]},
-  { name:'Around the Grounds', color:'#2a7a7a', vendors:[
+  { name:'Around the Grounds', color:'#2a7a7a', mapId:'map-area-grounds', vendors:[
     { name:"Tap Truck Nola", city:"New Orleans", items:["Mocktail mule","Watermelon coconut refresher","Tangerine yuzu cherry mocktail"] },
     { name:"Café du Monde — Beignets Cart", city:"New Orleans", url:"https://www.cafedumonde.com/", items:["Café au lait","Beignets"] },
     { name:"Cee Cee's Sno-Balls", city:"Slidell", items:["Sno-balls","Sugar-free sno-balls","Nectar crème float","Chocolate cream soda","Popcorn"] },
@@ -1257,13 +1306,13 @@ const FOOD_AREAS = [
     { name:"Jumbo Peanut Company", city:"New Orleans", items:["Glazed pecans"] },
     { name:"Strawberry Lemonade", city:"New Orleans", items:["Strawberry lemonade","Tito's strawberry lemonade"] },
   ]},
-  { name:'Louisiana Folklife Village', color:'#5a7a2a', vendors:[
+  { name:'Louisiana Folklife Village', color:'#5a7a2a', mapId:'map-area-folklife', vendors:[
     { name:"United Houma Nation", city:"Golden Meadow", items:["Shrimp macque choux","Sausage macque choux","Indian taco","Fry bread","Strawberry sweet potato blossom"] },
   ]},
-  { name:'Cultural Exchange Village', color:'#1a6fb5', vendors:[
+  { name:'Cultural Exchange Village', color:'#1a6fb5', mapId:'map-area-cultural', vendors:[
     { name:"Afrodisiac", city:"New Orleans", badge:"NEW 2026", items:["Fried escovitch fish with festival (pickled veggies & fried sweet dumplings)","Oxtail stew with rice & peas","Jerk mushrooms with rice & peas (vegan)"] },
   ]},
-  { name:'Grandstand', color:'#7a3a9a', vendors:[
+  { name:'Grandstand', color:'#7a3a9a', mapId:'map-area-grandstand', vendors:[
     { name:"Francofonte on Wheels", city:"New Orleans", items:["Old-fashioned handmade ice cream sandwich"] },
   ]},
 ];
@@ -1288,14 +1337,138 @@ function vendorCardHTML(v, color) {
 function renderProvisions() {
   const el = document.getElementById('provisions-content');
   if (!el) return;
-  el.innerHTML = FOOD_AREAS.map(area => `
-    <div class="food-area">
+  el.innerHTML = FOOD_AREAS.map(area => {
+    const mapBtn = area.mapId
+      ? `<button class="show-map-btn" onclick="showOnMap('${area.mapId}')">&#9679; Map</button>`
+      : '';
+    return `<div class="food-area">
       <div class="food-area-header" style="--area-color:${area.color}">
         <span class="food-area-title">${area.name}</span>
         <span class="food-area-count">${area.vendors.length} vendor${area.vendors.length === 1 ? '' : 's'}</span>
+        ${mapBtn}
       </div>
       <div class="vendor-grid">${area.vendors.map(v => vendorCardHTML(v, area.color)).join('')}</div>
-    </div>`).join('');
+    </div>`;
+  }).join('');
+}
+
+// ─────────────────────────────────────────────────────────
+// SHOW ON MAP
+// ─────────────────────────────────────────────────────────
+function showOnMap(areaId) {
+  // Switch to map view
+  document.querySelectorAll('.nav-tab').forEach(t => t.classList.remove('active'));
+  document.querySelectorAll('.view').forEach(v => v.classList.remove('active'));
+  const mapTab = document.querySelector('[data-view="map"]');
+  if (mapTab) mapTab.classList.add('active');
+  const mapView = document.getElementById('view-map');
+  if (mapView) mapView.classList.add('active');
+  const contentSplit = document.querySelector('.content-split');
+  if (contentSplit) {
+    contentSplit.classList.remove('rules-active', 'provisions-active');
+  }
+  // Highlight target element
+  setTimeout(() => {
+    const el = document.getElementById(areaId);
+    if (!el) return;
+    el.classList.remove('map-highlight');
+    void el.offsetWidth; // reflow to restart animation
+    el.classList.add('map-highlight');
+    // Scroll map wrap so element is visible
+    const mapWrap = document.querySelector('.map-wrap');
+    if (mapWrap) mapWrap.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+    setTimeout(() => el.classList.remove('map-highlight'), 3000);
+  }, 100);
+}
+
+// ─────────────────────────────────────────────────────────
+// BEER & SPIRITS DATA
+// ─────────────────────────────────────────────────────────
+const BEER_STANDS = [
+  { name:'Beer Tents', location:'Throughout the Grounds', note:'Beer selections from 2025 — subject to change in 2026. Stands are volunteer-staffed throughout the Fair Grounds.',
+    beers:[
+      { name:'Miller Lite', style:'American Light Lager', abv:'4.2%', format:'Can & Draft', price:'$8.50', untappd:'https://untappd.com/b/miller-brewing-company-miller-lite/3811', description:"America's classic light lager. Crisp, clean, and refreshing in the New Orleans heat." },
+      { name:'Sol', style:'Mexican Pale Lager', abv:'4.5%', format:'Can', price:null, untappd:'https://untappd.com/b/cerveceria-cuauhtemoc-moctezuma-s-a-de-c-v-sol/7457', description:'A light, easy-drinking Mexican lager first brewed in the 1890s. Clean with subtle citrus notes.' },
+      { name:'Blue Moon Belgian White', style:'Witbier', abv:'5.4%', format:'Can', price:null, untappd:'https://untappd.com/b/blue-moon-brewing-company-belgian-white/1932908', description:'Belgian-style wheat ale brewed with Valencia orange peel and coriander. Hazy and refreshing.' },
+      { name:"Leinenkugel Summer Shandy", style:'Shandy / Radler', abv:'4.2%', format:'Can', price:null, untappd:'https://untappd.com/b/jacob-leinenkugel-brewing-company-summer-shandy/8949', description:'Weiss beer blended with natural lemonade flavor. Made for exactly this kind of afternoon.' },
+      { name:'Peroni Nastro Azzurro', style:'Italian Pale Lager', abv:'5.1%', format:'Can', price:null, untappd:'https://untappd.com/b/birra-peroni-nastro-azzurro/7427', description:"Italy's premium lager since 1963 — light, crisp, with a clean hoppy finish." },
+      { name:"Foster's Lager", style:'Australian Pale Lager', abv:'5.0%', format:'Can', price:null, untappd:'https://untappd.com/b/foster-s-group-foster-s-lager/5519', description:"Australia's famous lager since 1888. Balanced and smooth with no bitter aftertaste." },
+    ]
+  },
+  { name:'Draft Beer Stands', location:'Near Jazz, Gospel & Blues Tents · Grandstand', note:'16 oz draft pours. Stands vary — walk to a different one if you don\'t see what you want.',
+    beers:[
+      { name:'Miller Lite', style:'American Light Lager', abv:'4.2%', format:'16 oz Draft', price:'$8.50', untappd:'https://untappd.com/b/miller-brewing-company-miller-lite/3811', description:"America's classic light lager, also available on draft." },
+      { name:'Abita Amber', style:'Munich-Style Lager', abv:'4.5%', format:'16 oz Draft', price:'$8', untappd:'https://untappd.com/b/abita-brewing-company-amber-ale/5166902', description:"Louisiana's flagship beer from Abita Springs since 1986. Rich malt character with a clean, crisp finish." },
+      { name:'Abita Jockamo IPA', style:'American IPA', abv:'6.5%', format:'16 oz Draft', price:'$8', untappd:'https://untappd.com/b/abita-brewing-company-jockamo-ipa/5963', description:'Named for the Mardi Gras Indian chant. Bold citrus and pine hops from Louisiana\'s original craft brewery.' },
+      { name:'Pilsner Urquell', style:'Czech Pilsner', abv:'4.4%', format:'16 oz Draft', price:'$8', untappd:'https://untappd.com/b/plzensky-prazdroj-pilsner-urquell/37936', description:'The original pilsner, brewed in Plzeň since 1842 using the same recipe. Crisp, golden, and hoppy.' },
+    ]
+  },
+  { name:'Casamigos Bar', location:'Between Jazz & Heritage Stage and Festival Stage', note:null,
+    beers:[
+      { name:'Paloma', style:'Tequila Cocktail', abv:null, format:'On the rocks or frozen', price:'~$12', untappd:null, description:'Casamigos tequila with grapefruit and blood orange juice, sparkling grapefruit water.' },
+      { name:'Casamigos Margarita', style:'Tequila Cocktail', abv:null, format:'Cocktail', price:'~$12', untappd:null, description:'Classic margarita made with Casamigos tequila.' },
+      { name:'Michelada', style:'Beer Cocktail', abv:null, format:'Cocktail', price:null, untappd:null, description:'Sol with pre-mixed lime and tomato juice — a classic Mexican cure for what ails you.' },
+    ]
+  },
+  { name:"Club Tito's", location:'Various locations throughout grounds', note:null,
+    beers:[
+      { name:"Tito's Lemonade", style:'Vodka Cocktail', abv:null, format:'Cocktail', price:'$15', untappd:null, description:"Tito's Handmade Vodka over lemonade. One of the most-ordered drinks at the fest." },
+      { name:'Vodka Soda', style:'Vodka Cocktail', abv:null, format:'Cocktail', price:'~$12', untappd:null, description:"Tito's with soda water and lemon." },
+    ]
+  },
+  { name:'Rhythmpourium Wine Tent', location:'Throughout Grounds', note:null,
+    beers:[
+      { name:'Côtes du Rhône Blanc', style:'White Wine', abv:null, format:'Glass or $48/liter carafe', price:'$9.50', untappd:null, description:'Crisp French white wine from the southern Rhône Valley.' },
+      { name:'Côtes du Rhône Rouge', style:'Red Wine', abv:null, format:'Glass or $48/liter carafe', price:'$9.50', untappd:null, description:'Full-bodied French red from the southern Rhône Valley.' },
+      { name:'Côtes du Rhône Rosé', style:'Rosé Wine', abv:null, format:'Glass or $48/liter carafe', price:'$9.50', untappd:null, description:'Dry, refreshing rosé from the southern Rhône Valley.' },
+      { name:'Prosecco', style:'Sparkling Wine', abv:null, format:'Glass', price:'$9.50', untappd:null, description:'Light Italian sparkling wine.' },
+      { name:'Frosé', style:'Frozen Rosé Cocktail', abv:null, format:'Frozen', price:'$11.50–$12.50', untappd:null, description:'Frozen rosé with vodka. The Jazz Fest crowd pleaser.' },
+      { name:'Mimosa', style:'Wine Cocktail', abv:null, format:'Cocktail', price:'$11.50', untappd:null, description:'Prosecco with orange juice.' },
+      { name:'Louisiana Lemonade', style:'Vodka Cocktail', abv:null, format:'Cocktail', price:'$11.50–$12.50', untappd:null, description:'House lemonade with vodka.' },
+    ]
+  },
+  { name:'New Orleans Original Daiquiris', location:'Throughout Grounds (5 locations)', note:'Prices not confirmed — typical Jazz Fest frozen drinks run $12–$15.',
+    beers:[
+      { name:'Frozen Margarita', style:'Tequila Cocktail', abv:null, format:'Frozen', price:null, untappd:null, description:'Classic frozen margarita.' },
+      { name:'Rum Punch', style:'Rum Cocktail', abv:null, format:'Frozen', price:null, untappd:null, description:'Tropical rum punch, frozen.' },
+      { name:'Piña Colada', style:'Rum Cocktail', abv:null, format:'Frozen', price:null, untappd:null, description:'Coconut and pineapple with rum, frozen.' },
+      { name:'Bloody Mary', style:'Vodka Cocktail', abv:null, format:'Frozen', price:null, untappd:null, description:'Classic New Orleans Bloody Mary. Hair of the dog for day two.' },
+    ]
+  },
+];
+
+function beerCardHTML(b) {
+  const nameEl = b.untappd
+    ? `<a href="${b.untappd}" target="_blank" rel="noopener" class="beer-name">${b.name} <span class="beer-link-arrow">↗</span></a>`
+    : `<span class="beer-name">${b.name}</span>`;
+  const abvEl = b.abv ? `<span class="beer-abv">${b.abv}</span>` : '';
+  const priceEl = b.price ? `<span class="beer-price">${b.price}</span>` : '';
+  const formatEl = b.format ? `<span class="beer-format">${b.format}</span>` : '';
+  return `<div class="beer-card">
+    <div>${nameEl}</div>
+    <div class="beer-meta">
+      <span class="beer-style">${b.style}</span>
+      ${abvEl}
+    </div>
+    <div class="beer-description">${b.description}</div>
+    <div class="beer-price-row">${priceEl}${formatEl}</div>
+  </div>`;
+}
+
+function renderBeer() {
+  const el = document.getElementById('beer-content');
+  if (!el) return;
+  el.innerHTML = BEER_STANDS.map(stand => {
+    const note = stand.note ? `<div class="beer-stand-note">${stand.note}</div>` : '';
+    return `<div class="beer-stand">
+      <div class="beer-stand-header">
+        <span class="beer-stand-title">${stand.name}</span>
+        <span class="beer-stand-location">&#9679; ${stand.location}</span>
+      </div>
+      ${note}
+      <div class="beer-grid">${stand.beers.map(beerCardHTML).join('')}</div>
+    </div>`;
+  }).join('');
 }
 
 // ─────────────────────────────────────────────────────────
@@ -2040,6 +2213,17 @@ document.addEventListener('DOMContentLoaded', () => {
 
   // ── Render provisions tab
   renderProvisions();
+  renderBeer();
+
+  // ── Provisions sub-tabs (Food / Beer)
+  document.querySelectorAll('.prov-tab').forEach(tab => {
+    tab.addEventListener('click', () => {
+      document.querySelectorAll('.prov-tab').forEach(t => t.classList.remove('active'));
+      document.querySelectorAll('.prov-panel').forEach(p => p.classList.remove('active'));
+      tab.classList.add('active');
+      document.getElementById('ppanel-' + tab.dataset.ptab).classList.add('active');
+    });
+  });
 
   // ── Initial render using fallback
   rebuildAllViews();
