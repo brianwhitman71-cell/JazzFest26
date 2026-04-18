@@ -56,6 +56,31 @@ h1 span{color:var(--gold-light);font-weight:300}
 .btn-official{font-family:'Barlow Condensed',sans-serif;font-size:15px;font-weight:600;letter-spacing:0.14em;text-transform:uppercase;text-decoration:none;color:var(--bg);background:var(--gold);padding:9px 16px;border-radius:2px;transition:background 0.2s;white-space:nowrap;-webkit-tap-highlight-color:transparent}
 .btn-official:hover{background:var(--gold-light)}
 
+/* ── BURGER MENU ── */
+.burger-btn{
+  background:none;border:none;cursor:pointer;padding:6px 8px;
+  display:flex;flex-direction:column;justify-content:center;gap:5px;
+  -webkit-tap-highlight-color:transparent;flex-shrink:0;align-self:flex-start;margin-top:4px;
+}
+.burger-btn span{display:block;width:22px;height:2px;background:var(--cream);border-radius:1px;transition:background 0.2s}
+.burger-btn:hover span{background:var(--gold)}
+.burger-menu{
+  position:absolute;top:100%;left:0;z-index:200;
+  background:var(--surface);border:1px solid var(--border);border-top:none;
+  border-radius:0 0 4px 0;min-width:220px;
+  opacity:0;pointer-events:none;transform:translateY(-6px);
+  transition:opacity 0.18s,transform 0.18s;
+}
+.burger-menu.open{opacity:1;pointer-events:auto;transform:translateY(0)}
+.burger-item{
+  display:block;width:100%;text-align:left;
+  font-family:'Barlow Condensed',sans-serif;font-size:16px;font-weight:600;letter-spacing:0.16em;text-transform:uppercase;
+  color:var(--cream);background:none;border:none;border-bottom:1px solid var(--border);
+  padding:14px 20px;cursor:pointer;
+  transition:color 0.15s,background 0.15s;-webkit-tap-highlight-color:transparent;
+}
+.burger-item:last-child{border-bottom:none}
+.burger-item:hover{color:var(--gold);background:var(--card)}
 
 /* ── NAV TABS ── */
 .nav-tabs{display:flex;gap:0;overflow-x:auto;scrollbar-width:none;border-top:1px solid var(--border)}
@@ -505,6 +530,15 @@ footer{margin-top:20px;padding:20px 16px calc(20px + var(--safe-bot));border-top
 
 <header id="mainHeader">
   <div class="header-top">
+    <button class="burger-btn" id="burgerBtn" aria-label="Menu" aria-expanded="false">
+      <span></span><span></span><span></span>
+    </button>
+    <div class="burger-menu" id="burgerMenu" role="menu">
+      <button class="burger-item" role="menuitem" data-view="schedule">Full Schedule</button>
+      <button class="burger-item" role="menuitem" data-view="map">Now Playing</button>
+      <button class="burger-item" role="menuitem" data-view="provisions">Provisions &amp; Libations</button>
+      <button class="burger-item" role="menuitem" data-view="rules">Rules &amp; Regs</button>
+    </div>
     <div>
       <span class="festival-eyebrow">New Orleans Jazz &amp; Heritage Festival 2026</span>
       <h1>Jazz<span>Fest</span>26</h1>
@@ -2123,19 +2157,40 @@ document.addEventListener('DOMContentLoaded', () => {
 
   // ── Nav tabs
   const contentSplit = document.querySelector('.content-split');
+  function switchToView(viewName) {
+    document.querySelectorAll('.nav-tab').forEach(t => t.classList.remove('active'));
+    document.querySelectorAll('.view').forEach(v => v.classList.remove('active'));
+    const tab = document.querySelector('[data-view="' + viewName + '"]');
+    if (tab) tab.classList.add('active');
+    const view = document.getElementById('view-' + viewName);
+    if (view) view.classList.add('active');
+    contentSplit.classList.toggle('rules-active', viewName === 'rules');
+    contentSplit.classList.toggle('provisions-active', viewName === 'provisions');
+  }
   document.querySelectorAll('.nav-tab').forEach(tab => {
-    tab.addEventListener('click', () => {
-      document.querySelectorAll('.nav-tab').forEach(t => t.classList.remove('active'));
-      document.querySelectorAll('.view').forEach(v => v.classList.remove('active'));
-      tab.classList.add('active');
-      document.getElementById('view-' + tab.dataset.view).classList.add('active');
-      const isRules = tab.dataset.view === 'rules';
-      const isProvisions = tab.dataset.view === 'provisions';
-      contentSplit.classList.toggle('rules-active', isRules);
-      contentSplit.classList.toggle('provisions-active', isProvisions);
-      // On desktop, Full Schedule + Now Playing are always co-visible
-      // Remove pointer-events blockage by re-showing schedule when leaving rules
+    tab.addEventListener('click', () => switchToView(tab.dataset.view));
+  });
+
+  // ── Burger menu
+  const burgerBtn = document.getElementById('burgerBtn');
+  const burgerMenu = document.getElementById('burgerMenu');
+  burgerBtn.addEventListener('click', (e) => {
+    e.stopPropagation();
+    const open = burgerMenu.classList.toggle('open');
+    burgerBtn.setAttribute('aria-expanded', open);
+  });
+  document.querySelectorAll('.burger-item').forEach(item => {
+    item.addEventListener('click', () => {
+      switchToView(item.dataset.view);
+      burgerMenu.classList.remove('open');
+      burgerBtn.setAttribute('aria-expanded', 'false');
     });
+  });
+  document.addEventListener('click', (e) => {
+    if (!burgerMenu.contains(e.target) && e.target !== burgerBtn) {
+      burgerMenu.classList.remove('open');
+      burgerBtn.setAttribute('aria-expanded', 'false');
+    }
   });
 
   // ── Day + time pickers
