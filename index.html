@@ -327,6 +327,15 @@ a.vendor-name:hover{color:var(--gold-light)}
 .price-legend span{color:var(--gold);font-weight:700}
 .show-map-btn{font-family:'Barlow Condensed',sans-serif;font-size:12px;font-weight:600;letter-spacing:0.12em;text-transform:uppercase;color:var(--muted);background:transparent;border:1px solid var(--border);border-radius:2px;padding:3px 8px;cursor:pointer;transition:color 0.2s,border-color 0.2s;flex-shrink:0;-webkit-tap-highlight-color:transparent}
 .show-map-btn:hover{color:var(--gold);border-color:var(--gold)}
+.vendor-map-pin{
+  position:absolute;top:8px;right:8px;
+  background:none;border:none;padding:4px;cursor:pointer;
+  line-height:1;-webkit-tap-highlight-color:transparent;
+  opacity:0.55;transition:opacity 0.18s,transform 0.18s;
+  font-size:18px;
+}
+.vendor-map-pin:hover{opacity:1;transform:scale(1.2) translateY(-2px)}
+.vendor-map-pin svg{display:block;pointer-events:none}
 /* Provisions sub-tabs */
 .prov-tabs{display:flex;gap:0;border-bottom:1px solid var(--border);background:var(--surface);padding:0 16px}
 .prov-tab{font-family:'Barlow Condensed',sans-serif;font-size:15px;font-weight:600;letter-spacing:0.14em;text-transform:uppercase;color:var(--muted);padding:10px 16px 11px;border:none;background:transparent;cursor:pointer;border-bottom:2px solid transparent;transition:color 0.2s,border-color 0.2s;white-space:nowrap;-webkit-tap-highlight-color:transparent;flex-shrink:0}
@@ -1351,7 +1360,7 @@ const FOOD_AREAS = [
   ]},
 ];
 
-function vendorCardHTML(v, color) {
+function vendorCardHTML(v, color, mapId) {
   const nameEl = v.url
     ? `<a href="${v.url}" target="_blank" rel="noopener" class="vendor-name">${v.name} <span class="vendor-link-arrow">↗</span></a>`
     : `<span class="vendor-name">${v.name}</span>`;
@@ -1361,7 +1370,16 @@ function vendorCardHTML(v, color) {
     const price = prices[i];
     return `<li><span class="item-name">${i}</span>${price ? `<span class="item-price">${price}</span>` : ''}</li>`;
   }).join('');
-  return `<div class="vendor-card" style="--area-color:${color}">
+  const pinBtn = mapId
+    ? `<button class="vendor-map-pin" onclick="showOnMap('${mapId}')" title="Show on map" aria-label="Show on map">
+        <svg width="16" height="22" viewBox="0 0 16 22" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <path d="M8 0C3.58 0 0 3.58 0 8c0 5.25 8 14 8 14s8-8.75 8-14c0-4.42-3.58-8-8-8z" fill="#e03030"/>
+          <circle cx="8" cy="8" r="3" fill="#fff" opacity="0.9"/>
+        </svg>
+      </button>`
+    : '';
+  return `<div class="vendor-card" style="--area-color:${color};position:relative">
+    ${pinBtn}
     <div class="vendor-top">${nameEl}${badge}</div>
     <div class="vendor-city">${v.city}</div>
     <ul class="vendor-items">${itemsHTML}</ul>
@@ -1381,7 +1399,7 @@ function renderProvisions() {
         <span class="food-area-count">${area.vendors.length} vendor${area.vendors.length === 1 ? '' : 's'}</span>
         ${mapBtn}
       </div>
-      <div class="vendor-grid">${area.vendors.map(v => vendorCardHTML(v, area.color)).join('')}</div>
+      <div class="vendor-grid">${area.vendors.map(v => vendorCardHTML(v, area.color, area.mapId)).join('')}</div>
     </div>`;
   }).join('');
 }
