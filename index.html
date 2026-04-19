@@ -282,21 +282,23 @@ main{max-width:1200px;margin:0 auto;padding:0 0 calc(60px + var(--safe-bot))}
 
 @keyframes fadeUp{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:translateY(0)}}
 @keyframes noteDance{
-  0%   {transform:translateY(0)    rotate(-8deg)  scale(1);}
-  25%  {transform:translateY(-10px) rotate(6deg)  scale(1.12);}
-  50%  {transform:translateY(-4px) rotate(-4deg) scale(0.96);}
-  75%  {transform:translateY(-14px) rotate(10deg) scale(1.08);}
-  100% {transform:translateY(0)    rotate(-8deg)  scale(1);}
+  0%   {transform:translateY(0px)   rotate(var(--r0)) scale(1)    translateX(0px);}
+  15%  {transform:translateY(-14px) rotate(var(--r1)) scale(1.18) translateX(var(--sx));}
+  30%  {transform:translateY(-6px)  rotate(var(--r2)) scale(0.92) translateX(0px);}
+  50%  {transform:translateY(-20px) rotate(var(--r3)) scale(1.22) translateX(calc(var(--sx)*-0.6));}
+  65%  {transform:translateY(-4px)  rotate(var(--r4)) scale(0.96) translateX(4px);}
+  80%  {transform:translateY(-16px) rotate(var(--r5)) scale(1.14) translateX(calc(var(--sx)*0.4));}
+  100% {transform:translateY(0px)   rotate(var(--r0)) scale(1)    translateX(0px);}
 }
 .music-note{
   position:absolute;
-  font-size:20px;
-  animation:noteDance var(--dur,2.4s) ease-in-out infinite;
+  animation:noteDance var(--dur,2s) ease-in-out infinite;
   animation-delay:var(--delay,0s);
-  opacity:0.72;
+  opacity:0.8;
   color:var(--gold);
-  text-shadow:0 0 8px rgba(212,175,55,0.5);
+  text-shadow:0 0 10px rgba(212,175,55,0.6),0 0 20px rgba(212,175,55,0.2);
   will-change:transform;
+  display:inline-block;
 }
 .cards-grid .card,.now-cards .card{animation:fadeUp 0.3s ease both}
 .cards-grid .card:nth-child(1),.now-cards .card:nth-child(1){animation-delay:0s}
@@ -419,6 +421,9 @@ span.beer-name{font-family:'Cormorant Garamond',serif;font-size:20px;font-weight
 
 /* ── IPHONE / SMALL SCREEN TWEAKS ── */
 @media(max-width:599px){
+  /* Notes bar: hide between nav tabs and show above weather on mobile */
+  #notes-bar{ display:none !important; }
+  #notes-bar-mobile{ display:block !important; }
   /* Weather bar: compact on mobile */
   #wx-bar{padding:8px 14px}
   #wx-icon{font-size:26px !important}
@@ -634,6 +639,9 @@ footer{margin-top:20px;padding:20px 16px calc(20px + var(--safe-bot));border-top
       <a href="https://www.nojazzfest.com/music-schedule/" target="_blank" rel="noopener" class="btn-official">Official Schedule ↗</a>
     </div>
   </div>
+  <!-- Dancing music notes -->
+  <div id="notes-bar" style="position:relative;height:44px;overflow:hidden;pointer-events:none;background:rgba(0,0,0,0.15);border-bottom:1px solid rgba(255,255,255,0.06)"></div>
+
   <nav class="nav-tabs" role="tablist">
     <button class="nav-tab active" data-view="schedule" role="tab">Full Schedule</button>
     <button class="nav-tab" data-view="map" role="tab">Now Playing</button>
@@ -643,8 +651,8 @@ footer{margin-top:20px;padding:20px 16px calc(20px + var(--safe-bot));border-top
     <button class="nav-tab" data-view="airbnb" role="tab">Home for the Week</button>
   </nav>
 
-  <!-- Dancing music notes -->
-  <div id="notes-bar" style="position:relative;height:36px;overflow:hidden;pointer-events:none"></div>
+  <!-- Mobile-only notes bar (shown above weather on iPhone) -->
+  <div id="notes-bar-mobile" style="display:none;position:relative;height:44px;overflow:hidden;pointer-events:none;background:rgba(0,0,0,0.15);border-bottom:1px solid rgba(255,255,255,0.06)"></div>
 
   <!-- Weather bar -->
   <div id="wx-bar" style="background:rgba(0,0,0,0.32);border-top:1px solid rgba(255,255,255,0.09);padding:12px 20px;display:flex;gap:0;align-items:flex-start;overflow:hidden;flex-wrap:wrap">
@@ -2562,21 +2570,31 @@ window.scrollTo(0, 0);
 document.addEventListener('DOMContentLoaded', () => {
   window.scrollTo(0, 0);
 
-  // ── Dancing music notes across header ────────────────────────────────────
+  // ── Dancing music notes ───────────────────────────────────────────────────
   (function() {
-    const NOTES = ['♩','♪','♫','♬','𝄞','𝄢','♩','♪','♫','♬'];
-    const bar = document.getElementById('notes-bar');
-    const count = 18;
-    for (let i = 0; i < count; i++) {
-      const el = document.createElement('span');
-      el.className = 'music-note';
-      el.textContent = NOTES[i % NOTES.length];
-      const left = (i / count) * 100 + (Math.random() - 0.5) * (100 / count);
-      const dur  = 1.8 + Math.random() * 2.2;
-      const delay = -(Math.random() * dur);
-      el.style.cssText += `left:${left.toFixed(1)}%;top:${4 + Math.random() * 8}px;--dur:${dur.toFixed(2)}s;--delay:${delay.toFixed(2)}s;font-size:${16 + Math.floor(Math.random() * 10)}px;opacity:${0.45 + Math.random() * 0.45}`;
-      bar.appendChild(el);
+    const NOTES = ['♩','♪','♫','♬','𝄞','𝄢','♭','♮','♯','♪','♫','♬'];
+    const rng   = (mn, mx) => mn + Math.random() * (mx - mn);
+    const rDeg  = (mn, mx) => rng(mn, mx).toFixed(1) + 'deg';
+
+    function populateBar(bar, count) {
+      if (!bar) return;
+      for (let i = 0; i < count; i++) {
+        const el  = document.createElement('span');
+        el.className = 'music-note';
+        el.textContent = NOTES[i % NOTES.length];
+        const left  = (i / count) * 100 + rng(-2, 2);
+        const dur   = rng(1.2, 2.8);
+        const delay = -rng(0, dur);
+        const sz    = rng(15, 28);
+        const sx    = rng(-8, 8).toFixed(1) + 'px';
+        const r0 = rDeg(-20,20), r1 = rDeg(-180,180), r2 = rDeg(-90,90);
+        const r3 = rDeg(-270,270), r4 = rDeg(-45,45), r5 = rDeg(-200,200);
+        el.style.cssText = `left:${left.toFixed(1)}%;top:${rng(4,14)}px;font-size:${sz}px;opacity:${rng(0.55,0.9)};--dur:${dur.toFixed(2)}s;--delay:${delay.toFixed(2)}s;--sx:${sx};--r0:${r0};--r1:${r1};--r2:${r2};--r3:${r3};--r4:${r4};--r5:${r5}`;
+        bar.appendChild(el);
+      }
     }
+    populateBar(document.getElementById('notes-bar'), 20);
+    populateBar(document.getElementById('notes-bar-mobile'), 20);
   })();
 
   // Header height for sticky time controls
@@ -3010,6 +3028,7 @@ document.addEventListener('DOMContentLoaded', () => {
   const groundCanvas = document.getElementById('ground-canvas');
   const gctx = groundCanvas.getContext('2d');
   let currentMudF = 0, targetMudF = 0, groundIsRaining = false;
+  let groundNeedsRedraw = false;
 
   function renderGround(rainIn24h, isRaining) {
     groundIsRaining = isRaining;
@@ -3019,117 +3038,219 @@ document.addEventListener('DOMContentLoaded', () => {
       rainIn24h < 2   ? 0.4 + ((rainIn24h - 1) / 1) * 0.2 :
       rainIn24h < 4   ? 0.6 + ((rainIn24h - 2) / 2) * 0.2 :
                         0.8 + Math.min(0.2, ((rainIn24h - 4) / 3) * 0.2));
-    drawGroundTexture();
+    groundNeedsRedraw = true;
+  }
+
+  // Smooth value noise: hash → bilinear interpolation with smoothstep
+  function gHash(ix, iy) {
+    const n = Math.sin(ix * 127.1 + iy * 311.7) * 43758.5453;
+    return n - Math.floor(n);
+  }
+  function gNoise(x, y, freq) {
+    const gx = x * freq, gy = y * freq;
+    const ix = Math.floor(gx), iy = Math.floor(gy);
+    const fx = gx - ix, fy = gy - iy;
+    const u = fx*fx*(3-2*fx), v = fy*fy*(3-2*fy);
+    return gHash(ix,iy)*(1-u)*(1-v) + gHash(ix+1,iy)*u*(1-v) +
+           gHash(ix,iy+1)*(1-u)*v   + gHash(ix+1,iy+1)*u*v;
+  }
+  // Fractional Brownian Motion — 4 octaves for rich, smooth detail
+  function fbm(x, y) {
+    return gNoise(x,y,0.012)*0.50 + gNoise(x,y,0.030)*0.28 +
+           gNoise(x,y,0.075)*0.14 + gNoise(x,y,0.180)*0.08;
   }
 
   function drawGroundTexture() {
-    const w = groundCanvas.offsetWidth;
-    const h = groundCanvas.offsetHeight;
-    if (!w || !h) return;
-    groundCanvas.width  = w;
-    groundCanvas.height = h;
+    const dpr = Math.min(window.devicePixelRatio || 1, 2);
+    const cw  = groundCanvas.offsetWidth  || window.innerWidth;
+    const ch  = groundCanvas.offsetHeight || 120;
+    if (!cw || !ch) return;
+    groundCanvas.width  = cw * dpr;
+    groundCanvas.height = ch * dpr;
+    gctx.scale(dpr, dpr);
 
-    const f = currentMudF;
-    // Base colours: dry tan → wet dark brown
-    const br = Math.round(188 - f * 128); // base red
-    const bg = Math.round(152 - f * 100); // base green
-    const bb = Math.round(100 - f * 72);  // base blue
+    const f  = currentMudF;
+    const w  = cw, h = ch;
 
-    // Sky-to-ground gradient at top edge
-    const skyGrad = gctx.createLinearGradient(0, 0, 0, h * 0.38);
-    skyGrad.addColorStop(0, 'rgba(0,0,0,0)');
-    skyGrad.addColorStop(1, `rgba(${br},${bg},${bb},1)`);
-    gctx.fillStyle = skyGrad;
-    gctx.fillRect(0, 0, w, h * 0.38);
+    // Colour palette: sun-bleached dirt → deep Louisiana mud
+    const dryR=192, dryG=158, dryB=104;
+    const mudR=52,  mudG=36,  mudB=18;
+    const bR = dryR + (mudR-dryR)*f;
+    const bG = dryG + (mudG-dryG)*f;
+    const bB = dryB + (mudB-dryB)*f;
 
-    // Solid ground base
-    gctx.fillStyle = `rgb(${br},${bg},${bb})`;
-    gctx.fillRect(0, h * 0.35, w, h);
-
-    // Noise texture — pebbles, clods, variation
-    const seed = 42;
-    function rnd(x, y) {
-      const n = Math.sin(x * 127.1 + y * 311.7 + seed) * 43758.5453;
-      return n - Math.floor(n);
+    // ── 1. Build terrain height profile across width ──────────────────────
+    // Uses smooth noise so the surface has natural rolling undulations
+    const profile = new Float32Array(w + 1);
+    let minH = Infinity, maxH = -Infinity;
+    for (let x = 0; x <= w; x++) {
+      profile[x] = fbm(x, 500) * 32 + gNoise(x, 200, 0.055) * 10;
+      if (profile[x] < minH) minH = profile[x];
+      if (profile[x] > maxH) maxH = profile[x];
     }
-    const cellSize = 4;
-    for (let py = Math.floor(h * 0.3); py < h; py += cellSize) {
-      for (let px = 0; px < w; px += cellSize) {
-        const r1 = rnd(px / cellSize, py / cellSize);
-        const r2 = rnd(px / cellSize + 100, py / cellSize + 50);
-        // Vary brightness per clod
-        const bright = (r1 - 0.5) * (f < 0.4 ? 55 : 28);
-        const cr = Math.max(0, Math.min(255, br + bright));
-        const cg = Math.max(0, Math.min(255, bg + bright * 0.85));
-        const cb = Math.max(0, Math.min(255, bb + bright * 0.7));
-        gctx.fillStyle = `rgba(${Math.round(cr)},${Math.round(cg)},${Math.round(cb)},${0.55 + r2 * 0.45})`;
-        gctx.fillRect(px, py, cellSize - (r1 > 0.7 ? 1 : 0), cellSize - (r2 > 0.8 ? 1 : 0));
+    // Normalize to 0–1
+    const hRange = maxH - minH || 1;
+    const normH = x => (profile[x] - minH) / hRange; // 0 = depression, 1 = peak
+
+    // ── 2. Fade-in gradient at very top (transparent → ground) ───────────
+    const horizonY = h * 0.28;
+    const fadeGrad = gctx.createLinearGradient(0, 0, 0, horizonY + 6);
+    fadeGrad.addColorStop(0,   'rgba(0,0,0,0)');
+    fadeGrad.addColorStop(1,   `rgba(${bR|0},${bG|0},${bB|0},1)`);
+    gctx.fillStyle = fadeGrad;
+    gctx.fillRect(0, 0, w, horizonY + 6);
+
+    // ── 3. Terrain-shaped clip path ───────────────────────────────────────
+    gctx.save();
+    gctx.beginPath();
+    gctx.moveTo(0, h);
+    gctx.lineTo(0, horizonY - profile[0] * 0.55);
+    for (let x = 1; x <= w; x++) {
+      gctx.lineTo(x, horizonY - profile[x] * 0.55);
+    }
+    gctx.lineTo(w, h);
+    gctx.closePath();
+    gctx.clip();
+
+    // ── 4. Base ground fill ───────────────────────────────────────────────
+    gctx.fillStyle = `rgb(${bR|0},${bG|0},${bB|0})`;
+    gctx.fillRect(0, 0, w, h);
+
+    // ── 5. Per-pixel smooth texture via ImageData ─────────────────────────
+    const imgData = gctx.getImageData(0, 0, w * dpr, h * dpr);
+    const px = imgData.data;
+    const stride = w * dpr;
+
+    for (let sy = 0; sy < h * dpr; sy++) {
+      const worldY = sy / dpr;
+      // Only process pixels below the terrain surface
+      const colX = Math.min(w, Math.round(0)); // processed column by column below
+      for (let sx = 0; sx < stride; sx++) {
+        const worldX = sx / dpr;
+        const profY  = horizonY - profile[Math.min(w, sx / dpr | 0)] * 0.55;
+        if (worldY < profY) continue; // above terrain line — skip
+
+        // Smooth multi-octave surface variation
+        const n1 = fbm(worldX, worldY);
+        const n2 = gNoise(worldX, worldY, 0.08);
+        const nh  = normH(Math.min(w, worldX | 0)); // terrain height 0–1
+
+        // Ambient occlusion: depressions are darker
+        const aoFactor = 0.7 + nh * 0.3;
+        // Micro-detail brightness swing
+        const detail  = (n1 - 0.5) * (f < 0.35 ? 52 : 28) + (n2 - 0.5) * 18;
+
+        // Puddle darkening in depressions when wet
+        const depression = Math.max(0, 0.4 - nh); // 0 at peaks, >0 in valleys
+        const wetDark = f > 0.15 ? depression * f * 80 : 0;
+
+        let r = Math.max(0, Math.min(255, (bR + detail) * aoFactor - wetDark));
+        let g = Math.max(0, Math.min(255, (bG + detail * 0.85) * aoFactor - wetDark * 0.75));
+        let b = Math.max(0, Math.min(255, (bB + detail * 0.65) * aoFactor - wetDark * 0.5));
+
+        const i = (sy * stride + sx) * 4;
+        px[i]   = r;
+        px[i+1] = g;
+        px[i+2] = b;
+        // alpha already 255 from base fill
+      }
+    }
+    gctx.putImageData(imgData, 0, 0);
+
+    // ── 6. Puddles: reflective pools in terrain depressions ──────────────
+    if (f > 0.12) {
+      const poolCount = 6 + Math.round(f * 5);
+      // Find valley positions (low normH values)
+      const valleys = [];
+      for (let i = 0; i < 80; i++) {
+        const tx = (i / 80) * w;
+        const nh = normH(Math.min(w, tx | 0));
+        valleys.push({ x: tx, nh });
+      }
+      valleys.sort((a, b) => a.nh - b.nh);
+
+      const poolAlpha = Math.min(0.88, (f - 0.12) * 1.1);
+      for (let pi = 0; pi < Math.min(poolCount, valleys.length); pi++) {
+        const v   = valleys[pi];
+        const py  = horizonY - profile[v.x | 0] * 0.55 + 12 + (1 - v.nh) * 18;
+        const prx = 28 + (1 - v.nh) * 55 * f + gHash(pi, 3) * 30;
+        const pry = prx * 0.22;
+
+        // Dark reflective base
+        const poolGrad = gctx.createRadialGradient(v.x, py, 0, v.x, py, prx);
+        const pr2 = Math.round(bR * 0.28), pg2 = Math.round(bG * 0.28), pb2 = Math.round(bB * 0.42);
+        poolGrad.addColorStop(0,   `rgba(${pr2},${pg2},${pb2},${poolAlpha})`);
+        poolGrad.addColorStop(0.7, `rgba(${pr2},${pg2},${pb2},${poolAlpha * 0.6})`);
+        poolGrad.addColorStop(1,   'rgba(0,0,0,0)');
+        gctx.save();
+        gctx.scale(1, pry / prx);
+        gctx.beginPath();
+        gctx.ellipse(v.x, py * (prx / pry), prx, prx, 0, 0, Math.PI * 2);
+        gctx.fillStyle = poolGrad;
+        gctx.fill();
+
+        // Specular sky reflection highlight
+        const skyRefl = Math.min(0.55, (f - 0.12) * 0.7);
+        const hlGrad = gctx.createRadialGradient(v.x - prx*0.18, py*(prx/pry) - prx*0.12, 0, v.x, py*(prx/pry), prx*0.55);
+        hlGrad.addColorStop(0,   `rgba(120,180,240,${skyRefl})`);
+        hlGrad.addColorStop(0.5, `rgba(80,140,210,${skyRefl * 0.3})`);
+        hlGrad.addColorStop(1,   'rgba(0,0,0,0)');
+        gctx.beginPath();
+        gctx.ellipse(v.x, py*(prx/pry), prx, prx, 0, 0, Math.PI * 2);
+        gctx.fillStyle = hlGrad;
+        gctx.fill();
+        gctx.restore();
+
+        // Rim: thin bright edge where water meets mud
+        gctx.save();
+        gctx.scale(1, pry / prx);
+        gctx.strokeStyle = `rgba(160,210,255,${poolAlpha * 0.35})`;
+        gctx.lineWidth = 0.8;
+        gctx.beginPath();
+        gctx.ellipse(v.x, py*(prx/pry), prx, prx, 0, 0, Math.PI * 2);
+        gctx.stroke();
+        gctx.restore();
       }
     }
 
-    // Dry dirt: draw surface cracks
-    if (f < 0.3) {
-      const crackAlpha = (0.3 - f) / 0.3 * 0.55;
-      gctx.strokeStyle = `rgba(${Math.round(br*0.55)},${Math.round(bg*0.5)},${Math.round(bb*0.45)},${crackAlpha})`;
-      gctx.lineWidth = 1;
-      function rndCrack(x, y) { return rnd(x * 3.7, y * 2.3); }
-      for (let i = 0; i < 18; i++) {
-        const sx = rndCrack(i, 0) * w;
-        const sy = h * 0.4 + rndCrack(i, 1) * h * 0.55;
+    // ── 7. Dry surface cracks ─────────────────────────────────────────────
+    if (f < 0.25) {
+      const crAlpha = (0.25 - f) / 0.25 * 0.6;
+      gctx.strokeStyle = `rgba(${(bR*0.52)|0},${(bG*0.48)|0},${(bB*0.42)|0},${crAlpha})`;
+      gctx.lineWidth = 0.9;
+      for (let ci = 0; ci < 22; ci++) {
+        const sx = gHash(ci, 7) * w;
+        const sy = horizonY + gHash(ci, 8) * (h - horizonY) * 0.85;
         gctx.beginPath();
         gctx.moveTo(sx, sy);
-        let cx = sx, cy = sy;
-        for (let s = 0; s < 6; s++) {
-          cx += (rndCrack(i + s * 0.3, s) - 0.5) * 28;
-          cy += rndCrack(i, s + 0.7) * 14;
-          gctx.lineTo(cx, cy);
+        let cx2 = sx, cy2 = sy;
+        for (let s = 0; s < 7; s++) {
+          cx2 += (gHash(ci + s*0.31, s + 1) - 0.5) * 30;
+          cy2 += gHash(ci + 9, s + 0.6) * 12;
+          const cpx = (cx2 + (gHash(ci,s+10)-0.5)*12);
+          const cpy = (cy2 + (gHash(ci+1,s+10)-0.5)*8);
+          gctx.quadraticCurveTo(cpx, cpy, cx2, cy2);
         }
         gctx.stroke();
       }
     }
 
-    // Wet/mud: dark glossy pools
-    if (f > 0.25) {
-      const poolAlpha = Math.min(0.55, (f - 0.25) * 0.78);
-      for (let i = 0; i < 9; i++) {
-        const px2 = rnd(i * 3, 0) * w;
-        const py2 = h * 0.45 + rnd(i, 1) * h * 0.5;
-        const pr  = 18 + rnd(i, 2) * 55;
-        const poolGrad = gctx.createRadialGradient(px2, py2, 0, px2, py2, pr);
-        poolGrad.addColorStop(0, `rgba(${Math.round(br*0.3)},${Math.round(bg*0.3)},${Math.round(bb*0.45)},${poolAlpha})`);
-        poolGrad.addColorStop(0.6, `rgba(${Math.round(br*0.4)},${Math.round(bg*0.38)},${Math.round(bb*0.5)},${poolAlpha * 0.5})`);
-        poolGrad.addColorStop(1, 'rgba(0,0,0,0)');
-        gctx.save();
-        gctx.scale(1, 0.32);
-        gctx.beginPath();
-        gctx.ellipse(px2, py2 / 0.32, pr, pr, 0, 0, Math.PI * 2);
-        gctx.fillStyle = poolGrad;
-        gctx.fill();
-        // Wet sheen highlight
-        if (f > 0.45) {
-          gctx.strokeStyle = `rgba(180,215,255,${(f - 0.45) * 0.22})`;
-          gctx.lineWidth = 1;
-          gctx.beginPath();
-          gctx.ellipse(px2 - pr * 0.15, py2 / 0.32 - pr * 0.1, pr * 0.4, pr * 0.18, -0.3, 0, Math.PI * 2);
-          gctx.stroke();
-        }
-        gctx.restore();
-      }
-    }
+    // ── 8. Bottom edge vignette ───────────────────────────────────────────
+    const vignette = gctx.createLinearGradient(0, h * 0.75, 0, h);
+    vignette.addColorStop(0, 'rgba(0,0,0,0)');
+    vignette.addColorStop(1, 'rgba(0,0,0,0.45)');
+    gctx.fillStyle = vignette;
+    gctx.fillRect(0, h * 0.75, w, h);
 
-    // Subtle darkening at very bottom edge
-    const bottomGrad = gctx.createLinearGradient(0, h * 0.8, 0, h);
-    bottomGrad.addColorStop(0, 'rgba(0,0,0,0)');
-    bottomGrad.addColorStop(1, 'rgba(0,0,0,0.35)');
-    gctx.fillStyle = bottomGrad;
-    gctx.fillRect(0, h * 0.8, w, h);
+    gctx.restore();
   }
 
-  // Slowly animate mud level changes
+  // Animate mud level smoothly; redraw only when changed
   function tickGroundAnim() {
-    if (Math.abs(currentMudF - targetMudF) > 0.004) {
-      currentMudF += (targetMudF - currentMudF) * 0.008;
+    if (groundNeedsRedraw || Math.abs(currentMudF - targetMudF) > 0.002) {
+      currentMudF += (targetMudF - currentMudF) * 0.006;
       drawGroundTexture();
+      groundNeedsRedraw = false;
     }
     requestAnimationFrame(tickGroundAnim);
   }
