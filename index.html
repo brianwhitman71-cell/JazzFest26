@@ -669,6 +669,7 @@ footer{margin-top:20px;padding:20px 16px calc(20px + var(--safe-bot));border-top
         <button class="search-clear" id="schedSearchClear" aria-label="Clear search">✕</button>
       </div>
       <span class="count-badge" id="schedCount"></span>
+      <button id="rain-toggle" title="Toggle rain effect" style="margin-left:auto;background:none;border:none;cursor:pointer;font-size:22px;padding:2px 6px;opacity:0.3;display:none;transition:opacity 0.3s" aria-label="Toggle rain">🌧</button>
     </div>
     <div class="search-results-banner" id="searchBanner"></div>
     <div class="sched-day active" id="sday-thu">
@@ -1580,6 +1581,7 @@ footer{margin-top:20px;padding:20px 16px calc(20px + var(--safe-bot));border-top
   <button id="map-modal-close" aria-label="Close map">✕</button>
 </div>
 
+<div id="ground-strip" style="position:fixed;bottom:0;left:0;right:0;height:80px;pointer-events:none;z-index:997;transition:background 4s ease,bottom 0.3s ease"></div>
 <canvas id="rain-canvas" style="position:fixed;top:0;left:0;width:100vw;height:100vh;pointer-events:none;z-index:998;opacity:0;transition:opacity 1.5s ease"></canvas>
 
 <script>
@@ -2785,22 +2787,41 @@ document.addEventListener('DOMContentLoaded', () => {
   const ctx    = canvas.getContext('2d');
   let drops = [], ripples = [], puddles = [], rainXV = 0, rainYV = 10, rainOn = false, rafId = null;
 
+  let groundY = 0; // y-coordinate of ground level in canvas space
+
+  function getFooterOffset() {
+    const footer = document.querySelector('footer');
+    if (!footer) return 0;
+    const rect = footer.getBoundingClientRect();
+    return Math.max(0, window.innerHeight - rect.top);
+  }
+
   function resizeCanvas() {
     canvas.width  = window.innerWidth;
     canvas.height = window.innerHeight;
+    const footerH = getFooterOffset();
+    groundY = canvas.height - footerH;
+    document.getElementById('ground-strip').style.bottom = footerH + 'px';
     buildPuddles();
   }
   resizeCanvas();
   window.addEventListener('resize', resizeCanvas);
+  // Re-measure when schedule panel scrolls (footer may shift in/out of view)
+  document.getElementById('view-schedule') && document.getElementById('view-schedule').addEventListener('scroll', () => {
+    const footerH = getFooterOffset();
+    groundY = canvas.height - footerH;
+    document.getElementById('ground-strip').style.bottom = footerH + 'px';
+  });
 
-  // Fixed puddle zones distributed across the bottom third of screen
+  // Fixed puddle zones just above the footer line
   function buildPuddles() {
-    const n = 5 + Math.floor(Math.random() * 4); // 5–8 puddles
+    const n = 5 + Math.floor(Math.random() * 4);
+    const gY = groundY || canvas.height;
     puddles = Array.from({length: n}, (_, i) => ({
       x:    (canvas.width / (n + 1)) * (i + 1) + (Math.random() - 0.5) * 120,
-      y:    canvas.height * (0.72 + Math.random() * 0.22),
-      rx:   40 + Math.random() * 60,   // semi-major axis
-      ry:   0,                          // grows in as rain falls
+      y:    gY - 10 - Math.random() * 30,  // cluster just above ground line
+      rx:   40 + Math.random() * 60,
+      ry:   0,
       maxRy: 8 + Math.random() * 10,
     }));
   }
@@ -2900,9 +2921,9 @@ document.addEventListener('DOMContentLoaded', () => {
       d.x += rainXV * d.speed;
       d.y += rainYV * d.speed;
 
-      if (d.y > canvas.height || d.x < -300 || d.x > canvas.width + 300) {
-        // Check if drop lands near a puddle → emit ripple from puddle center
-        if (d.y > canvas.height * 0.6) {
+      const gY = groundY || canvas.height;
+      if (d.y > gY || d.x < -300 || d.x > canvas.width + 300) {
+        if (d.y > gY * 0.6) {
           let closest = null, bestDist = 180;
           puddles.forEach(p => {
             const dx = d.x - p.x, dy = d.y - p.y;
@@ -2914,9 +2935,8 @@ document.addEventListener('DOMContentLoaded', () => {
             const jy = closest.y + (Math.random() - 0.5) * closest.ry * 1.2;
             ripples.push({ x: jx, y: jy, rx: 0, ry: 0, pRx: closest.rx, pRy: closest.ry, maxR: 0.65 + Math.random() * 0.3, alpha: 0.7, speed: 0.012 + Math.random() * 0.01 });
           }
-          // Also spawn a ground-hit ripple at bottom of screen
           if (Math.random() < 0.18) {
-            ripples.push({ x: d.x, y: canvas.height - 2, rx: 0, ry: 0, pRx: 30, pRy: 8, maxR: 0.9, alpha: 0.5, speed: 0.016 + Math.random() * 0.01 });
+            ripples.push({ x: d.x, y: gY - 2, rx: 0, ry: 0, pRx: 30, pRy: 8, maxR: 0.9, alpha: 0.5, speed: 0.016 + Math.random() * 0.01 });
           }
         }
         Object.assign(d, spawnDrop(Math.random() * (canvas.width + 500) - 250, -20));
@@ -2949,6 +2969,39 @@ document.addEventListener('DOMContentLoaded', () => {
       }
       ctx.restore();
     }
+  }
+
+  // ── Ground strip (dirt → mud) ────────────────────────────────────────────
+  function renderGround(rainIn24h, isRaining) {
+    // Map rainfall to a 0–1 mud factor (same scale as Mud-O-Meter)
+    const f = Math.min(1, rainIn24h <= 0 ? 0 :
+      rainIn24h < 0.5 ? (rainIn24h / 0.5) * 0.2 :
+      rainIn24h < 1   ? 0.2 + ((rainIn24h - 0.5) / 0.5) * 0.2 :
+      rainIn24h < 2   ? 0.4 + ((rainIn24h - 1) / 1) * 0.2 :
+      rainIn24h < 4   ? 0.6 + ((rainIn24h - 2) / 2) * 0.2 :
+                        0.8 + Math.min(0.2, ((rainIn24h - 4) / 3) * 0.2));
+
+    // Dry dirt → wet mud colour stops
+    // dry: tan #c4a87a → damp: #8b6840 → mud: #5a3d1e → swamp: #3a2810
+    const r = Math.round(196 - f * 134);
+    const g = Math.round(168 - f * 112);
+    const b = Math.round(122 - f * 90);
+    const darkR = Math.round(r * 0.55);
+    const darkG = Math.round(g * 0.50);
+    const darkB = Math.round(b * 0.45);
+
+    const wet = isRaining ? 0.18 : 0;
+    const groundEl = document.getElementById('ground-strip');
+    // gradient: transparent top → dirt/mud colour bottom; wet sheen when raining
+    groundEl.style.background = `linear-gradient(to bottom,
+      transparent 0%,
+      rgba(${r},${g},${b},0.55) 35%,
+      rgba(${darkR},${darkG},${darkB},0.82) 100%
+    )`;
+    // wet sheen overlay via box-shadow
+    groundEl.style.boxShadow = wet > 0
+      ? `inset 0 6px 18px rgba(120,180,230,${wet})`
+      : 'none';
   }
 
   // ── Mud-O-Meter ──────────────────────────────────────────────────────────
@@ -3014,8 +3067,16 @@ document.addEventListener('DOMContentLoaded', () => {
           : '🌧 raining';
 
       // Rain effect
-      if (raining) startRain(Math.max(c.precipitation, 0.05), c.wind_speed_10m, c.wind_direction_10m);
-      else stopRain();
+      if (raining && !rainManualOff) {
+        startRain(Math.max(c.precipitation, 0.05), c.wind_speed_10m, c.wind_direction_10m);
+        rainToggleBtn.style.display = 'inline-block';
+        rainToggleBtn.style.opacity = '1';
+      } else if (!raining) {
+        rainManualOff = false;
+        rainToggleBtn.style.opacity = '0.3';
+        setTimeout(() => { if (!rainOn) rainToggleBtn.style.display = 'none'; }, 2000);
+        stopRain();
+      }
 
       // Mud-O-Meter: sum past 24 hours of precipitation from hourly data
       const nowMs2  = Date.now();
@@ -3024,6 +3085,7 @@ document.addEventListener('DOMContentLoaded', () => {
         return (tMs <= nowMs2 && nowMs2 - tMs <= 86400000) ? sum + (h.precipitation[i] || 0) : sum;
       }, 0);
       renderMudMeter(past24h);
+      renderGround(past24h, c.precipitation > 0 || isRainCode(c.weather_code));
 
       // 12-hour forecast — find current hour by comparing epoch timestamps
       const nowMs  = Date.now();
@@ -3060,12 +3122,29 @@ document.addEventListener('DOMContentLoaded', () => {
   // Rain preview — moderate rain, wind from west 10mph gusting to 30mph
   setTimeout(() => window._previewRain(0.2, 10, 30, 270), 500);
 
+  // Rain toggle button — shows when rain is active, toggles effect
+  let rainManualOff = false;
+  const rainToggleBtn = document.getElementById('rain-toggle');
+  rainToggleBtn.addEventListener('click', () => {
+    if (rainOn) {
+      rainManualOff = true;
+      stopRain();
+      if (gustInterval) { clearInterval(gustInterval); gustInterval = null; }
+      rainToggleBtn.style.opacity = '0.3';
+    } else {
+      rainManualOff = false;
+      window._previewRain(0.2, 10, 30, 270);
+      rainToggleBtn.style.opacity = '1';
+    }
+  });
+
   // Preview helpers — call from browser console
   let gustInterval = null;
   window._previewRain = function(precip, baseSpeed, gustSpeed, windDir) {
     if (gustInterval) clearInterval(gustInterval);
-    // Start rain with base wind, then pulse gusts every 2s
     startRain(precip, baseSpeed, windDir);
+    rainToggleBtn.style.display = 'inline-block';
+    rainToggleBtn.style.opacity = '1';
     let gust = false;
     gustInterval = setInterval(function() {
       gust = !gust;
@@ -3077,6 +3156,7 @@ document.addEventListener('DOMContentLoaded', () => {
   window._stopRain = function() {
     if (gustInterval) { clearInterval(gustInterval); gustInterval = null; }
     stopRain();
+    rainToggleBtn.style.opacity = '0.3';
   };
 })();
 
