@@ -2941,9 +2941,8 @@ document.addEventListener('DOMContentLoaded', () => {
   fetchWeather();
   setInterval(fetchWeather, 10 * 60 * 1000); // refresh every 10 min
 
-  // Auto-preview: ?rain in URL triggers moderate rain from the west
-  if (new URLSearchParams(location.search).has('rain'))
-    setTimeout(() => window._previewRain(0.2, 10, 30, 270), 500);
+  // Rain preview — moderate rain, wind from west 10mph gusting to 30mph
+  setTimeout(() => window._previewRain(0.2, 10, 30, 270), 500);
 
   // Preview helpers — call from browser console
   let gustInterval = null;
