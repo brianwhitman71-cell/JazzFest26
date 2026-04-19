@@ -645,6 +645,7 @@ footer{margin-top:20px;padding:20px 16px calc(20px + var(--safe-bot));border-top
       <div class="header-subtitle">Weekend Two · Apr 30 – May 3 · Fair Grounds</div>
     </div>
     <div class="header-actions">
+      <button id="rain-toggle" title="Toggle rain effect" aria-label="Toggle rain" style="background:none;border:1px solid rgba(255,255,255,0.22);border-radius:2px;color:var(--cream);font-size:18px;padding:7px 10px;cursor:pointer;line-height:1;transition:background 0.2s,border-color 0.2s;display:none">🌧</button>
       <a href="https://www.nojazzfest.com/music-schedule/" target="_blank" rel="noopener" class="btn-official">Official Schedule ↗</a>
     </div>
   </div>
@@ -1619,7 +1620,6 @@ footer{margin-top:20px;padding:20px 16px calc(20px + var(--safe-bot));border-top
 </div>
 
 <canvas id="rain-canvas" style="position:fixed;top:0;left:0;width:100vw;height:100vh;pointer-events:none;z-index:998;opacity:0;transition:opacity 1.5s ease"></canvas>
-<button id="rain-toggle" title="Toggle rain effect" style="position:fixed;bottom:20px;right:16px;z-index:999;background:rgba(0,0,0,0.55);border:1px solid rgba(255,255,255,0.18);border-radius:50%;width:44px;height:44px;font-size:22px;cursor:pointer;display:none;align-items:center;justify-content:center;backdrop-filter:blur(8px);transition:opacity 0.3s,transform 0.2s;box-shadow:0 2px 12px rgba(0,0,0,0.4)" aria-label="Toggle rain">🌧</button>
 
 <script>
 // ─────────────────────────────────────────────────────────
@@ -3338,11 +3338,11 @@ document.addEventListener('DOMContentLoaded', () => {
       // Rain effect
       if (raining && !rainManualOff) {
         startRain(Math.max(c.precipitation, 0.05), c.wind_speed_10m, c.wind_direction_10m);
-        rainToggleBtn.style.display = 'flex';
-        rainToggleBtn.style.opacity = '1';
+        rainToggleBtn.style.display = 'inline-block';
+        rainToggleBtn.style.background = "rgba(120,170,220,0.25)"; rainToggleBtn.style.borderColor = "rgba(120,180,240,0.6)";;
       } else if (!raining) {
         rainManualOff = false;
-        rainToggleBtn.style.opacity = '0.3';
+        rainToggleBtn.style.background = "none"; rainToggleBtn.style.borderColor = "rgba(255,255,255,0.22)";;
         setTimeout(() => { if (!rainOn) rainToggleBtn.style.display = 'none'; }, 2000);
         stopRain();
       }
@@ -3399,11 +3399,11 @@ document.addEventListener('DOMContentLoaded', () => {
       rainManualOff = true;
       stopRain();
       if (gustInterval) { clearInterval(gustInterval); gustInterval = null; }
-      rainToggleBtn.style.opacity = '0.3';
+      rainToggleBtn.style.background = "none"; rainToggleBtn.style.borderColor = "rgba(255,255,255,0.22)";;
     } else {
       rainManualOff = false;
       window._previewRain(0.2, 10, 30, 270);
-      rainToggleBtn.style.opacity = '1';
+      rainToggleBtn.style.background = "rgba(120,170,220,0.25)"; rainToggleBtn.style.borderColor = "rgba(120,180,240,0.6)";;
     }
   });
 
@@ -3412,8 +3412,8 @@ document.addEventListener('DOMContentLoaded', () => {
   window._previewRain = function(precip, baseSpeed, gustSpeed, windDir) {
     if (gustInterval) clearInterval(gustInterval);
     startRain(precip, baseSpeed, windDir);
-    rainToggleBtn.style.display = 'flex';
-    rainToggleBtn.style.opacity = '1';
+    rainToggleBtn.style.display = 'inline-block';
+    rainToggleBtn.style.background = "rgba(120,170,220,0.25)"; rainToggleBtn.style.borderColor = "rgba(120,180,240,0.6)";;
     let gust = false;
     gustInterval = setInterval(function() {
       gust = !gust;
@@ -3425,7 +3425,7 @@ document.addEventListener('DOMContentLoaded', () => {
   window._stopRain = function() {
     if (gustInterval) { clearInterval(gustInterval); gustInterval = null; }
     stopRain();
-    rainToggleBtn.style.opacity = '0.3';
+    rainToggleBtn.style.background = "none"; rainToggleBtn.style.borderColor = "rgba(255,255,255,0.22)";;
   };
 })();
 
