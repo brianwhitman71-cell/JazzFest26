@@ -2783,7 +2783,7 @@ document.addEventListener('DOMContentLoaded', () => {
   // ── Rain canvas ──────────────────────────────────────────────────────────
   const canvas = document.getElementById('rain-canvas');
   const ctx    = canvas.getContext('2d');
-  let drops = [], rainXV = 0, rainYV = 10, rainOn = false, rafId = null;
+  let drops = [], ripples = [], rainXV = 0, rainYV = 10, rainOn = false, rafId = null;
 
   function resizeCanvas() {
     canvas.width  = window.innerWidth;
@@ -2792,19 +2792,28 @@ document.addEventListener('DOMContentLoaded', () => {
   resizeCanvas();
   window.addEventListener('resize', resizeCanvas);
 
+  function spawnDrop(x, y) {
+    const speed = 0.75 + Math.random() * 0.5;
+    const thick = Math.random();
+    return {
+      x, y,
+      len:   14 + Math.random() * 20,
+      speed,
+      width: thick < 0.6 ? 0.8 : thick < 0.9 ? 1.2 : 1.8,
+      alpha: 0.35 + Math.random() * 0.35,
+    };
+  }
+
   function startRain(precip, windSpeed, windDir) {
-    // precip in inches/hr; scale drops 30 → 450
-    const count = Math.min(450, Math.max(30, Math.round(precip * 350 + 30)));
-    // meteorological wind dir → screen drift
-    // wind FROM west (270°) blows east → drops move right (+x)
+    const count = Math.min(600, Math.max(40, Math.round(precip * 420 + 40)));
     rainXV = -Math.sin(windDir * Math.PI / 180) * windSpeed * 0.18;
-    rainYV =  9 + windSpeed * 0.08;
-    drops  = Array.from({length: count}, () => ({
-      x: Math.random() * (window.innerWidth + 400) - 200,
-      y: Math.random() * window.innerHeight,
-      len: 10 + Math.random() * 14,
-      speed: 0.85 + Math.random() * 0.3,
-    }));
+    rainYV =  9 + windSpeed * 0.09;
+    drops  = Array.from({length: count}, () =>
+      spawnDrop(
+        Math.random() * (window.innerWidth + 500) - 250,
+        Math.random() * window.innerHeight
+      )
+    );
     rainOn = true;
     canvas.style.opacity = '1';
     if (!rafId) drawRain();
@@ -2813,31 +2822,84 @@ document.addEventListener('DOMContentLoaded', () => {
   function stopRain() {
     rainOn = false;
     canvas.style.opacity = '0';
-    setTimeout(() => { ctx.clearRect(0, 0, canvas.width, canvas.height); rafId = null; }, 1600);
+    setTimeout(() => {
+      ctx.clearRect(0, 0, canvas.width, canvas.height);
+      ripples = [];
+      rafId = null;
+    }, 1600);
   }
 
   function drawRain() {
-    if (!rainOn) { rafId = null; return; }
+    if (!rainOn && !ripples.length) { rafId = null; return; }
     rafId = requestAnimationFrame(drawRain);
     ctx.clearRect(0, 0, canvas.width, canvas.height);
-    ctx.save();
-    ctx.strokeStyle = 'rgba(185, 225, 255, 0.52)';
-    ctx.lineWidth   = 1;
+
+    // ── Drops ──
     drops.forEach(d => {
       const trailX = rainXV * (d.len / rainYV) * d.speed;
       const trailY = d.len * d.speed;
+
+      // thin highlight streak for realism
+      ctx.save();
+      ctx.globalAlpha = d.alpha * 0.35;
+      ctx.strokeStyle = '#ffffff';
+      ctx.lineWidth   = d.width * 0.5;
+      ctx.beginPath();
+      ctx.moveTo(d.x + 0.6, d.y);
+      ctx.lineTo(d.x + 0.6 - trailX, d.y - trailY);
+      ctx.stroke();
+      ctx.restore();
+
+      // main drop
+      ctx.save();
+      ctx.globalAlpha = d.alpha;
+      ctx.strokeStyle = 'rgba(180, 220, 255, 1)';
+      ctx.lineWidth   = d.width;
       ctx.beginPath();
       ctx.moveTo(d.x, d.y);
       ctx.lineTo(d.x - trailX, d.y - trailY);
       ctx.stroke();
+      ctx.restore();
+
       d.x += rainXV * d.speed;
       d.y += rainYV * d.speed;
-      if (d.y > canvas.height + 20 || d.x < -250 || d.x > canvas.width + 250) {
-        d.y = -20;
-        d.x = Math.random() * (canvas.width + 400) - 200;
+
+      if (d.y > canvas.height - 2 || d.x < -300 || d.x > canvas.width + 300) {
+        // spawn ripple at landing point (bottom strip only)
+        if (d.y > canvas.height - 4 && Math.random() < 0.35) {
+          ripples.push({ x: d.x, y: canvas.height - 4, r: 0, maxR: 18 + Math.random() * 22, alpha: 0.55, speed: 0.55 + Math.random() * 0.35 });
+        }
+        // reset drop to top
+        Object.assign(d, spawnDrop(Math.random() * (canvas.width + 500) - 250, -20));
       }
     });
-    ctx.restore();
+
+    // ── Ripples ──
+    for (let i = ripples.length - 1; i >= 0; i--) {
+      const rp = ripples[i];
+      rp.r     += rp.speed;
+      rp.alpha -= rp.alpha * 0.045;
+
+      // ellipse (flattened circle simulates ground plane)
+      ctx.save();
+      ctx.globalAlpha = rp.alpha;
+      ctx.strokeStyle = 'rgba(180, 215, 255, 1)';
+      ctx.lineWidth   = 0.8;
+      ctx.beginPath();
+      ctx.ellipse(rp.x, rp.y, rp.r, rp.r * 0.28, 0, 0, Math.PI * 2);
+      ctx.stroke();
+
+      // inner second ring, slightly delayed
+      if (rp.r > 6) {
+        ctx.globalAlpha = rp.alpha * 0.4;
+        ctx.beginPath();
+        ctx.ellipse(rp.x, rp.y, rp.r * 0.55, rp.r * 0.55 * 0.28, 0, 0, Math.PI * 2);
+        ctx.stroke();
+      }
+      ctx.restore();
+
+      if (rp.alpha < 0.012 || rp.r >= rp.maxR) ripples.splice(i, 1);
+    }
   }
 
   // ── Mud-O-Meter ──────────────────────────────────────────────────────────
