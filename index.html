@@ -288,13 +288,14 @@ main{max-width:1200px;margin:0 auto;padding:0 0 calc(60px + var(--safe-bot))}
   55%    { transform:translateY(-20px) scale(1.20); }
   80%    { transform:translateY(-8px)  scale(1.06); }
 }
-/* Inner glyph: pure constant-speed Y-axis spin */
+/* Pure GPU-composited Y-axis spin — NO CSS vars in keyframes, no mixed transforms */
 @keyframes noteRotateY{
-  from{ transform:rotateX(var(--tilt)) rotateY(0deg); }
-  to  { transform:rotateX(var(--tilt)) rotateY(360deg); }
+  from{ transform:rotateY(0deg); }
+  to  { transform:rotateY(360deg); }
 }
 .note-wrap{
   position:absolute;
+  perspective:180px;
   animation:noteBounce var(--bdur,2.4s) ease-in-out infinite;
   animation-delay:var(--bdelay,0s);
 }
@@ -306,7 +307,6 @@ main{max-width:1200px;margin:0 auto;padding:0 0 calc(60px + var(--safe-bot))}
   color:var(--gold);
   text-shadow:0 0 10px rgba(212,175,55,0.65),0 0 22px rgba(212,175,55,0.2);
   will-change:transform;
-  transform-style:preserve-3d;
   opacity:var(--op,0.82);
 }
 .cards-grid .card,.now-cards .card{animation:fadeUp 0.3s ease both}
@@ -645,7 +645,7 @@ footer{margin-top:20px;padding:20px 16px calc(20px + var(--safe-bot));border-top
       <div class="header-subtitle">Weekend Two · Apr 30 – May 3 · Fair Grounds</div>
     </div>
     <div class="header-actions">
-      <button id="rain-toggle" title="Toggle rain effect" aria-label="Toggle rain" style="background:none;border:1px solid rgba(255,255,255,0.22);border-radius:2px;color:var(--cream);font-size:18px;padding:7px 10px;cursor:pointer;line-height:1;transition:background 0.2s,border-color 0.2s;display:none">🌧</button>
+      <button id="rain-toggle" title="Toggle rain effect" aria-label="Toggle rain" style="background:none;border:1px solid rgba(255,255,255,0.22);border-radius:2px;color:var(--cream);font-size:18px;padding:7px 10px;cursor:pointer;line-height:1;transition:background 0.2s,border-color 0.2s">🌧</button>
       <a href="https://www.nojazzfest.com/music-schedule/" target="_blank" rel="noopener" class="btn-official">Official Schedule ↗</a>
     </div>
   </div>
@@ -3338,12 +3338,10 @@ document.addEventListener('DOMContentLoaded', () => {
       // Rain effect
       if (raining && !rainManualOff) {
         startRain(Math.max(c.precipitation, 0.05), c.wind_speed_10m, c.wind_direction_10m);
-        rainToggleBtn.style.display = 'inline-block';
-        rainToggleBtn.style.background = "rgba(120,170,220,0.25)"; rainToggleBtn.style.borderColor = "rgba(120,180,240,0.6)";;
+        rainToggleBtn.style.background = "rgba(120,170,220,0.25)"; rainToggleBtn.style.borderColor = "rgba(120,180,240,0.6)";
       } else if (!raining) {
         rainManualOff = false;
-        rainToggleBtn.style.background = "none"; rainToggleBtn.style.borderColor = "rgba(255,255,255,0.22)";;
-        setTimeout(() => { if (!rainOn) rainToggleBtn.style.display = 'none'; }, 2000);
+        rainToggleBtn.style.background = "none"; rainToggleBtn.style.borderColor = "rgba(255,255,255,0.22)";
         stopRain();
       }
 
@@ -3412,8 +3410,7 @@ document.addEventListener('DOMContentLoaded', () => {
   window._previewRain = function(precip, baseSpeed, gustSpeed, windDir) {
     if (gustInterval) clearInterval(gustInterval);
     startRain(precip, baseSpeed, windDir);
-    rainToggleBtn.style.display = 'inline-block';
-    rainToggleBtn.style.background = "rgba(120,170,220,0.25)"; rainToggleBtn.style.borderColor = "rgba(120,180,240,0.6)";;
+    rainToggleBtn.style.background = "rgba(120,170,220,0.25)"; rainToggleBtn.style.borderColor = "rgba(120,180,240,0.6)";
     let gust = false;
     gustInterval = setInterval(function() {
       gust = !gust;
