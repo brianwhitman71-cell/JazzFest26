@@ -281,6 +281,23 @@ main{max-width:1200px;margin:0 auto;padding:0 0 calc(60px + var(--safe-bot))}
 .card-btn svg{width:14px;height:14px;display:block}
 
 @keyframes fadeUp{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:translateY(0)}}
+@keyframes noteDance{
+  0%   {transform:translateY(0)    rotate(-8deg)  scale(1);}
+  25%  {transform:translateY(-10px) rotate(6deg)  scale(1.12);}
+  50%  {transform:translateY(-4px) rotate(-4deg) scale(0.96);}
+  75%  {transform:translateY(-14px) rotate(10deg) scale(1.08);}
+  100% {transform:translateY(0)    rotate(-8deg)  scale(1);}
+}
+.music-note{
+  position:absolute;
+  font-size:20px;
+  animation:noteDance var(--dur,2.4s) ease-in-out infinite;
+  animation-delay:var(--delay,0s);
+  opacity:0.72;
+  color:var(--gold);
+  text-shadow:0 0 8px rgba(212,175,55,0.5);
+  will-change:transform;
+}
 .cards-grid .card,.now-cards .card{animation:fadeUp 0.3s ease both}
 .cards-grid .card:nth-child(1),.now-cards .card:nth-child(1){animation-delay:0s}
 .cards-grid .card:nth-child(2),.now-cards .card:nth-child(2){animation-delay:.03s}
@@ -625,6 +642,9 @@ footer{margin-top:20px;padding:20px 16px calc(20px + var(--safe-bot));border-top
     <button class="nav-tab" data-view="crowd" role="tab">Conditions</button>
     <button class="nav-tab" data-view="airbnb" role="tab">Home for the Week</button>
   </nav>
+
+  <!-- Dancing music notes -->
+  <div id="notes-bar" style="position:relative;height:36px;overflow:hidden;pointer-events:none"></div>
 
   <!-- Weather bar -->
   <div id="wx-bar" style="background:rgba(0,0,0,0.32);border-top:1px solid rgba(255,255,255,0.09);padding:12px 20px;display:flex;gap:0;align-items:flex-start;overflow:hidden;flex-wrap:wrap">
@@ -2541,6 +2561,23 @@ window.scrollTo(0, 0);
 
 document.addEventListener('DOMContentLoaded', () => {
   window.scrollTo(0, 0);
+
+  // ── Dancing music notes across header ────────────────────────────────────
+  (function() {
+    const NOTES = ['♩','♪','♫','♬','𝄞','𝄢','♩','♪','♫','♬'];
+    const bar = document.getElementById('notes-bar');
+    const count = 18;
+    for (let i = 0; i < count; i++) {
+      const el = document.createElement('span');
+      el.className = 'music-note';
+      el.textContent = NOTES[i % NOTES.length];
+      const left = (i / count) * 100 + (Math.random() - 0.5) * (100 / count);
+      const dur  = 1.8 + Math.random() * 2.2;
+      const delay = -(Math.random() * dur);
+      el.style.cssText += `left:${left.toFixed(1)}%;top:${4 + Math.random() * 8}px;--dur:${dur.toFixed(2)}s;--delay:${delay.toFixed(2)}s;font-size:${16 + Math.floor(Math.random() * 10)}px;opacity:${0.45 + Math.random() * 0.45}`;
+      bar.appendChild(el);
+    }
+  })();
 
   // Header height for sticky time controls
   const header = document.getElementById('mainHeader');
