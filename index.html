@@ -281,24 +281,24 @@ main{max-width:1200px;margin:0 auto;padding:0 0 calc(60px + var(--safe-bot))}
 .card-btn svg{width:14px;height:14px;display:block}
 
 @keyframes fadeUp{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:translateY(0)}}
-@keyframes noteDance{
-  0%   {transform:translateY(0px)   rotate(var(--r0)) scale(1)    translateX(0px);}
-  15%  {transform:translateY(-14px) rotate(var(--r1)) scale(1.18) translateX(var(--sx));}
-  30%  {transform:translateY(-6px)  rotate(var(--r2)) scale(0.92) translateX(0px);}
-  50%  {transform:translateY(-20px) rotate(var(--r3)) scale(1.22) translateX(calc(var(--sx)*-0.6));}
-  65%  {transform:translateY(-4px)  rotate(var(--r4)) scale(0.96) translateX(4px);}
-  80%  {transform:translateY(-16px) rotate(var(--r5)) scale(1.14) translateX(calc(var(--sx)*0.4));}
-  100% {transform:translateY(0px)   rotate(var(--r0)) scale(1)    translateX(0px);}
+@keyframes noteSpin{
+  0%   { transform: translateY(0px)   rotateY(0deg)   rotateX(var(--tilt))  scale(1);    }
+  20%  { transform: translateY(-13px) rotateY(120deg) rotateX(calc(var(--tilt)*-0.5)) scale(1.16); }
+  40%  { transform: translateY(-5px)  rotateY(240deg) rotateX(var(--tilt))  scale(0.94); }
+  60%  { transform: translateY(-18px) rotateY(360deg) rotateX(calc(var(--tilt)*-0.8)) scale(1.2);  }
+  80%  { transform: translateY(-8px)  rotateY(480deg) rotateX(var(--tilt))  scale(1.06); }
+  100% { transform: translateY(0px)   rotateY(600deg) rotateX(var(--tilt))  scale(1);    }
 }
 .music-note{
   position:absolute;
-  animation:noteDance var(--dur,2s) ease-in-out infinite;
+  animation:noteSpin var(--dur,2s) linear infinite;
   animation-delay:var(--delay,0s);
-  opacity:0.8;
+  opacity:0.82;
   color:var(--gold);
-  text-shadow:0 0 10px rgba(212,175,55,0.6),0 0 20px rgba(212,175,55,0.2);
+  text-shadow:0 0 10px rgba(212,175,55,0.65),0 0 22px rgba(212,175,55,0.2);
   will-change:transform;
   display:inline-block;
+  transform-style:preserve-3d;
 }
 .cards-grid .card,.now-cards .card{animation:fadeUp 0.3s ease both}
 .cards-grid .card:nth-child(1),.now-cards .card:nth-child(1){animation-delay:0s}
@@ -640,7 +640,7 @@ footer{margin-top:20px;padding:20px 16px calc(20px + var(--safe-bot));border-top
     </div>
   </div>
   <!-- Dancing music notes -->
-  <div id="notes-bar" style="position:relative;height:44px;overflow:hidden;pointer-events:none;background:rgba(0,0,0,0.15);border-bottom:1px solid rgba(255,255,255,0.06)"></div>
+  <div id="notes-bar" style="position:relative;height:44px;overflow:hidden;pointer-events:none;background:rgba(0,0,0,0.15);border-bottom:1px solid rgba(255,255,255,0.06);perspective:300px"></div>
 
   <nav class="nav-tabs" role="tablist">
     <button class="nav-tab active" data-view="schedule" role="tab">Full Schedule</button>
@@ -652,7 +652,7 @@ footer{margin-top:20px;padding:20px 16px calc(20px + var(--safe-bot));border-top
   </nav>
 
   <!-- Mobile-only notes bar (shown above weather on iPhone) -->
-  <div id="notes-bar-mobile" style="display:none;position:relative;height:44px;overflow:hidden;pointer-events:none;background:rgba(0,0,0,0.15);border-bottom:1px solid rgba(255,255,255,0.06)"></div>
+  <div id="notes-bar-mobile" style="display:none;position:relative;height:44px;overflow:hidden;pointer-events:none;background:rgba(0,0,0,0.15);border-bottom:1px solid rgba(255,255,255,0.06);perspective:300px"></div>
 
   <!-- Weather bar -->
   <div id="wx-bar" style="background:rgba(0,0,0,0.32);border-top:1px solid rgba(255,255,255,0.09);padding:12px 20px;display:flex;gap:0;align-items:flex-start;overflow:hidden;flex-wrap:wrap">
@@ -2573,8 +2573,7 @@ document.addEventListener('DOMContentLoaded', () => {
   // ── Dancing music notes ───────────────────────────────────────────────────
   (function() {
     const NOTES = ['♩','♪','♫','♬','𝄞','𝄢','♭','♮','♯','♪','♫','♬'];
-    const rng   = (mn, mx) => mn + Math.random() * (mx - mn);
-    const rDeg  = (mn, mx) => rng(mn, mx).toFixed(1) + 'deg';
+    const rng = (mn, mx) => mn + Math.random() * (mx - mn);
 
     function populateBar(bar, count) {
       if (!bar) return;
@@ -2583,13 +2582,14 @@ document.addEventListener('DOMContentLoaded', () => {
         el.className = 'music-note';
         el.textContent = NOTES[i % NOTES.length];
         const left  = (i / count) * 100 + rng(-2, 2);
-        const dur   = rng(1.2, 2.8);
+        const dur   = rng(1.4, 3.2);
         const delay = -rng(0, dur);
         const sz    = rng(15, 28);
-        const sx    = rng(-8, 8).toFixed(1) + 'px';
-        const r0 = rDeg(-20,20), r1 = rDeg(-180,180), r2 = rDeg(-90,90);
-        const r3 = rDeg(-270,270), r4 = rDeg(-45,45), r5 = rDeg(-200,200);
-        el.style.cssText = `left:${left.toFixed(1)}%;top:${rng(4,14)}px;font-size:${sz}px;opacity:${rng(0.55,0.9)};--dur:${dur.toFixed(2)}s;--delay:${delay.toFixed(2)}s;--sx:${sx};--r0:${r0};--r1:${r1};--r2:${r2};--r3:${r3};--r4:${r4};--r5:${r5}`;
+        // Random tilt angle (-25° to +25°) gives each note a unique lean as it spins
+        const tilt  = rng(-25, 25).toFixed(1) + 'deg';
+        // Some notes spin backward for variety
+        const dir   = Math.random() < 0.4 ? 'reverse' : 'normal';
+        el.style.cssText = `left:${left.toFixed(1)}%;top:${rng(5,16)}px;font-size:${sz}px;opacity:${rng(0.6,0.92)};--dur:${dur.toFixed(2)}s;--delay:${delay.toFixed(2)}s;--tilt:${tilt};animation-direction:${dir}`;
         bar.appendChild(el);
       }
     }
