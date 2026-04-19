@@ -449,12 +449,12 @@ footer{margin-top:20px;padding:20px 16px calc(20px + var(--safe-bot));border-top
   .nav-tabs { display: flex; }
   /* Now Playing tab is redundant on desktop — map always visible alongside schedule */
   .nav-tab[data-view="map"] { display: none; }
-  .content-split:not(.rules-active):not(.provisions-active) {
+  .content-split:not(.rules-active):not(.provisions-active):not(.crowd-active):not(.airbnb-active) {
     display: flex;
     align-items: flex-start;
   }
   /* Schedule panel — left, sticky, scrollable */
-  .content-split:not(.rules-active):not(.provisions-active) #view-schedule {
+  .content-split:not(.rules-active):not(.provisions-active):not(.crowd-active):not(.airbnb-active) #view-schedule {
     display: block !important;
     width: 420px;
     flex-shrink: 0;
@@ -465,6 +465,11 @@ footer{margin-top:20px;padding:20px 16px calc(20px + var(--safe-bot));border-top
     top: var(--header-h, 96px);
     scrollbar-width: thin;
     scrollbar-color: var(--border) transparent;
+  }
+  .content-split.crowd-active #view-crowd,
+  .content-split.airbnb-active #view-airbnb {
+    display: block !important;
+    width: 100%;
   }
   #view-schedule::-webkit-scrollbar { width: 4px; }
   #view-schedule::-webkit-scrollbar-track { background: transparent; }
@@ -1446,9 +1451,15 @@ footer{margin-top:20px;padding:20px 16px calc(20px + var(--safe-bot));border-top
 
   <!-- ══ CROWD-O-METER ══ -->
   <div class="view crowd-view" id="view-crowd">
-    <div style="max-width:540px;margin:36px auto;padding:0 24px;text-align:center">
-      <h2 style="font-family:'Cormorant SC',serif;font-size:26px;font-weight:600;letter-spacing:0.08em;color:var(--cream);margin-bottom:4px">Conditions™</h2>
-      <p style="font-family:'Barlow Condensed',sans-serif;font-size:13px;letter-spacing:0.1em;color:var(--muted);margin-bottom:28px;text-transform:uppercase">Highly Scientific Algorithmic Crowd Intelligence</p>
+    <div style="max-width:960px;margin:36px auto;padding:0 24px">
+
+      <!-- Two meters side by side -->
+      <div style="display:flex;gap:24px;align-items:flex-start;flex-wrap:wrap">
+
+      <!-- ── Crowd-O-Meter ── -->
+      <div style="flex:1;min-width:280px;text-align:center">
+      <h2 style="font-family:'Cormorant SC',serif;font-size:24px;font-weight:600;letter-spacing:0.08em;color:var(--cream);margin-bottom:4px">Crowd-O-Meter™</h2>
+      <p style="font-family:'Barlow Condensed',sans-serif;font-size:12px;letter-spacing:0.1em;color:var(--muted);margin-bottom:20px;text-transform:uppercase">Highly Scientific Crowd Intelligence</p>
 
       <!-- Gauge -->
       <div style="position:relative;margin:0 auto 8px">
@@ -1496,14 +1507,13 @@ footer{margin-top:20px;padding:20px 16px calc(20px + var(--safe-bot));border-top
 
       <!-- Updated + disclaimer -->
       <p id="crowd-updated" style="font-family:'Barlow Condensed',sans-serif;font-size:12px;letter-spacing:0.08em;color:var(--muted);margin-bottom:8px;text-transform:uppercase">–</p>
-      <p style="font-family:'Barlow Condensed',sans-serif;font-size:11px;color:rgba(255,255,255,0.25);line-height:1.5;margin-top:0">* Based on historical patterns & vibes. Not actual surveillance.<br>We're not watching you. Probably.</p>
+      <p style="font-family:'Barlow Condensed',sans-serif;font-size:11px;color:rgba(255,255,255,0.25);line-height:1.5;margin-top:0">* Based on historical patterns & vibes.<br>We're not watching you. Probably.</p>
+      </div><!-- /crowd column -->
 
-      <!-- Divider -->
-      <div style="border-top:1px solid var(--border);margin:32px 0 28px"></div>
-
-      <!-- Mud-O-Meter -->
-      <h2 style="font-family:'Cormorant SC',serif;font-size:26px;font-weight:600;letter-spacing:0.08em;color:var(--cream);margin-bottom:4px">Mud-O-Meter™</h2>
-      <p style="font-family:'Barlow Condensed',sans-serif;font-size:13px;letter-spacing:0.1em;color:var(--muted);margin-bottom:28px;text-transform:uppercase">Powered by actual rainfall · Past 24 Hours</p>
+      <!-- ── Mud-O-Meter ── -->
+      <div style="flex:1;min-width:280px;text-align:center">
+      <h2 style="font-family:'Cormorant SC',serif;font-size:24px;font-weight:600;letter-spacing:0.08em;color:var(--cream);margin-bottom:4px">Mud-O-Meter™</h2>
+      <p style="font-family:'Barlow Condensed',sans-serif;font-size:12px;letter-spacing:0.1em;color:var(--muted);margin-bottom:20px;text-transform:uppercase">Powered by actual rainfall · Past 24 Hours</p>
 
       <div style="position:relative;margin:0 auto 8px">
         <svg id="mud-gauge" viewBox="0 0 200 115" style="width:100%;max-width:380px;overflow:visible">
@@ -1538,7 +1548,10 @@ footer{margin-top:20px;padding:20px 16px calc(20px + var(--safe-bot));border-top
       <div id="mud-label" style="font-family:'Cormorant SC',serif;font-size:22px;font-weight:600;color:var(--gold);margin-bottom:10px;letter-spacing:0.06em">Loading…</div>
       <div id="mud-desc"  style="font-family:'Cormorant Garamond',serif;font-size:17px;color:var(--cream);line-height:1.55;margin-bottom:24px;min-height:52px">Checking rainfall data…</div>
       <div id="mud-rain-total" style="font-family:'Barlow Condensed',sans-serif;font-size:12px;letter-spacing:0.08em;color:var(--muted);text-transform:uppercase">–</div>
-    </div>
+      </div><!-- /mud column -->
+
+      </div><!-- /flex row -->
+    </div><!-- /max-width wrapper -->
   </div><!-- /crowd-view -->
 
 </div><!-- /content-split -->
@@ -2533,6 +2546,8 @@ document.addEventListener('DOMContentLoaded', () => {
     if (view) view.classList.add('active');
     contentSplit.classList.toggle('rules-active', viewName === 'rules');
     contentSplit.classList.toggle('provisions-active', viewName === 'provisions');
+    contentSplit.classList.toggle('crowd-active', viewName === 'crowd');
+    contentSplit.classList.toggle('airbnb-active', viewName === 'airbnb');
   }
   document.querySelectorAll('.nav-tab').forEach(tab => {
     tab.addEventListener('click', () => switchToView(tab.dataset.view));
