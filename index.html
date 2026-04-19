@@ -402,6 +402,18 @@ span.beer-name{font-family:'Cormorant Garamond',serif;font-size:20px;font-weight
 
 /* ── IPHONE / SMALL SCREEN TWEAKS ── */
 @media(max-width:599px){
+  /* Weather bar: compact on mobile */
+  #wx-bar{padding:8px 14px}
+  #wx-icon{font-size:26px !important}
+  #wx-temp{font-size:26px !important}
+  #wx-feels{font-size:14px !important}
+  #wx-meta{font-size:13px !important}
+  #wx-rain-note{font-size:13px !important}
+  .wx-slot{min-width:38px !important}
+  .wx-slot-hour{font-size:12px !important}
+  .wx-slot-icon{font-size:18px !important}
+  .wx-slot-temp{font-size:14px !important}
+  .wx-slot-pop{font-size:12px !important}
   /* Time controls: hide Day/Time labels — selects are self-explanatory */
   .tc-label{display:none}
   /* Tighten time controls to fit on one row */
@@ -2914,11 +2926,11 @@ document.addEventListener('DOMContentLoaded', () => {
         const pop  = h.precipitation_probability[idx];
         const precip = h.precipitation[idx];
         const showRain = pop > 20 || precip > 0;
-        return `<div style="flex-shrink:0;text-align:center;min-width:54px">
-          <div style="font-family:'Barlow Condensed',sans-serif;font-size:15px;color:var(--muted);letter-spacing:0.05em">${hour}</div>
-          <div style="font-size:26px;line-height:1.4">${icon}</div>
-          <div style="font-family:'Barlow Condensed',sans-serif;font-size:19px;font-weight:600;color:var(--cream)">${temp}°</div>
-          ${showRain ? `<div style="font-family:'Barlow Condensed',sans-serif;font-size:15px;color:#7EC8F0">${pop}%</div>` : '<div style="height:19px"></div>'}
+        return `<div class="wx-slot" style="flex-shrink:0;text-align:center;min-width:54px">
+          <div class="wx-slot-hour" style="font-family:'Barlow Condensed',sans-serif;font-size:15px;color:var(--muted);letter-spacing:0.05em">${hour}</div>
+          <div class="wx-slot-icon" style="font-size:26px;line-height:1.4">${icon}</div>
+          <div class="wx-slot-temp" style="font-family:'Barlow Condensed',sans-serif;font-size:19px;font-weight:600;color:var(--cream)">${temp}°</div>
+          ${showRain ? `<div class="wx-slot-pop" style="font-family:'Barlow Condensed',sans-serif;font-size:15px;color:#7EC8F0">${pop}%</div>` : '<div style="height:19px"></div>'}
         </div>`;
       }).join('');
     } catch(e) {
@@ -2929,22 +2941,26 @@ document.addEventListener('DOMContentLoaded', () => {
   fetchWeather();
   setInterval(fetchWeather, 10 * 60 * 1000); // refresh every 10 min
 
+  // Auto-preview: ?rain in URL triggers moderate rain from the west
+  if (new URLSearchParams(location.search).has('rain'))
+    setTimeout(() => window._previewRain(0.2, 10, 30, 270), 500);
+
   // Preview helpers — call from browser console
-  let gustRafId = null;
+  let gustInterval = null;
   window._previewRain = function(precip, baseSpeed, gustSpeed, windDir) {
-    if (gustRafId) cancelAnimationFrame(gustRafId);
-    const start = performance.now();
-    function tick(now) {
-      // oscillate between base and gust on a ~4s cycle
-      const t = ((now - start) / 4000) % 1;
-      const speed = baseSpeed + (gustSpeed - baseSpeed) * Math.abs(Math.sin(t * Math.PI));
-      startRain(precip, speed, windDir);
-      gustRafId = requestAnimationFrame(tick);
-    }
-    gustRafId = requestAnimationFrame(tick);
+    if (gustInterval) clearInterval(gustInterval);
+    // Start rain with base wind, then pulse gusts every 2s
+    startRain(precip, baseSpeed, windDir);
+    let gust = false;
+    gustInterval = setInterval(function() {
+      gust = !gust;
+      const speed = gust ? gustSpeed : baseSpeed;
+      rainXV = -Math.sin(windDir * Math.PI / 180) * speed * 0.18;
+      rainYV =  9 + speed * 0.08;
+    }, 2000);
   };
   window._stopRain = function() {
-    if (gustRafId) { cancelAnimationFrame(gustRafId); gustRafId = null; }
+    if (gustInterval) { clearInterval(gustInterval); gustInterval = null; }
     stopRain();
   };
 })();
