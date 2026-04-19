@@ -5,7 +5,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-<title>JazzFest26</title>
+<title>♪ JazzFest26 ♫</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Cormorant+SC:wght@300;400;600;700&family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400&family=Barlow+Condensed:wght@300;400;500;600;700&display=swap" rel="stylesheet">
@@ -475,7 +475,7 @@ footer{margin-top:20px;padding:20px 16px calc(20px + var(--safe-bot));border-top
   #view-schedule::-webkit-scrollbar-track { background: transparent; }
   #view-schedule::-webkit-scrollbar-thumb { background: var(--border); border-radius: 2px; }
   /* Map panel — right, fills remaining space */
-  .content-split:not(.rules-active):not(.provisions-active) #view-map {
+  .content-split:not(.rules-active):not(.provisions-active):not(.crowd-active):not(.airbnb-active) #view-map {
     display: block !important;
     flex: 1;
     min-width: 0;
@@ -610,8 +610,8 @@ footer{margin-top:20px;padding:20px 16px calc(20px + var(--safe-bot));border-top
     <button class="nav-tab" data-view="map" role="tab">Now Playing</button>
     <button class="nav-tab" data-view="provisions" role="tab">Provisions &amp; Libations</button>
     <button class="nav-tab" data-view="rules" role="tab">Rules &amp; Regs</button>
-    <button class="nav-tab" data-view="airbnb" role="tab">Home for the Week</button>
     <button class="nav-tab" data-view="crowd" role="tab">Conditions</button>
+    <button class="nav-tab" data-view="airbnb" role="tab">Home for the Week</button>
   </nav>
 
   <!-- Weather bar -->
@@ -2827,13 +2827,13 @@ document.addEventListener('DOMContentLoaded', () => {
 
   // ── Mud-O-Meter ──────────────────────────────────────────────────────────
   const MUD_LEVELS = [
-    { max: 5,  emoji: '🏜️', label: 'Bone Dry',          desc: "You could eat off the grass. Don't, though. Perfect conditions for the unwise shoe choice you made." },
-    { max: 18, emoji: '💧', label: 'Barely Damp',        desc: "A light spritz. The grounds crew is unconcerned. Your white sneakers remain delusional but viable." },
-    { max: 35, emoji: '👟', label: 'Shoe Risk Advisory', desc: "Damp underfoot. Mud potential: theoretical but rising. Sandal wearers: begin your risk assessment." },
-    { max: 52, emoji: '🥾', label: 'Mud Has Arrived',    desc: "It's here. The classic JazzFest mud experience. It wants your Chacos. It will get your Chacos." },
-    { max: 68, emoji: '🐖', label: 'Full Mud Mode',      desc: "Your feet are now part of the Fair Grounds. Scientists are classifying this as a new biome." },
-    { max: 82, emoji: '🌊', label: 'Historic Mud',       desc: "The mud has a name. It has opinions. It remembers. It will follow you home on your socks." },
-    { max: 101,emoji: '🐊', label: 'THE SWAMP IS ALIVE', desc: "The mud has organized. It has elected a spokesperson. Resistance is futile. Embrace becoming sediment." },
+    { max: 5,  emoji: '🏜️', label: 'Bone Dry',          desc: "Practically a parking lot out there. You could wear your good shoes. You won't. But you could." },
+    { max: 18, emoji: '💧', label: 'Barely Damp',        desc: "Damp but dignified. The mud is merely considering its options. Your Crocs remain an embarrassing overreaction." },
+    { max: 35, emoji: '👟', label: 'Shoe Risk Advisory', desc: "Puddles have been spotted. The sandal people are making eye contact. This is not a drill." },
+    { max: 52, emoji: '🥾', label: 'Mud Has Arrived',    desc: "It's here. It has opinions. It is actively auditioning to become your new left shoe. Let the negotiations begin." },
+    { max: 68, emoji: '🐖', label: 'Full Mud Mode',      desc: "The mud is load-bearing at this point. A man lost his entire personality somewhere between Stage 2 and the port-a-potties." },
+    { max: 82, emoji: '🌊', label: 'Historic Mud',       desc: "The mud has filed for personhood. Your shoe has already accepted it. Pour one out. Literally, the shoe is full of water." },
+    { max: 101,emoji: '🐊', label: 'THE SWAMP IS ALIVE', desc: "Alligators are just confused. You are one with the mud. The mud is one with you. Your podiatrist has been notified." },
   ];
 
   function renderMudMeter(rainIn24h) {
