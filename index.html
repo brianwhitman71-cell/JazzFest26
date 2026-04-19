@@ -2928,6 +2928,25 @@ document.addEventListener('DOMContentLoaded', () => {
 
   fetchWeather();
   setInterval(fetchWeather, 10 * 60 * 1000); // refresh every 10 min
+
+  // Preview helpers — call from browser console
+  let gustRafId = null;
+  window._previewRain = function(precip, baseSpeed, gustSpeed, windDir) {
+    if (gustRafId) cancelAnimationFrame(gustRafId);
+    const start = performance.now();
+    function tick(now) {
+      // oscillate between base and gust on a ~4s cycle
+      const t = ((now - start) / 4000) % 1;
+      const speed = baseSpeed + (gustSpeed - baseSpeed) * Math.abs(Math.sin(t * Math.PI));
+      startRain(precip, speed, windDir);
+      gustRafId = requestAnimationFrame(tick);
+    }
+    gustRafId = requestAnimationFrame(tick);
+  };
+  window._stopRain = function() {
+    if (gustRafId) { cancelAnimationFrame(gustRafId); gustRafId = null; }
+    stopRain();
+  };
 })();
 
 // ── App-only deep link (no website fallback) ──────────────────────────────
