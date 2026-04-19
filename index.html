@@ -589,6 +589,7 @@ footer{margin-top:20px;padding:20px 16px calc(20px + var(--safe-bot));border-top
       <button class="burger-item" role="menuitem" data-view="provisions">Provisions &amp; Libations</button>
       <button class="burger-item" role="menuitem" data-view="rules">Rules &amp; Regs</button>
       <button class="burger-item" role="menuitem" data-view="airbnb">Home for the Week</button>
+      <button class="burger-item" role="menuitem" data-view="crowd">Crowd-O-Meter</button>
     </div>
     <div>
       <span class="festival-eyebrow">New Orleans Jazz &amp; Heritage Festival 2026</span>
@@ -605,6 +606,7 @@ footer{margin-top:20px;padding:20px 16px calc(20px + var(--safe-bot));border-top
     <button class="nav-tab" data-view="provisions" role="tab">Provisions &amp; Libations</button>
     <button class="nav-tab" data-view="rules" role="tab">Rules &amp; Regs</button>
     <button class="nav-tab" data-view="airbnb" role="tab">Home for the Week</button>
+    <button class="nav-tab" data-view="crowd" role="tab">Crowd-O-Meter</button>
   </nav>
 </header>
 
@@ -1402,24 +1404,76 @@ footer{margin-top:20px;padding:20px 16px calc(20px + var(--safe-bot));border-top
 
         <p style="font-family:'Barlow Condensed',sans-serif;font-size:12px;letter-spacing:0.1em;text-transform:uppercase;color:var(--muted);margin:28px 0 14px">Rideshare</p>
         <div style="display:flex;gap:10px;justify-content:center;flex-wrap:wrap">
-          <a href="uber://?action=setPickup&pickup=my_location&dropoff[latitude]=29.9515&dropoff[longitude]=-90.0778&dropoff[nickname]=222+Loyola+Ave"
-            onclick="setTimeout(function(){window.location='https://m.uber.com/ul/?action=setPickup&pickup=my_location&dropoff[latitude]=29.9515&dropoff[longitude]=-90.0778&dropoff[nickname]=222+Loyola+Ave,+New+Orleans,+LA'},1500)"
-            target="_blank" rel="noopener"
-            style="display:inline-flex;align-items:center;font-family:'Barlow Condensed',sans-serif;font-size:13px;font-weight:600;letter-spacing:0.12em;text-transform:uppercase;color:var(--cream);background:rgba(255,255,255,0.08);border:1px solid var(--border);padding:10px 20px;border-radius:4px;text-decoration:none;transition:background 0.2s"
+          <button onclick="tryAppLink('uber://?action=setPickup&pickup=my_location&dropoff[formattedAddress]=222%20Loyola%20Ave%2C%20New%20Orleans%2C%20LA%2070112&dropoff[nickname]=Home%20for%20the%20Week')"
+            style="display:inline-flex;align-items:center;font-family:'Barlow Condensed',sans-serif;font-size:13px;font-weight:600;letter-spacing:0.12em;text-transform:uppercase;color:var(--cream);background:rgba(255,255,255,0.08);border:1px solid var(--border);padding:10px 20px;border-radius:4px;cursor:pointer;transition:background 0.2s"
             onmouseover="this.style.background='rgba(255,255,255,0.15)'" onmouseout="this.style.background='rgba(255,255,255,0.08)'">
             <img src="https://cdn.simpleicons.org/uber/ffffff" width="18" height="18" alt="" style="margin-right:7px">Uber
-          </a>
-          <a href="lyft://ridetype?id=lyft&destination[latitude]=29.9515&destination[longitude]=-90.0778&destination[address]=222+Loyola+Ave,+New+Orleans,+LA"
-            onclick="setTimeout(function(){window.location='https://www.lyft.com/ride?destination[latitude]=29.9515&destination[longitude]=-90.0778&destination[address]=222+Loyola+Ave,+New+Orleans,+LA'},1500)"
-            target="_blank" rel="noopener"
-            style="display:inline-flex;align-items:center;font-family:'Barlow Condensed',sans-serif;font-size:13px;font-weight:600;letter-spacing:0.12em;text-transform:uppercase;color:var(--cream);background:rgba(255,255,255,0.08);border:1px solid var(--border);padding:10px 20px;border-radius:4px;text-decoration:none;transition:background 0.2s"
+          </button>
+          <button onclick="tryAppLink('lyft://ridetype?id=lyft&destination[latitude]=29.9515&destination[longitude]=-90.0778&destination[address]=222%20Loyola%20Ave%2C%20New%20Orleans%2C%20LA')"
+            style="display:inline-flex;align-items:center;font-family:'Barlow Condensed',sans-serif;font-size:13px;font-weight:600;letter-spacing:0.12em;text-transform:uppercase;color:var(--cream);background:rgba(255,255,255,0.08);border:1px solid var(--border);padding:10px 20px;border-radius:4px;cursor:pointer;transition:background 0.2s"
             onmouseover="this.style.background='rgba(255,255,255,0.15)'" onmouseout="this.style.background='rgba(255,255,255,0.08)'">
             <img src="https://cdn.simpleicons.org/lyft/FF00BF" width="18" height="18" alt="" style="margin-right:7px">Lyft
-          </a>
+          </button>
         </div>
       </div>
     </div>
   </div><!-- /airbnb-view -->
+
+  <!-- ══ CROWD-O-METER ══ -->
+  <div class="view crowd-view" id="view-crowd">
+    <div style="max-width:540px;margin:36px auto;padding:0 24px;text-align:center">
+      <h2 style="font-family:'Cormorant SC',serif;font-size:26px;font-weight:600;letter-spacing:0.08em;color:var(--cream);margin-bottom:4px">Crowd-O-Meter™</h2>
+      <p style="font-family:'Barlow Condensed',sans-serif;font-size:13px;letter-spacing:0.1em;color:var(--muted);margin-bottom:28px;text-transform:uppercase">Highly Scientific Algorithmic Crowd Intelligence</p>
+
+      <!-- Gauge -->
+      <div style="position:relative;margin:0 auto 8px">
+        <svg id="crowd-gauge" viewBox="0 0 200 115" style="width:100%;max-width:380px;overflow:visible">
+          <defs>
+            <linearGradient id="zoneGrad" x1="15" y1="0" x2="185" y2="0" gradientUnits="userSpaceOnUse">
+              <stop offset="0%"   stop-color="#4CAF50"/>
+              <stop offset="40%"  stop-color="#4CAF50"/>
+              <stop offset="40%"  stop-color="#FFC107"/>
+              <stop offset="65%"  stop-color="#FFC107"/>
+              <stop offset="65%"  stop-color="#FF9800"/>
+              <stop offset="80%"  stop-color="#FF9800"/>
+              <stop offset="80%"  stop-color="#F44336"/>
+              <stop offset="100%" stop-color="#F44336"/>
+            </linearGradient>
+          </defs>
+          <!-- Track background -->
+          <path d="M 15,105 A 85,85 0 0,1 185,105" fill="none" stroke="rgba(255,255,255,0.08)" stroke-width="16" stroke-linecap="round"/>
+          <!-- Zone color background (dim) -->
+          <path d="M 15,105 A 85,85 0 0,1 185,105" fill="none" stroke="url(#zoneGrad)" stroke-width="16" stroke-linecap="round" opacity="0.25"/>
+          <!-- Active fill arc -->
+          <path id="crowd-arc" d="M 15,105 A 85,85 0 0,1 185,105" fill="none" stroke="url(#zoneGrad)" stroke-width="16" stroke-linecap="round" stroke-dasharray="267" stroke-dashoffset="267" style="transition:stroke-dashoffset 1.2s cubic-bezier(.4,0,.2,1)"/>
+          <!-- Needle -->
+          <line id="crowd-needle" x1="100" y1="105" x2="100" y2="26" stroke="var(--cream)" stroke-width="2.5" stroke-linecap="round" transform="rotate(-90,100,105)" style="transition:transform 1.2s cubic-bezier(.4,0,.2,1)"/>
+          <circle cx="100" cy="105" r="5" fill="var(--gold)"/>
+          <!-- Pct text -->
+          <text id="crowd-pct" x="100" y="88" text-anchor="middle" font-family="'Barlow Condensed',sans-serif" font-size="22" font-weight="700" fill="var(--cream)" letter-spacing="1">--</text>
+        </svg>
+      </div>
+
+      <!-- Zone labels -->
+      <div style="display:flex;justify-content:space-between;max-width:380px;margin:0 auto 24px;padding:0 8px">
+        <span style="font-family:'Barlow Condensed',sans-serif;font-size:10px;letter-spacing:0.08em;color:#4CAF50;text-transform:uppercase">Empty</span>
+        <span style="font-family:'Barlow Condensed',sans-serif;font-size:10px;letter-spacing:0.08em;color:#FF9800;text-transform:uppercase">Busy</span>
+        <span style="font-family:'Barlow Condensed',sans-serif;font-size:10px;letter-spacing:0.08em;color:#F44336;text-transform:uppercase">Chaos</span>
+      </div>
+
+      <!-- Level description -->
+      <div id="crowd-emoji" style="font-size:40px;margin-bottom:8px;line-height:1">🎺</div>
+      <div id="crowd-label" style="font-family:'Cormorant SC',serif;font-size:22px;font-weight:600;color:var(--gold);margin-bottom:10px;letter-spacing:0.06em">Loading…</div>
+      <div id="crowd-desc" style="font-family:'Cormorant Garamond',serif;font-size:17px;color:var(--cream);line-height:1.55;margin-bottom:24px;min-height:52px">Calculating crowd vibes…</div>
+
+      <!-- Day pills -->
+      <div id="crowd-days" style="display:flex;gap:8px;justify-content:center;margin-bottom:20px;flex-wrap:wrap"></div>
+
+      <!-- Updated + disclaimer -->
+      <p id="crowd-updated" style="font-family:'Barlow Condensed',sans-serif;font-size:12px;letter-spacing:0.08em;color:var(--muted);margin-bottom:8px;text-transform:uppercase">–</p>
+      <p style="font-family:'Barlow Condensed',sans-serif;font-size:11px;color:rgba(255,255,255,0.25);line-height:1.5;margin-top:0">* Based on historical patterns & vibes. Not actual surveillance.<br>We're not watching you. Probably.</p>
+    </div>
+  </div><!-- /crowd-view -->
 
 </div><!-- /content-split -->
 
@@ -2593,6 +2647,142 @@ document.addEventListener('DOMContentLoaded', () => {
   // ── Async: fetch fresh schedule from schedule.json on every load
   loadSchedule();
 });
+
+// ── App-only deep link (no website fallback) ──────────────────────────────
+function tryAppLink(url) {
+  const iframe = document.createElement('iframe');
+  iframe.style.cssText = 'display:none;position:fixed;top:-1px;left:-1px;width:1px;height:1px';
+  iframe.src = url;
+  document.body.appendChild(iframe);
+  setTimeout(() => { try { document.body.removeChild(iframe); } catch(e){} }, 2000);
+}
+
+// ── Crowd-O-Meter ─────────────────────────────────────────────────────────
+(function() {
+  const FEST_DAYS = [
+    { date: '2026-04-30', label: 'Thu Apr 30', peak: 0.50 },
+    { date: '2026-05-01', label: 'Fri May 1',  peak: 0.65 },
+    { date: '2026-05-02', label: 'Sat May 2',  peak: 0.85 },
+    { date: '2026-05-03', label: 'Sun May 3',  peak: 1.00 },
+  ];
+
+  const LEVELS = [
+    { max: 8,  emoji: '👻', label: 'Ghost Town',         desc: "You and the sound engineer are nodding at each other. This is peak JazzFest. Tell no one." },
+    { max: 20, emoji: '🦗', label: 'Early Bird Special', desc: "Beer line: zero people. Unobstructed stage view. You have achieved something rare and beautiful." },
+    { max: 35, emoji: '😌', label: 'Pleasantly Chill',   desc: "You can stretch your arms. Do it now. Cherish this. Remember it when Sunday arrives." },
+    { max: 50, emoji: '🎶', label: 'Prime Time Vibes',   desc: "Healthy crowd, good energy. Personal space technically still exists. Start body language negotiations." },
+    { max: 62, emoji: '🌶️', label: 'Getting Spicy',      desc: "You've made accidental eye contact with 4 strangers. Two are your new best friends. The others took your spot." },
+    { max: 74, emoji: '🐟', label: 'Sardine Mode',       desc: "That's not your elbow. Whose elbow is that? It doesn't matter anymore. You are one organism now." },
+    { max: 85, emoji: '🔥', label: 'Human Soup',         desc: "Scientists estimate 3,000 people sharing 12 square feet. Guard your crawfish. Become the crowd." },
+    { max: 93, emoji: '🆘', label: 'Send Help',          desc: "Your AC at home is sending thoughts and prayers. Resistance is futile. Someone is definitely on your foot." },
+    { max: 101,emoji: '🎺', label: 'MAXIMUM JAZZ',       desc: "Theoretical physics has broken down. You are simultaneously everywhere and nowhere. Send beer. More beer." },
+  ];
+
+  const ARC_LEN = 267; // π × 85
+
+  function todayKey() {
+    const d = new Date();
+    return d.getFullYear() + '-' + String(d.getMonth()+1).padStart(2,'0') + '-' + String(d.getDate()).padStart(2,'0');
+  }
+
+  function timeFactor() {
+    const now = new Date();
+    const h = now.getHours() + now.getMinutes() / 60;
+    // Gates open 11am, close 7pm; peak is 2–5pm
+    if (h < 10.5) return 0.02;
+    if (h < 11)   return 0.08;
+    if (h < 12)   return 0.20 + (h - 11) * 0.18;
+    if (h < 14)   return 0.40 + (h - 12) * 0.18;
+    if (h < 17)   return 0.76 + (h - 14) * 0.08;
+    if (h < 18)   return 1.00 - (h - 17) * 0.20;
+    if (h < 19)   return 0.80 - (h - 18) * 0.55;
+    return 0.05;
+  }
+
+  function crowdLevel(festDay) {
+    const tf = timeFactor();
+    const jitter = (Math.random() - 0.5) * 0.06;
+    return Math.max(0, Math.min(100, (tf * festDay.peak + jitter) * 100));
+  }
+
+  function preFestLevel() {
+    // Show building anticipation based on how many days away
+    const today = new Date(); today.setHours(0,0,0,0);
+    const fest  = new Date('2026-04-30'); fest.setHours(0,0,0,0);
+    const days  = Math.round((fest - today) / 86400000);
+    if (days <= 0) return null; // shouldn't happen here
+    return Math.max(2, 15 - days * 0.5); // low hum of anticipation
+  }
+
+  function render() {
+    const key = todayKey();
+    const festDay = FEST_DAYS.find(d => d.date === key);
+    let level, isFest = !!festDay;
+
+    if (festDay) {
+      level = crowdLevel(festDay);
+    } else {
+      // Check if before or after festival
+      const today = new Date(); today.setHours(0,0,0,0);
+      const start = new Date('2026-04-30');
+      const end   = new Date('2026-05-04');
+      if (today < start) {
+        level = preFestLevel();
+        isFest = false;
+      } else {
+        level = 2; // after festival
+        isFest = false;
+      }
+    }
+
+    // Update arc
+    const arc = document.getElementById('crowd-arc');
+    const offset = ARC_LEN * (1 - level / 100);
+    arc.style.strokeDashoffset = offset;
+
+    // Update needle (-90° = 0%, +90° = 100%)
+    const angle = -90 + (level / 100) * 180;
+    document.getElementById('crowd-needle').setAttribute('transform', `rotate(${angle.toFixed(1)},100,105)`);
+
+    // Update % text
+    document.getElementById('crowd-pct').textContent = Math.round(level) + '%';
+
+    // Update description
+    const lvl = LEVELS.find(l => level < l.max) || LEVELS[LEVELS.length - 1];
+    document.getElementById('crowd-emoji').textContent = lvl.emoji;
+    document.getElementById('crowd-label').textContent = isFest ? lvl.label : (new Date() < new Date('2026-04-30') ? 'Warming Up…' : 'Festival Over');
+    document.getElementById('crowd-desc').textContent = isFest
+      ? lvl.desc
+      : (new Date() < new Date('2026-04-30')
+          ? "Festival hasn't started yet. The Fair Grounds are just sitting there, blissfully unaware of what's coming. Rest while you can."
+          : "Festival's over. The crawfish are safe. Until next year.");
+
+    // Day pills
+    const strip = document.getElementById('crowd-days');
+    strip.innerHTML = FEST_DAYS.map(d => {
+      const isToday = d.date === key;
+      return `<div style="font-family:'Barlow Condensed',sans-serif;font-size:12px;font-weight:600;letter-spacing:0.08em;text-transform:uppercase;padding:5px 12px;border-radius:20px;border:1px solid ${isToday ? 'var(--gold)' : 'var(--border)'};color:${isToday ? 'var(--gold)' : 'var(--muted)'};background:${isToday ? 'rgba(212,175,55,0.12)' : 'transparent'}">${d.label}</div>`;
+    }).join('');
+
+    // Updated time
+    const now = new Date();
+    document.getElementById('crowd-updated').textContent =
+      'Updated ' + now.toLocaleTimeString([], {hour:'2-digit', minute:'2-digit'}) + ' · refreshes every 60s';
+  }
+
+  // Run on tab activation
+  document.addEventListener('click', function(e) {
+    if (e.target.matches('[data-view="crowd"]') || e.target.closest('[data-view="crowd"]')) {
+      render();
+    }
+  });
+
+  // Also run if crowd tab is already active on load
+  if (document.getElementById('view-crowd').classList.contains('active')) render();
+
+  // Auto-refresh every 60s
+  setInterval(render, 60000);
+})();
 </script>
 </body>
 </html>
