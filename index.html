@@ -645,7 +645,7 @@ footer{margin-top:20px;padding:20px 16px calc(20px + var(--safe-bot));border-top
       <div class="header-subtitle">Weekend Two · Apr 30 – May 3 · Fair Grounds</div>
     </div>
     <div class="header-actions">
-      <button id="rain-toggle" title="Toggle rain effect" aria-label="Toggle rain" style="background:none;border:1px solid rgba(255,255,255,0.22);border-radius:2px;color:var(--cream);font-size:18px;padding:7px 10px;cursor:pointer;line-height:1;transition:background 0.2s,border-color 0.2s">🌧</button>
+      <button id="rain-toggle" title="Toggle rain effect" aria-label="Toggle rain" style="display:none;background:rgba(120,170,220,0.25);border:1px solid rgba(120,180,240,0.6);border-radius:2px;color:var(--cream);font-size:18px;padding:7px 10px;cursor:pointer;line-height:1;transition:background 0.2s,border-color 0.2s">🌧</button>
       <a href="https://www.nojazzfest.com/music-schedule/" target="_blank" rel="noopener" class="btn-official">Official Schedule ↗</a>
     </div>
   </div>
@@ -3338,11 +3338,11 @@ document.addEventListener('DOMContentLoaded', () => {
       // Rain effect
       if (raining && !rainManualOff) {
         startRain(Math.max(c.precipitation, 0.05), c.wind_speed_10m, c.wind_direction_10m);
-        rainToggleBtn.style.background = "rgba(120,170,220,0.25)"; rainToggleBtn.style.borderColor = "rgba(120,180,240,0.6)";
+        rainToggleBtn.style.display = 'inline-block';
       } else if (!raining) {
         rainManualOff = false;
-        rainToggleBtn.style.background = "none"; rainToggleBtn.style.borderColor = "rgba(255,255,255,0.22)";
         stopRain();
+        rainToggleBtn.style.display = 'none';
       }
 
       // Mud-O-Meter: sum past 24 hours of precipitation from hourly data
@@ -3397,11 +3397,10 @@ document.addEventListener('DOMContentLoaded', () => {
       rainManualOff = true;
       stopRain();
       if (gustInterval) { clearInterval(gustInterval); gustInterval = null; }
-      rainToggleBtn.style.background = "none"; rainToggleBtn.style.borderColor = "rgba(255,255,255,0.22)";;
+      rainToggleBtn.style.display = 'none';
     } else {
       rainManualOff = false;
       window._previewRain(0.2, 10, 30, 270);
-      rainToggleBtn.style.background = "rgba(120,170,220,0.25)"; rainToggleBtn.style.borderColor = "rgba(120,180,240,0.6)";;
     }
   });
 
@@ -3410,7 +3409,7 @@ document.addEventListener('DOMContentLoaded', () => {
   window._previewRain = function(precip, baseSpeed, gustSpeed, windDir) {
     if (gustInterval) clearInterval(gustInterval);
     startRain(precip, baseSpeed, windDir);
-    rainToggleBtn.style.background = "rgba(120,170,220,0.25)"; rainToggleBtn.style.borderColor = "rgba(120,180,240,0.6)";
+    rainToggleBtn.style.display = 'inline-block';
     let gust = false;
     gustInterval = setInterval(function() {
       gust = !gust;
@@ -3422,7 +3421,7 @@ document.addEventListener('DOMContentLoaded', () => {
   window._stopRain = function() {
     if (gustInterval) { clearInterval(gustInterval); gustInterval = null; }
     stopRain();
-    rainToggleBtn.style.background = "none"; rainToggleBtn.style.borderColor = "rgba(255,255,255,0.22)";;
+    rainToggleBtn.style.display = 'none';
   };
 })();
 
