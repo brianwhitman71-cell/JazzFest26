@@ -589,7 +589,7 @@ footer{margin-top:20px;padding:20px 16px calc(20px + var(--safe-bot));border-top
       <button class="burger-item" role="menuitem" data-view="provisions">Provisions &amp; Libations</button>
       <button class="burger-item" role="menuitem" data-view="rules">Rules &amp; Regs</button>
       <button class="burger-item" role="menuitem" data-view="airbnb">Home for the Week</button>
-      <button class="burger-item" role="menuitem" data-view="crowd">Crowd-O-Meter</button>
+      <button class="burger-item" role="menuitem" data-view="crowd">Conditions</button>
     </div>
     <div>
       <span class="festival-eyebrow">New Orleans Jazz &amp; Heritage Festival 2026</span>
@@ -606,30 +606,30 @@ footer{margin-top:20px;padding:20px 16px calc(20px + var(--safe-bot));border-top
     <button class="nav-tab" data-view="provisions" role="tab">Provisions &amp; Libations</button>
     <button class="nav-tab" data-view="rules" role="tab">Rules &amp; Regs</button>
     <button class="nav-tab" data-view="airbnb" role="tab">Home for the Week</button>
-    <button class="nav-tab" data-view="crowd" role="tab">Crowd-O-Meter</button>
+    <button class="nav-tab" data-view="crowd" role="tab">Conditions</button>
   </nav>
 
   <!-- Weather bar -->
-  <div id="wx-bar" style="background:rgba(0,0,0,0.28);border-top:1px solid rgba(255,255,255,0.07);padding:8px 16px;display:flex;gap:0;align-items:flex-start;overflow:hidden;min-height:52px">
-    <div style="flex-shrink:0;padding-right:16px;border-right:1px solid rgba(255,255,255,0.1)">
-      <div style="font-family:'Barlow Condensed',sans-serif;font-size:10px;letter-spacing:0.12em;color:var(--muted);text-transform:uppercase;margin-bottom:4px">Now · Fair Grounds</div>
-      <div style="display:flex;align-items:center;gap:8px">
-        <span id="wx-icon" style="font-size:22px;line-height:1">–</span>
+  <div id="wx-bar" style="background:rgba(0,0,0,0.32);border-top:1px solid rgba(255,255,255,0.09);padding:12px 20px;display:flex;gap:0;align-items:flex-start;overflow:hidden;flex-wrap:wrap">
+    <div style="flex-shrink:0;padding-right:20px;border-right:1px solid rgba(255,255,255,0.12);margin-right:20px;margin-bottom:4px">
+      <div style="font-family:'Barlow Condensed',sans-serif;font-size:11px;letter-spacing:0.14em;color:var(--muted);text-transform:uppercase;margin-bottom:6px">Now · Fair Grounds</div>
+      <div style="display:flex;align-items:center;gap:10px">
+        <span id="wx-icon" style="font-size:32px;line-height:1">–</span>
         <div>
-          <div style="display:flex;align-items:baseline;gap:6px">
-            <span id="wx-temp" style="font-family:'Barlow Condensed',sans-serif;font-size:20px;font-weight:700;color:var(--cream);line-height:1">–°</span>
-            <span id="wx-feels" style="font-family:'Barlow Condensed',sans-serif;font-size:12px;color:var(--muted)">feels –°</span>
+          <div style="display:flex;align-items:baseline;gap:8px">
+            <span id="wx-temp" style="font-family:'Barlow Condensed',sans-serif;font-size:30px;font-weight:700;color:var(--cream);line-height:1">–°</span>
+            <span id="wx-feels" style="font-family:'Barlow Condensed',sans-serif;font-size:15px;color:var(--muted)">feels –°</span>
           </div>
-          <div id="wx-meta" style="font-family:'Barlow Condensed',sans-serif;font-size:11px;color:var(--muted);letter-spacing:0.05em">–% humidity · – mph</div>
-          <div id="wx-rain-note" style="font-family:'Barlow Condensed',sans-serif;font-size:11px;color:#7EC8F0;display:none">🌧 raining</div>
+          <div id="wx-meta" style="font-family:'Barlow Condensed',sans-serif;font-size:14px;color:var(--muted);letter-spacing:0.05em;margin-top:2px">–% humidity · – mph</div>
+          <div id="wx-rain-note" style="font-family:'Barlow Condensed',sans-serif;font-size:13px;color:#7EC8F0;display:none;margin-top:2px">🌧 raining</div>
         </div>
       </div>
     </div>
-    <div style="flex:1;min-width:0;padding-left:14px;overflow:hidden">
-      <div style="font-family:'Barlow Condensed',sans-serif;font-size:10px;letter-spacing:0.12em;color:var(--muted);text-transform:uppercase;margin-bottom:4px">Next 12 Hours</div>
-      <div id="wx-forecast" style="display:flex;gap:10px;overflow-x:auto;scrollbar-width:none;-webkit-overflow-scrolling:touch;padding-bottom:2px">
+    <div style="flex:1;min-width:200px;overflow:hidden">
+      <div style="font-family:'Barlow Condensed',sans-serif;font-size:11px;letter-spacing:0.14em;color:var(--muted);text-transform:uppercase;margin-bottom:6px">Next 12 Hours</div>
+      <div id="wx-forecast" style="display:flex;gap:14px;overflow-x:auto;scrollbar-width:none;-webkit-overflow-scrolling:touch;padding-bottom:4px">
         <style>#wx-forecast::-webkit-scrollbar{display:none}</style>
-        <span style="font-family:'Barlow Condensed',sans-serif;font-size:11px;color:var(--muted)">Loading…</span>
+        <span style="font-family:'Barlow Condensed',sans-serif;font-size:13px;color:var(--muted)">Loading…</span>
       </div>
     </div>
   </div>
@@ -1447,7 +1447,7 @@ footer{margin-top:20px;padding:20px 16px calc(20px + var(--safe-bot));border-top
   <!-- ══ CROWD-O-METER ══ -->
   <div class="view crowd-view" id="view-crowd">
     <div style="max-width:540px;margin:36px auto;padding:0 24px;text-align:center">
-      <h2 style="font-family:'Cormorant SC',serif;font-size:26px;font-weight:600;letter-spacing:0.08em;color:var(--cream);margin-bottom:4px">Crowd-O-Meter™</h2>
+      <h2 style="font-family:'Cormorant SC',serif;font-size:26px;font-weight:600;letter-spacing:0.08em;color:var(--cream);margin-bottom:4px">Conditions™</h2>
       <p style="font-family:'Barlow Condensed',sans-serif;font-size:13px;letter-spacing:0.1em;color:var(--muted);margin-bottom:28px;text-transform:uppercase">Highly Scientific Algorithmic Crowd Intelligence</p>
 
       <!-- Gauge -->
@@ -1497,6 +1497,47 @@ footer{margin-top:20px;padding:20px 16px calc(20px + var(--safe-bot));border-top
       <!-- Updated + disclaimer -->
       <p id="crowd-updated" style="font-family:'Barlow Condensed',sans-serif;font-size:12px;letter-spacing:0.08em;color:var(--muted);margin-bottom:8px;text-transform:uppercase">–</p>
       <p style="font-family:'Barlow Condensed',sans-serif;font-size:11px;color:rgba(255,255,255,0.25);line-height:1.5;margin-top:0">* Based on historical patterns & vibes. Not actual surveillance.<br>We're not watching you. Probably.</p>
+
+      <!-- Divider -->
+      <div style="border-top:1px solid var(--border);margin:32px 0 28px"></div>
+
+      <!-- Mud-O-Meter -->
+      <h2 style="font-family:'Cormorant SC',serif;font-size:26px;font-weight:600;letter-spacing:0.08em;color:var(--cream);margin-bottom:4px">Mud-O-Meter™</h2>
+      <p style="font-family:'Barlow Condensed',sans-serif;font-size:13px;letter-spacing:0.1em;color:var(--muted);margin-bottom:28px;text-transform:uppercase">Powered by actual rainfall · Past 24 Hours</p>
+
+      <div style="position:relative;margin:0 auto 8px">
+        <svg id="mud-gauge" viewBox="0 0 200 115" style="width:100%;max-width:380px;overflow:visible">
+          <defs>
+            <linearGradient id="mudGrad" x1="15" y1="0" x2="185" y2="0" gradientUnits="userSpaceOnUse">
+              <stop offset="0%"   stop-color="#C8B560"/>
+              <stop offset="35%"  stop-color="#C8B560"/>
+              <stop offset="35%"  stop-color="#A08830"/>
+              <stop offset="65%"  stop-color="#A08830"/>
+              <stop offset="65%"  stop-color="#7A5C1E"/>
+              <stop offset="85%"  stop-color="#7A5C1E"/>
+              <stop offset="85%"  stop-color="#4E2E0A"/>
+              <stop offset="100%" stop-color="#4E2E0A"/>
+            </linearGradient>
+          </defs>
+          <path d="M 15,105 A 85,85 0 0,1 185,105" fill="none" stroke="rgba(255,255,255,0.08)" stroke-width="16" stroke-linecap="round"/>
+          <path d="M 15,105 A 85,85 0 0,1 185,105" fill="none" stroke="url(#mudGrad)" stroke-width="16" stroke-linecap="round" opacity="0.25"/>
+          <path id="mud-arc" d="M 15,105 A 85,85 0 0,1 185,105" fill="none" stroke="url(#mudGrad)" stroke-width="16" stroke-linecap="round" stroke-dasharray="267" stroke-dashoffset="267" style="transition:stroke-dashoffset 1.2s cubic-bezier(.4,0,.2,1)"/>
+          <line id="mud-needle" x1="100" y1="105" x2="100" y2="26" stroke="var(--cream)" stroke-width="2.5" stroke-linecap="round" transform="rotate(-90,100,105)" style="transition:transform 1.2s cubic-bezier(.4,0,.2,1)"/>
+          <circle cx="100" cy="105" r="5" fill="#A08830"/>
+          <text id="mud-pct" x="100" y="88" text-anchor="middle" font-family="'Barlow Condensed',sans-serif" font-size="22" font-weight="700" fill="var(--cream)" letter-spacing="1">--</text>
+        </svg>
+      </div>
+
+      <div style="display:flex;justify-content:space-between;max-width:380px;margin:0 auto 24px;padding:0 8px">
+        <span style="font-family:'Barlow Condensed',sans-serif;font-size:10px;letter-spacing:0.08em;color:#C8B560;text-transform:uppercase">Dry</span>
+        <span style="font-family:'Barlow Condensed',sans-serif;font-size:10px;letter-spacing:0.08em;color:#A08830;text-transform:uppercase">Muddy</span>
+        <span style="font-family:'Barlow Condensed',sans-serif;font-size:10px;letter-spacing:0.08em;color:#4E2E0A;text-transform:uppercase">Swamp</span>
+      </div>
+
+      <div id="mud-emoji"  style="font-size:40px;margin-bottom:8px;line-height:1">💧</div>
+      <div id="mud-label" style="font-family:'Cormorant SC',serif;font-size:22px;font-weight:600;color:var(--gold);margin-bottom:10px;letter-spacing:0.06em">Loading…</div>
+      <div id="mud-desc"  style="font-family:'Cormorant Garamond',serif;font-size:17px;color:var(--cream);line-height:1.55;margin-bottom:24px;min-height:52px">Checking rainfall data…</div>
+      <div id="mud-rain-total" style="font-family:'Barlow Condensed',sans-serif;font-size:12px;letter-spacing:0.08em;color:var(--muted);text-transform:uppercase">–</div>
     </div>
   </div><!-- /crowd-view -->
 
@@ -1513,6 +1554,8 @@ footer{margin-top:20px;padding:20px 16px calc(20px + var(--safe-bot));border-top
 <div id="map-modal" aria-modal="true" aria-hidden="true" role="dialog">
   <button id="map-modal-close" aria-label="Close map">✕</button>
 </div>
+
+<canvas id="rain-canvas" style="position:fixed;top:0;left:0;width:100vw;height:100vh;pointer-events:none;z-index:998;opacity:0;transition:opacity 1.5s ease"></canvas>
 
 <script>
 // ─────────────────────────────────────────────────────────
@@ -2681,7 +2724,7 @@ document.addEventListener('DOMContentLoaded', () => {
     'wind_speed_10m,wind_direction_10m,precipitation,weather_code' +
     '&hourly=temperature_2m,precipitation_probability,precipitation,weather_code' +
     '&temperature_unit=fahrenheit&wind_speed_unit=mph&precipitation_unit=inch' +
-    '&timezone=America%2FChicago&forecast_days=3';
+    '&timezone=America%2FChicago&forecast_days=3&past_days=1';
 
   function wmoIcon(c) {
     if (c === 0)            return '☀️';
@@ -2767,6 +2810,42 @@ document.addEventListener('DOMContentLoaded', () => {
     ctx.restore();
   }
 
+  // ── Mud-O-Meter ──────────────────────────────────────────────────────────
+  const MUD_LEVELS = [
+    { max: 5,  emoji: '🏜️', label: 'Bone Dry',          desc: "You could eat off the grass. Don't, though. Perfect conditions for the unwise shoe choice you made." },
+    { max: 18, emoji: '💧', label: 'Barely Damp',        desc: "A light spritz. The grounds crew is unconcerned. Your white sneakers remain delusional but viable." },
+    { max: 35, emoji: '👟', label: 'Shoe Risk Advisory', desc: "Damp underfoot. Mud potential: theoretical but rising. Sandal wearers: begin your risk assessment." },
+    { max: 52, emoji: '🥾', label: 'Mud Has Arrived',    desc: "It's here. The classic JazzFest mud experience. It wants your Chacos. It will get your Chacos." },
+    { max: 68, emoji: '🐖', label: 'Full Mud Mode',      desc: "Your feet are now part of the Fair Grounds. Scientists are classifying this as a new biome." },
+    { max: 82, emoji: '🌊', label: 'Historic Mud',       desc: "The mud has a name. It has opinions. It remembers. It will follow you home on your socks." },
+    { max: 101,emoji: '🐊', label: 'THE SWAMP IS ALIVE', desc: "The mud has organized. It has elected a spokesperson. Resistance is futile. Embrace becoming sediment." },
+  ];
+
+  function renderMudMeter(rainIn24h) {
+    // rainIn24h in inches; scale to 0-100%
+    // 0" = 0%, 0.5" = 20%, 1" = 40%, 2" = 60%, 4" = 80%, 7"+ = 100%
+    const level = Math.min(100, rainIn24h <= 0 ? 0 :
+      rainIn24h < 0.5 ? (rainIn24h / 0.5) * 20 :
+      rainIn24h < 1   ? 20 + ((rainIn24h - 0.5) / 0.5) * 20 :
+      rainIn24h < 2   ? 40 + ((rainIn24h - 1) / 1) * 20 :
+      rainIn24h < 4   ? 60 + ((rainIn24h - 2) / 2) * 20 :
+                        80 + Math.min(20, ((rainIn24h - 4) / 3) * 20));
+
+    const arc = document.getElementById('mud-arc');
+    if (!arc) return;
+    arc.style.strokeDashoffset = 267 * (1 - level / 100);
+    const angle = -90 + (level / 100) * 180;
+    document.getElementById('mud-needle').setAttribute('transform', `rotate(${angle.toFixed(1)},100,105)`);
+    document.getElementById('mud-pct').textContent = Math.round(level) + '%';
+
+    const lvl = MUD_LEVELS.find(l => level < l.max) || MUD_LEVELS[MUD_LEVELS.length - 1];
+    document.getElementById('mud-emoji').textContent  = lvl.emoji;
+    document.getElementById('mud-label').textContent  = lvl.label;
+    document.getElementById('mud-desc').textContent   = lvl.desc;
+    document.getElementById('mud-rain-total').textContent =
+      rainIn24h.toFixed(2) + '" of rain in the past 24 hours';
+  }
+
   // ── Weather UI ───────────────────────────────────────────────────────────
   async function fetchWeather() {
     try {
@@ -2793,6 +2872,14 @@ document.addEventListener('DOMContentLoaded', () => {
       if (raining) startRain(Math.max(c.precipitation, 0.05), c.wind_speed_10m, c.wind_direction_10m);
       else stopRain();
 
+      // Mud-O-Meter: sum past 24 hours of precipitation from hourly data
+      const nowMs2  = Date.now();
+      const past24h = h.time.reduce((sum, t, i) => {
+        const tMs = new Date(t + ':00').getTime();
+        return (tMs <= nowMs2 && nowMs2 - tMs <= 86400000) ? sum + (h.precipitation[i] || 0) : sum;
+      }, 0);
+      renderMudMeter(past24h);
+
       // 12-hour forecast — find current hour by comparing epoch timestamps
       const nowMs  = Date.now();
       const nowIdx = h.time.reduce((best, t, i) => {
@@ -2810,11 +2897,11 @@ document.addEventListener('DOMContentLoaded', () => {
         const pop  = h.precipitation_probability[idx];
         const precip = h.precipitation[idx];
         const showRain = pop > 20 || precip > 0;
-        return `<div style="flex-shrink:0;text-align:center;min-width:40px">
-          <div style="font-family:'Barlow Condensed',sans-serif;font-size:10px;color:var(--muted);letter-spacing:0.05em">${hour}</div>
-          <div style="font-size:16px;line-height:1.4">${icon}</div>
-          <div style="font-family:'Barlow Condensed',sans-serif;font-size:12px;font-weight:600;color:var(--cream)">${temp}°</div>
-          ${showRain ? `<div style="font-family:'Barlow Condensed',sans-serif;font-size:10px;color:#7EC8F0">${pop}%</div>` : '<div style="height:14px"></div>'}
+        return `<div style="flex-shrink:0;text-align:center;min-width:46px">
+          <div style="font-family:'Barlow Condensed',sans-serif;font-size:12px;color:var(--muted);letter-spacing:0.05em">${hour}</div>
+          <div style="font-size:20px;line-height:1.4">${icon}</div>
+          <div style="font-family:'Barlow Condensed',sans-serif;font-size:15px;font-weight:600;color:var(--cream)">${temp}°</div>
+          ${showRain ? `<div style="font-family:'Barlow Condensed',sans-serif;font-size:12px;color:#7EC8F0">${pop}%</div>` : '<div style="height:16px"></div>'}
         </div>`;
       }).join('');
     } catch(e) {
@@ -2835,7 +2922,7 @@ function tryAppLink(url) {
   setTimeout(() => { try { document.body.removeChild(iframe); } catch(e){} }, 2000);
 }
 
-// ── Crowd-O-Meter ─────────────────────────────────────────────────────────
+// ── Conditions ─────────────────────────────────────────────────────────
 (function() {
   const FEST_DAYS = [
     { date: '2026-04-30', label: 'Thu Apr 30', peak: 0.50 },
@@ -2962,6 +3049,5 @@ function tryAppLink(url) {
   setInterval(render, 60000);
 })();
 </script>
-<canvas id="rain-canvas" style="position:fixed;top:0;left:0;width:100vw;height:100vh;pointer-events:none;z-index:998;opacity:0;transition:opacity 1.5s ease"></canvas>
 </body>
 </html>
