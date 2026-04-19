@@ -617,24 +617,24 @@ footer{margin-top:20px;padding:20px 16px calc(20px + var(--safe-bot));border-top
   <!-- Weather bar -->
   <div id="wx-bar" style="background:rgba(0,0,0,0.32);border-top:1px solid rgba(255,255,255,0.09);padding:12px 20px;display:flex;gap:0;align-items:flex-start;overflow:hidden;flex-wrap:wrap">
     <div style="flex-shrink:0;padding-right:20px;border-right:1px solid rgba(255,255,255,0.12);margin-right:20px;margin-bottom:4px">
-      <div style="font-family:'Barlow Condensed',sans-serif;font-size:11px;letter-spacing:0.14em;color:var(--muted);text-transform:uppercase;margin-bottom:6px">Now · Fair Grounds</div>
-      <div style="display:flex;align-items:center;gap:10px">
-        <span id="wx-icon" style="font-size:32px;line-height:1">–</span>
+      <div style="font-family:'Barlow Condensed',sans-serif;font-size:13px;letter-spacing:0.14em;color:var(--muted);text-transform:uppercase;margin-bottom:6px">Now · Fair Grounds</div>
+      <div style="display:flex;align-items:center;gap:14px">
+        <span id="wx-icon" style="font-size:44px;line-height:1">–</span>
         <div>
-          <div style="display:flex;align-items:baseline;gap:8px">
-            <span id="wx-temp" style="font-family:'Barlow Condensed',sans-serif;font-size:30px;font-weight:700;color:var(--cream);line-height:1">–°</span>
-            <span id="wx-feels" style="font-family:'Barlow Condensed',sans-serif;font-size:15px;color:var(--muted)">feels –°</span>
+          <div style="display:flex;align-items:baseline;gap:10px">
+            <span id="wx-temp" style="font-family:'Barlow Condensed',sans-serif;font-size:44px;font-weight:700;color:var(--cream);line-height:1">–°</span>
+            <span id="wx-feels" style="font-family:'Barlow Condensed',sans-serif;font-size:20px;color:var(--muted)">feels –°</span>
           </div>
-          <div id="wx-meta" style="font-family:'Barlow Condensed',sans-serif;font-size:14px;color:var(--muted);letter-spacing:0.05em;margin-top:2px">–% humidity · – mph</div>
-          <div id="wx-rain-note" style="font-family:'Barlow Condensed',sans-serif;font-size:13px;color:#7EC8F0;display:none;margin-top:2px">🌧 raining</div>
+          <div id="wx-meta" style="font-family:'Barlow Condensed',sans-serif;font-size:18px;color:var(--muted);letter-spacing:0.05em;margin-top:4px">–% humidity · – mph</div>
+          <div id="wx-rain-note" style="font-family:'Barlow Condensed',sans-serif;font-size:17px;color:#7EC8F0;display:none;margin-top:3px">🌧 raining</div>
         </div>
       </div>
     </div>
     <div style="flex:1;min-width:200px;overflow:hidden">
-      <div style="font-family:'Barlow Condensed',sans-serif;font-size:11px;letter-spacing:0.14em;color:var(--muted);text-transform:uppercase;margin-bottom:6px">Next 12 Hours</div>
+      <div style="font-family:'Barlow Condensed',sans-serif;font-size:13px;letter-spacing:0.14em;color:var(--muted);text-transform:uppercase;margin-bottom:6px">Next 24 Hours</div>
       <div id="wx-forecast" style="display:flex;gap:14px;overflow-x:auto;scrollbar-width:none;-webkit-overflow-scrolling:touch;padding-bottom:4px">
         <style>#wx-forecast::-webkit-scrollbar{display:none}</style>
-        <span style="font-family:'Barlow Condensed',sans-serif;font-size:13px;color:var(--muted)">Loading…</span>
+        <span style="font-family:'Barlow Condensed',sans-serif;font-size:15px;color:var(--muted)">Loading…</span>
       </div>
     </div>
   </div>
@@ -2880,8 +2880,10 @@ document.addEventListener('DOMContentLoaded', () => {
       const raining = c.precipitation > 0 || isRainCode(c.weather_code);
       const rainNote = document.getElementById('wx-rain-note');
       rainNote.style.display = raining ? 'block' : 'none';
-      if (raining && c.precipitation > 0)
-        rainNote.textContent = '🌧 ' + (c.precipitation * 100 | 0) / 100 + '" this hour';
+      if (raining)
+        rainNote.textContent = c.precipitation > 0
+          ? '🌧 ' + c.precipitation.toFixed(2) + '" this hour'
+          : '🌧 raining';
 
       // Rain effect
       if (raining) startRain(Math.max(c.precipitation, 0.05), c.wind_speed_10m, c.wind_direction_10m);
@@ -2902,7 +2904,7 @@ document.addEventListener('DOMContentLoaded', () => {
         return diff < Math.abs(new Date(h.time[best] + ':00').getTime() - nowMs) ? i : best;
       }, 0);
       const start = nowIdx;
-      const slots = h.time.slice(start + 1, start + 13);
+      const slots = h.time.slice(start + 1, start + 25);
       const fcast   = document.getElementById('wx-forecast');
       fcast.innerHTML = slots.map((t, i) => {
         const idx  = start + 1 + i;
@@ -2912,11 +2914,11 @@ document.addEventListener('DOMContentLoaded', () => {
         const pop  = h.precipitation_probability[idx];
         const precip = h.precipitation[idx];
         const showRain = pop > 20 || precip > 0;
-        return `<div style="flex-shrink:0;text-align:center;min-width:46px">
-          <div style="font-family:'Barlow Condensed',sans-serif;font-size:12px;color:var(--muted);letter-spacing:0.05em">${hour}</div>
-          <div style="font-size:20px;line-height:1.4">${icon}</div>
-          <div style="font-family:'Barlow Condensed',sans-serif;font-size:15px;font-weight:600;color:var(--cream)">${temp}°</div>
-          ${showRain ? `<div style="font-family:'Barlow Condensed',sans-serif;font-size:12px;color:#7EC8F0">${pop}%</div>` : '<div style="height:16px"></div>'}
+        return `<div style="flex-shrink:0;text-align:center;min-width:54px">
+          <div style="font-family:'Barlow Condensed',sans-serif;font-size:15px;color:var(--muted);letter-spacing:0.05em">${hour}</div>
+          <div style="font-size:26px;line-height:1.4">${icon}</div>
+          <div style="font-family:'Barlow Condensed',sans-serif;font-size:19px;font-weight:600;color:var(--cream)">${temp}°</div>
+          ${showRain ? `<div style="font-family:'Barlow Condensed',sans-serif;font-size:15px;color:#7EC8F0">${pop}%</div>` : '<div style="height:19px"></div>'}
         </div>`;
       }).join('');
     } catch(e) {
