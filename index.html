@@ -2783,22 +2783,34 @@ document.addEventListener('DOMContentLoaded', () => {
   // ── Rain canvas ──────────────────────────────────────────────────────────
   const canvas = document.getElementById('rain-canvas');
   const ctx    = canvas.getContext('2d');
-  let drops = [], ripples = [], rainXV = 0, rainYV = 10, rainOn = false, rafId = null;
+  let drops = [], ripples = [], puddles = [], rainXV = 0, rainYV = 10, rainOn = false, rafId = null;
 
   function resizeCanvas() {
     canvas.width  = window.innerWidth;
     canvas.height = window.innerHeight;
+    buildPuddles();
   }
   resizeCanvas();
   window.addEventListener('resize', resizeCanvas);
 
+  // Fixed puddle zones distributed across the bottom third of screen
+  function buildPuddles() {
+    const n = 5 + Math.floor(Math.random() * 4); // 5–8 puddles
+    puddles = Array.from({length: n}, (_, i) => ({
+      x:    (canvas.width / (n + 1)) * (i + 1) + (Math.random() - 0.5) * 120,
+      y:    canvas.height * (0.72 + Math.random() * 0.22),
+      rx:   40 + Math.random() * 60,   // semi-major axis
+      ry:   0,                          // grows in as rain falls
+      maxRy: 8 + Math.random() * 10,
+    }));
+  }
+
   function spawnDrop(x, y) {
-    const speed = 0.75 + Math.random() * 0.5;
     const thick = Math.random();
     return {
       x, y,
-      len:   14 + Math.random() * 20,
-      speed,
+      len:   14 + Math.random() * 22,
+      speed: 0.75 + Math.random() * 0.5,
       width: thick < 0.6 ? 0.8 : thick < 0.9 ? 1.2 : 1.8,
       alpha: 0.35 + Math.random() * 0.35,
     };
@@ -2809,10 +2821,7 @@ document.addEventListener('DOMContentLoaded', () => {
     rainXV = -Math.sin(windDir * Math.PI / 180) * windSpeed * 0.18;
     rainYV =  9 + windSpeed * 0.09;
     drops  = Array.from({length: count}, () =>
-      spawnDrop(
-        Math.random() * (window.innerWidth + 500) - 250,
-        Math.random() * window.innerHeight
-      )
+      spawnDrop(Math.random() * (canvas.width + 500) - 250, Math.random() * canvas.height)
     );
     rainOn = true;
     canvas.style.opacity = '1';
@@ -2825,23 +2834,50 @@ document.addEventListener('DOMContentLoaded', () => {
     setTimeout(() => {
       ctx.clearRect(0, 0, canvas.width, canvas.height);
       ripples = [];
+      puddles.forEach(p => { p.ry = 0; });
       rafId = null;
     }, 1600);
   }
 
+  let frameCount = 0;
   function drawRain() {
     if (!rainOn && !ripples.length) { rafId = null; return; }
     rafId = requestAnimationFrame(drawRain);
+    frameCount++;
     ctx.clearRect(0, 0, canvas.width, canvas.height);
 
-    // ── Drops ──
+    // ── Standing puddles ──
+    puddles.forEach(p => {
+      if (!rainOn && p.ry > 0) p.ry = Math.max(0, p.ry - 0.02);
+      else if (rainOn) p.ry = Math.min(p.maxRy, p.ry + 0.012);
+      if (p.ry < 0.5) return;
+
+      // Filled puddle body
+      const grd = ctx.createRadialGradient(p.x, p.y, 0, p.x, p.y, p.rx);
+      grd.addColorStop(0,   'rgba(140, 190, 230, 0.22)');
+      grd.addColorStop(0.7, 'rgba(120, 170, 215, 0.14)');
+      grd.addColorStop(1,   'rgba(100, 150, 200, 0.04)');
+      ctx.save();
+      ctx.scale(1, p.ry / p.rx);
+      ctx.beginPath();
+      ctx.ellipse(p.x, p.y * (p.rx / p.ry), p.rx, p.rx, 0, 0, Math.PI * 2);
+      ctx.fillStyle = grd;
+      ctx.fill();
+      // Puddle rim
+      ctx.strokeStyle = 'rgba(160, 210, 245, 0.25)';
+      ctx.lineWidth   = 1;
+      ctx.stroke();
+      ctx.restore();
+    });
+
+    // ── Rain drops ──
     drops.forEach(d => {
       const trailX = rainXV * (d.len / rainYV) * d.speed;
       const trailY = d.len * d.speed;
 
-      // thin highlight streak for realism
+      // highlight streak
       ctx.save();
-      ctx.globalAlpha = d.alpha * 0.35;
+      ctx.globalAlpha = d.alpha * 0.3;
       ctx.strokeStyle = '#ffffff';
       ctx.lineWidth   = d.width * 0.5;
       ctx.beginPath();
@@ -2864,12 +2900,25 @@ document.addEventListener('DOMContentLoaded', () => {
       d.x += rainXV * d.speed;
       d.y += rainYV * d.speed;
 
-      if (d.y > canvas.height - 2 || d.x < -300 || d.x > canvas.width + 300) {
-        // spawn ripple at landing point (bottom strip only)
-        if (d.y > canvas.height - 4 && Math.random() < 0.35) {
-          ripples.push({ x: d.x, y: canvas.height - 4, r: 0, maxR: 18 + Math.random() * 22, alpha: 0.55, speed: 0.55 + Math.random() * 0.35 });
+      if (d.y > canvas.height || d.x < -300 || d.x > canvas.width + 300) {
+        // Check if drop lands near a puddle → emit ripple from puddle center
+        if (d.y > canvas.height * 0.6) {
+          let closest = null, bestDist = 180;
+          puddles.forEach(p => {
+            const dx = d.x - p.x, dy = d.y - p.y;
+            const dist = Math.sqrt(dx*dx + dy*dy);
+            if (dist < bestDist) { bestDist = dist; closest = p; }
+          });
+          if (closest && closest.ry > 1 && Math.random() < 0.7) {
+            const jx = closest.x + (Math.random() - 0.5) * closest.rx * 1.2;
+            const jy = closest.y + (Math.random() - 0.5) * closest.ry * 1.2;
+            ripples.push({ x: jx, y: jy, rx: 0, ry: 0, pRx: closest.rx, pRy: closest.ry, maxR: 0.65 + Math.random() * 0.3, alpha: 0.7, speed: 0.012 + Math.random() * 0.01 });
+          }
+          // Also spawn a ground-hit ripple at bottom of screen
+          if (Math.random() < 0.18) {
+            ripples.push({ x: d.x, y: canvas.height - 2, rx: 0, ry: 0, pRx: 30, pRy: 8, maxR: 0.9, alpha: 0.5, speed: 0.016 + Math.random() * 0.01 });
+          }
         }
-        // reset drop to top
         Object.assign(d, spawnDrop(Math.random() * (canvas.width + 500) - 250, -20));
       }
     });
@@ -2877,28 +2926,28 @@ document.addEventListener('DOMContentLoaded', () => {
     // ── Ripples ──
     for (let i = ripples.length - 1; i >= 0; i--) {
       const rp = ripples[i];
-      rp.r     += rp.speed;
-      rp.alpha -= rp.alpha * 0.045;
+      rp.rx    = rp.pRx * rp.maxR * (1 - Math.exp(-rp.speed * 60 * (rp.rx / rp.pRx + 0.01)));
+      rp.rx   += rp.pRx * rp.speed;
+      rp.ry    = rp.rx * (rp.pRy / rp.pRx);
+      rp.alpha -= 0.016;
 
-      // ellipse (flattened circle simulates ground plane)
+      if (rp.alpha <= 0 || rp.rx >= rp.pRx * rp.maxR) { ripples.splice(i, 1); continue; }
+
       ctx.save();
       ctx.globalAlpha = rp.alpha;
-      ctx.strokeStyle = 'rgba(180, 215, 255, 1)';
-      ctx.lineWidth   = 0.8;
+      ctx.strokeStyle = 'rgba(200, 230, 255, 1)';
+      ctx.lineWidth   = 1.2;
       ctx.beginPath();
-      ctx.ellipse(rp.x, rp.y, rp.r, rp.r * 0.28, 0, 0, Math.PI * 2);
+      ctx.ellipse(rp.x, rp.y, Math.max(1, rp.rx), Math.max(0.3, rp.ry), 0, 0, Math.PI * 2);
       ctx.stroke();
-
-      // inner second ring, slightly delayed
-      if (rp.r > 6) {
-        ctx.globalAlpha = rp.alpha * 0.4;
+      // faint inner ring
+      if (rp.rx > 4) {
+        ctx.globalAlpha = rp.alpha * 0.35;
         ctx.beginPath();
-        ctx.ellipse(rp.x, rp.y, rp.r * 0.55, rp.r * 0.55 * 0.28, 0, 0, Math.PI * 2);
+        ctx.ellipse(rp.x, rp.y, rp.rx * 0.5, rp.ry * 0.5, 0, 0, Math.PI * 2);
         ctx.stroke();
       }
       ctx.restore();
-
-      if (rp.alpha < 0.012 || rp.r >= rp.maxR) ripples.splice(i, 1);
     }
   }
 
